@@ -91,6 +91,39 @@ const S = {
   },
   // a wrong-answer buzz
   buzz: () => normalize(ramp(decay(mixIn(mixIn(tone(420, 220), tone(420, 233)), gain(tone(420, 110), 0.6)), 3), 10), 0.4),
+  // a label printer printing one label (about 2 s): the stepper motor's whine over the rattle of the
+  // mechanism, a click as it starts and a small knock as it stops
+  print: () => {
+    const ms = 1950, n = len(ms);
+    const step = glide(ms, 760, 780).map(v => Math.tanh(v * 3) * 0.5);
+    const sub = gain(tone(ms, 390), 0.25), rattle = gain(band(noise(ms), 180, 2400), 0.35);
+    const body = mixIn(mixIn(step, sub), rattle).map((v, i) => {
+      const k = i / n, env = Math.min(1, k / 0.02) * Math.min(1, (1 - k) / 0.03);
+      return v * env * (0.85 + 0.15 * Math.sin(i / SR * 2 * Math.PI * 23));   // the roller's flutter
+    });
+    const click = gain(decay(band(noise(20), 1500, 6000), 300), 0.8), knock = gain(decay(glide(60, 160, 90), 60), 0.7);
+    return normalize(ramp(mixIn(mixIn(mixIn(buf(ms + 120), click), body, len(15)), knock, len(ms)), 2), 0.6);
+  },
+  // a barcode scanner's good-read beep: one short, bright, square-ish note
+  scan: () => normalize(ramp(tone(95, 2700).map(v => Math.tanh(v * 3)), 4), 0.35),
+  // paper torn across a tear bar: a quick, crackling rip
+  tear: () => {
+    const x = noise(190), crackle = x.map((v, i) => v * (rand() > 0.6 ? 1 : 0.25));
+    return normalize(ramp(decay(band(crackle, 700, 6500), 16).map((v, i) => v * Math.min(1, i / len(12))), 3), 0.55);
+  },
+  // an office laser printer running off a page (about 3 s): the fan and drum spinning up, the page
+  // picked with a clunk, rollers and gears as it goes through, and a flap as it drops into the bin
+  laser: () => {
+    const ms = 3000, n = len(ms);
+    const hum = glide(ms, 95, 150, 0.4).map((v, i) => v * 0.35 * Math.min(1, i / len(500)));
+    const fan = lowpass(noise(ms), 700).map((v, i) => v * 0.9 * Math.min(1, i / len(300)) * Math.min(1, (n - i) / len(200)));
+    const rollers = band(noise(ms), 300, 2200).map((v, i) => { const t = i / SR; return v * 0.3 * (t > 0.45 && t < 2.55 ? 1 : 0.1); });
+    let x = mixIn(mixIn(hum, fan), rollers);
+    for (let t = 0.5; t < 2.5; t += 1 / 11) x = mixIn(x, gain(decay(band(noise(12), 800, 4000), 500), 0.12), len(t * 1000));   // gear teeth
+    x = mixIn(x, gain(decay(glide(90, 150, 70), 40), 0.8), len(420));                        // the page picked
+    x = mixIn(x, gain(decay(band(noise(80), 200, 1800), 45), 0.6), len(2600));              // and dropped
+    return normalize(ramp(x, 30), 0.55);
+  },
 };
 
 for (const [name, make] of Object.entries(S)) {

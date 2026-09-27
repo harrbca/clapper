@@ -13,6 +13,9 @@ own project. `examples/` holds projects that show the kit off.
   anything. Tell Brad before spending credits beyond narration he asked for. `clap voice --draft` lays
   out timings with no sound and no credits. Don't run `clap voice --music` unless asked. Listing voices
   (`GET /v1/voices`) is free.
+- **YouTube.** `clap upload` publishes to Brad's channel: ask before each upload, naming the file and
+  the privacy. The OAuth client and token (`%USERPROFILE%\youtube-client.json`, `youtube-token.json`)
+  are handled like the ElevenLabs key: never printed, copied or committed.
 - **This repo is public.** Videos made for work, and anything from work (app screenshots, scripts,
   internal names), live in their own project folders outside this repo and never come into it. Those
   projects use the kit from this checkout by its path, `C:\Projects\clapper`: don't move or rename it.
@@ -51,4 +54,5 @@ Look at frames, don't assume them. Brad notices glitches, so find them first.
 - A trial of ready-made 3D characters (VRM avatars, Quaternius rigged characters and animations):
   `@pixiv/three-vrm` is installed but not committed, and a sample VRM and the Quaternius animation
   library are in `C:\Projects\clapper-assets`. Brad paused it; ask before picking it up.
-- Planned but not started: capturing web apps' screens into scenes, and bringing in screen recordings.
+- Web apps' screens into scenes: started, as `clap capture` and `web/screen.js` (see the README).
+  Bringing in screen recordings is planned but not started.

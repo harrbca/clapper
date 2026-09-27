@@ -6,10 +6,12 @@ import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
 import { build } from '../lib/build.js';
 import { chromePath } from '../lib/browser.js';
+import { capture } from '../lib/capture.js';
 import { KIT, loadProject } from '../lib/project.js';
 import { sheets, stills, video } from '../lib/render.js';
 import { serve } from '../lib/server.js';
 import { voice } from '../lib/voice.js';
+import * as youtube from '../lib/youtube.js';
 
 const HELP = `clap <command> [options]
 
@@ -29,10 +31,16 @@ const HELP = `clap <command> [options]
   render [out.mp4] [--workers 8] [--from s] [--to s] [--scale 0.5|2] [--draft] [--encoder nvenc|x264]
                                the video, with the mix and chapters. --draft: half size, fast.
                                x264 by default; --encoder nvenc uses an NVIDIA GPU
-  doctor                       check ffmpeg, Chrome and the ElevenLabs key
+  capture <script.js> [--headed]
+                               drive a web page as its script says (pointing, clicking, typing) and
+                               keep a screenshot of each state, for web/screen.js to play back
+  upload [file.mp4] [--privacy private|unlisted|public] [--title T] [--description D]
+                               a video (default out/video.mp4) to YouTube, private unless asked, with
+                               its chapters in the description. --login signs in to YouTube (again)
+  doctor                       check ffmpeg, Chrome, the ElevenLabs key and the YouTube sign-in
 `;
 
-const FLAGS = new Set(['audition', 'music', 'open', 'draft', 'no-audio', 'help']);
+const FLAGS = new Set(['audition', 'music', 'open', 'draft', 'no-audio', 'login', 'headed', 'help']);
 const args = process.argv.slice(2), pos = [], opt = {};
 for (let i = 0; i < args.length; i++) {
   const a = args[i];
@@ -54,6 +62,7 @@ const commands = {
     console.log(`  made ${dir}\n  next: cd there, edit script.json, then clap voice, clap build, clap preview`);
   },
   voice: () => voice(project(), { voice: opt.voice, audition: opt.audition, music: opt.music, draft: opt.draft }),
+  capture: () => capture(project(), pos[0] || fail('clap capture <script.js>'), { headed: opt.headed }),
   build: () => build(project(), { audio: !opt['no-audio'] }),
   still: () => stills(project(), pos.length ? pos : fail('clap still <time>...'), { scale: num(opt.scale, 1), entry: opt.entry }),
   sheet: () => sheets(project(), pos.shift() || 'review', pos, { entry: opt.entry }),
@@ -98,6 +107,18 @@ const commands = {
     });
     await new Promise(() => {});
   },
+  async upload() {
+    if (opt.login) { await youtube.login(); if (!pos[0]) return; }
+    let P = null;
+    try { P = project(); } catch (e) { if (opt.project || !pos[0]) throw e; }   // a file on its own needs no project
+    const file = path.resolve(pos[0] || P.file('out', 'video.mp4'));
+    if (!fs.existsSync(file)) fail(`no ${file}: clap render makes it`);
+    await youtube.upload(P, file, {
+      title: opt.title ?? P?.config.title ?? path.basename(file, path.extname(file)),
+      description: opt.description ?? P?.config.description ?? '',
+      privacy: opt.privacy ?? 'private',
+    });
+  },
   doctor() {
     const check = (name, fn) => { try { console.log(`  ok    ${name}: ${fn()}`); } catch (e) { console.log(`  MISSING ${name}: ${e.message}`); } };
     check('node', () => process.version);
@@ -106,6 +127,8 @@ const commands = {
     check('Chrome', chromePath);
     const key = process.env.ELEVENLABS_KEY_FILE || path.join(process.env.USERPROFILE || process.env.HOME || '', 'elevenlabs-key.txt');
     check('ElevenLabs key', () => { if (!fs.existsSync(key)) throw new Error(`no ${key}`); return key; });
+    check('YouTube client', () => { if (!fs.existsSync(youtube.CLIENT_FILE)) throw new Error(`no ${youtube.CLIENT_FILE} (only for clap upload)`); return youtube.CLIENT_FILE; });
+    check('YouTube sign-in', () => { if (!fs.existsSync(youtube.TOKEN_FILE)) throw new Error('not yet: clap upload --login'); return youtube.TOKEN_FILE; });
   },
 };
 

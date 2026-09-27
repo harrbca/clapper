@@ -138,6 +138,8 @@ function buildHand(wrist, side, skin) {
       thumb.localToWorld(T2.set(0, -20, 0));
       return v.addVectors(T1, T2).multiplyScalar(0.5);
     },
+    // The tip of the index finger, in the world.
+    tip(v = new THREE.Vector3()) { hand.updateWorldMatrix(true, true); return fingers[0].mid.localToWorld(v.set(0, -fingers[0].b - 5, 0)); },
     // form, and which way the palm faces: palm (a direction in the world, or null to leave it), then
     // an extra roll and a bend at the wrist
     pose(form, palm, roll, bend) {
@@ -276,6 +278,8 @@ export function pip3d(layer, { vest = false } = {}) {
     // right hand, +x on the left, fingers down -y). palm('R', v) is the middle of the palm, in the world.
     hands: { L: arms[0].hand.hand, R: arms[1].hand.hand },
     pinch(side, v) { return arms[side === 'L' ? 0 : 1].hand.pinch(v); },
+    // The tip of the index finger (for pointing, tapping a screen, pressing a key), in the world.
+    tip(side, v) { return arms[side === 'L' ? 0 : 1].hand.tip(v); },
     palm(side, v = palmPoint) { const h = arms[side === 'L' ? 0 : 1].hand.hand; h.updateWorldMatrix(true, false); return v.set(0, -30, 0).applyMatrix4(h.matrixWorld); },
     // Between the world and her own space (origin between her feet, y up, z where she faces), as
     // hand and foot targets are given.

@@ -90,6 +90,29 @@ export function layer3d(stage, { shadows = true, exposure = 1, fov = 18, environ
   };
 }
 
+// Poses for props that get carried about (a label torn off, a page picked up): { c, f, u }, where the
+// thing's middle is, the way its face looks and the way its top points, all in the world.
+const _m = new THREE.Matrix4(), _q0 = new THREE.Quaternion(), _q1 = new THREE.Quaternion();
+const turnOf = (q, f, u) => {
+  const y = f.clone().normalize(), z = u.clone().addScaledVector(y, -u.dot(y)).normalize();
+  return q.setFromRotationMatrix(_m.makeBasis(new THREE.Vector3().crossVectors(y, z), y, z));
+};
+// k of the way from pose a to pose b, the turn taken the short way round, lifted on an arc of `arc`.
+export function poseBetween(a, b, k, arc = 0) {
+  turnOf(_q0, a.f, a.u); turnOf(_q1, b.f, b.u); _q0.slerp(_q1, k);
+  const c = new THREE.Vector3().lerpVectors(a.c, b.c, k);
+  c.y += arc * Math.sin(Math.PI * k);
+  return { c, f: new THREE.Vector3(0, 1, 0).applyQuaternion(_q0), u: new THREE.Vector3(0, 0, 1).applyQuaternion(_q0) };
+}
+// Square in front of a camera, d away, facing it and upright on screen: to show something to it.
+export function poseInFront(camera, d) {
+  camera.updateMatrixWorld();
+  const dir = camera.getWorldDirection(new THREE.Vector3()), up = new THREE.Vector3(0, 1, 0).applyQuaternion(camera.quaternion);
+  return { c: camera.getWorldPosition(new THREE.Vector3()).addScaledVector(dir, d), f: dir.negate(), u: up };
+}
+// How far from a camera something `size` tall fills `frac` of the frame's height.
+export const fitDistance = (camera, size, frac) => size / (frac * 2 * Math.tan((camera.fov * Math.PI) / 360));
+
 // A canvas texture: draw(ctx, w, h) paints it; call .redraw() to paint it again (for faces that animate).
 export function paintedTexture(w, h, draw) {
   const c = Object.assign(document.createElement('canvas'), { width: w, height: h });

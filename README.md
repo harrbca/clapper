@@ -15,7 +15,8 @@ number of Chrome processes at once.
   `--draft` estimates the timings from the text instead, to lay a video out before paying for it.
 - **Timeline:** `timeline.js` places the lines and names moments ("cues") on their words.
 - **Sound:** the narration, sound effects placed at cues, and a music bed that ducks under the voice,
-  mixed and normalised to a loudness target. Ten synthesised effects come with the kit.
+  mixed and normalised to a loudness target. Seventeen synthesised effects come with the kit, printers
+  (`print`, `tear`, `laser`) and a scanner's beep (`scan`) among them.
 - **Preview:** a live player in sync with the mix. It reloads when a scene changes, and rebuilds
   when the timeline does.
 - **Render:** MP4 with the soundtrack and chapter markers, plus SRT and VTT captions. The whole
@@ -24,7 +25,8 @@ number of Chrome processes at once.
 ## Setup
 
 Needs Node 20+, ffmpeg and ffprobe on the PATH, and Chrome (or Edge). For narration, an ElevenLabs
-key in `%USERPROFILE%\elevenlabs-key.txt` (or wherever `ELEVENLABS_KEY_FILE` points).
+key in `%USERPROFILE%\elevenlabs-key.txt` (or wherever `ELEVENLABS_KEY_FILE` points). For uploads to
+YouTube, a Google OAuth client (see [YouTube](#youtube)).
 
     npm install
     node bin/clap.js doctor
@@ -49,7 +51,9 @@ key in `%USERPROFILE%\elevenlabs-key.txt` (or wherever `ELEVENLABS_KEY_FILE` poi
 | `clap still <time>...` | full-size PNGs in `out/stills` |
 | `clap sheet [name] [time...]` | 2x2 contact sheets; by default of the timeline's review list |
 | `clap render [out.mp4] [--draft] [--scale 2] [--from s] [--to s] [--workers 8] [--encoder x264\|nvenc]` | the video. `--draft` is half size and fast; `--scale 2` is 4K when the project is `hidpi` |
-| `clap doctor` | checks ffmpeg, Chrome and the ElevenLabs key |
+| `clap capture <script.js> [--headed]` | drives a web page as the script says and keeps each state's screenshot, for `screen.js` (below) |
+| `clap upload [file.mp4] [--privacy private\|unlisted\|public] [--title T] [--description D] [--login]` | the video to YouTube, private unless asked (below) |
+| `clap doctor` | checks ffmpeg, Chrome, the ElevenLabs key and the YouTube sign-in |
 
 A time is seconds, a cue, a scene or a line id, with an optional offset: `12.5`, `title`, `intro+2`, `hello-0.1`.
 
@@ -174,6 +178,75 @@ real. 3D Pip can wear a hi-vis vest (`pip3d(layer, { vest: true })`), grip a han
 pinch a label (6), and `pip.palm('R')` says where her palm is, to hang props on. `examples/3d-props`
 shows them.
 
+`/@kit/printers3d.js` has printers, to scale in millimetres, and what they print:
+
+- `labelPrinter3d` is an industrial label printer after Zebra's ZT411, without the logos. It has a
+  control column with five lights, a portrait touch screen and three keys. Its door (half the roof, the
+  right side with its window, and a cap on the front) swings up and over to show the roll, the ribbon
+  and the print head. Labels leave over a serrated tear bar. `update({ screen, led, door })` repaints
+  the screen, sets the lights and opens the door.
+- `printedLabel(picture)` is a label on its backing. The printer's `hang(label, mm)` feeds it out,
+  printed as far as it has come out; `hung(label)` is where it hangs, to tear it off from.
+  `label.at(u, v)` is a point on its printed face, by the picture's own coordinates: aim a scanner at
+  one of its barcodes with it.
+- `laserPrinter3d` is an office laser printer. `feed(sheet, k)` puts a `sheet3d(picture)` into its bin,
+  face down, k of the way out.
+- `desk3d` is a desk to stand them on. `loadPicture(url)` makes a texture of a page or label.
+
+Things are carried about as poses `{ c, f, u }` (where the middle is, the way the face looks, the way
+the top points). scene3d.js's `poseBetween(a, b, k, arc)` goes between two poses, and
+`poseInFront(camera, d)` is square to the camera, to hold something up to it. `fitDistance(camera,
+size, frac)` is how far away something fills that much of the frame. `label.place(...)` and
+`sheet.place(...)` put them there.
+
+### Walking, and working with props
+
+`/@kit/walk3d.js` walks a character whose feet are placed by IK, such as 3D Pip, along a route.
+`walk(t, { path, t0, t1, step, width, lift })` says where the body is and which way it faces. It also
+says where each foot is: planted on the floor while the body passes over it, then swung forward, so
+feet never slide. The walk speeds up from a stand and slows to one. `footLocal` turns a foot into the
+character's own space, for its pose.
+
+- **Fingertips:** `pip.tip(side)` is where her index fingertip is. Set her wrist, measure the tip,
+  and correct the wrist, and the fingertip lands exactly on a screen or a key.
+- **Scanner keys:** `scanner3d` has `keys` (twelve; the last is Enter) and `keyAt(i)`, where the top of
+  key i is, to press it. It also has `screenAt(u, v)`, a point on its screen.
+
+### Web captures
+
+`clap capture capture/print.js` drives a web page in Chrome as its script says: pointing, clicking and
+typing. It keeps a screenshot of each state it passes through (the hover, the result, each typed
+character), at twice the page's size so the video can zoom in, and it records where the pointer went
+and what shape it took over each thing (arrow, hand or text cursor). It warns when something invisible
+on top would take a click.
+
+```js
+export const url = 'webapp/index.html';        // a page in the project, or any http(s) address
+export const address = 'orders.example/list';   // what the address bar shows
+export const viewport = { width: 1600, height: 816 };
+export async function steps(s) {
+  await s.shot('start');
+  await s.click('#search', 'search');
+  await s.type('4821', 'typed');
+  await s.click('tr[data-id="4821"]', 'open', { wait: 400 });
+}
+```
+
+`/@kit/screen.js` plays a capture back. `screen(ctx, t, cap, { at, x, y, w })` draws the page in a
+browser window, with a pointer that glides to each thing and clicks it (a ripple), and typing a
+character at a time. `at` gives each step its moment, usually cues on the narrator's words. A
+1600 x 816 page in a 1920-wide window fills a 1080p frame. `target(cap, o, id)` says where a step
+pointed, to aim the camera at it.
+
+A handheld's screen works the same way:
+
+- **Acts:** `s.act('scan("4821")', 'scanned')` keeps whatever happens to the page that isn't the
+  pointer's doing, such as a barcode read or a message arriving.
+- **Touch screens:** `screen(..., { bar: false, pointer: 'touch' })` draws the page with no browser
+  bars and no cursor, just a fingertip's mark where each tap lands.
+- **On a prop:** draw into a `paintedTexture` for a prop's screen, such as the scanner's, and show the
+  same page large beside it.
+
 ### Characters
 
 A `Puppet` is a tree of parts, each drawn around its own pivot. A pose is a flat object of numbers
@@ -237,11 +310,41 @@ Don't use it on things animated on twos: blur across a change of drawing shows b
 `clap still 0 --entry scenes/lab.js` draws another page instead of the video: a character sheet, a
 prop on its own. The page has the same stage and timeline.
 
+## YouTube
+
+`clap upload` puts `out/video.mp4` (or the file you name) on YouTube, to watch it there: private
+unless `--privacy unlisted` or `public` says otherwise. The title is video.json's `title` (or
+`--title`), and the description its `description` (or `--description`) followed by the video's
+chapters as `0:00 Title` lines, which YouTube makes chapters of when there are three or more, the
+first at 0:00, each at least 10 s long. A project keeps a list of its uploads in `out/youtube.json`.
+The upload goes in 16 MB chunks, and carries on from where it got to after a dropped connection.
+
+It signs in to Google as a desktop app. To set that up, in Google Cloud Console, signed in with the
+Google account that owns the channel:
+
+1. Make a project and enable the YouTube Data API v3 in it.
+2. Google Auth Platform: get started, with an external audience. Branding needs only the app's name
+   and two email addresses; leave the logo off, or Google wants to verify the app first. Leave the
+   app in testing, and under Audience add yourself as a test user. A testing app's sign-in lasts 7
+   days, and `clap upload` signs in again when it has run out. (Publishing the app to production
+   ends that, but needs a home page, privacy policy and terms of service on a domain of your own.)
+3. Clients: create a Desktop app client and download its JSON, which is only offered then, to
+   `%USERPROFILE%\youtube-client.json` (or wherever `YOUTUBE_CLIENT_FILE` points).
+4. `clap upload --login`. Google warns that it hasn't verified the app; it's your own, so choose
+   Advanced and go on to it. The token is kept in `%USERPROFILE%\youtube-token.json` (`YOUTUBE_TOKEN_FILE`).
+
+YouTube keeps videos uploaded by an API project it hasn't audited private, whatever privacy was
+asked for. That's enough to watch your own videos, signed in, on any device. For unlisted or public
+uploads the project needs YouTube's compliance audit: the
+[audit and quota extension form](https://support.google.com/youtube/contact/yt_api_form).
+
 ## Tools
 
 - `tools/make-sfx.mjs` remakes the kit's sound effects in `sfx/`.
 - `tools/import-el-cache.mjs` imports an ElevenLabs cache from the older Python pipeline.
 - `tools/profile-frames.mjs` times drawing and capture for one Chrome.
+- `tools/pdf-png.ps1` renders PDF pages to PNGs with the PDF renderer built into Windows, to put a
+  document in a video: `powershell -File tools\pdf-png.ps1 doc.pdf out -Dpi 300`.
 
 ## Notes
 

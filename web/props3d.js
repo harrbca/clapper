@@ -80,9 +80,11 @@ export function scanner3d(layer, { screen = null, scale = 1 } = {}) {
   const bezel = solid(roundBox(SCR.w + 8, SCR.h + 7, 3, 6), toon('#0A0C0E'), { ink: 1.4 }); bezel.position.set(0, SCR.y, 15.5); body.add(bezel);
   const screenMat = new THREE.MeshBasicMaterial({ color: screen ? '#FFFFFF' : '#14213D', map: screen, toneMapped: false });
   const glass = new THREE.Mesh(new THREE.PlaneGeometry(SCR.w, SCR.h), screenMat); glass.position.set(0, SCR.y, SCR.z); body.add(glass);
-  // keys
+  // keys, three rows of four; the last (bottom right) is Enter
+  const keys = [];
   for (let r = 0; r < 3; r++) for (let i = 0; i < 4; i++) {
     const k = solid(roundBox(16, 9, 3, 2), key, { ink: 1 }); k.position.set(-27 + i * 18, -52 - r * 13, 15.8); body.add(k);
+    keys.push(k);
   }
   // the scan window on the nose, and an indicator light
   const win = solid(roundBox(62, 5, 18, 2), new THREE.MeshBasicMaterial({ color: '#7A1010' }), { ink: 1.4 }); win.position.set(0, 107, 0); body.add(win);
@@ -108,7 +110,9 @@ export function scanner3d(layer, { screen = null, scale = 1 } = {}) {
   const HANDLE = V(0, 0, -48), FLIP = new THREE.Quaternion().setFromAxisAngle(V().set(0, 0, 1), Math.PI);
   const LED = { off: '#223322', green: '#39E26A', red: '#FF3B30', amber: '#FFB21F' };
   return {
-    root, body, screen: glass, grip: gripJ,
+    root, body, screen: glass, grip: gripJ, keys,
+    // The top of key i (0..11, by rows; 11 is Enter), lifted off it by `lift`, in the world.
+    keyAt(i, lift = 0) { root.updateMatrixWorld(true); const k = keys[i]; return body.localToWorld(V(k.position.x, k.position.y, k.position.z + 1.5 + lift)); },
     // Hold it with the middle of the handle at `hand`, the nose pointing along `aim`, and the screen
     // turned towards `face` (all in the world): the scanner's own "look at".
     hold(hand, aim, face) {
