@@ -22,7 +22,8 @@ const HELP = `clap <command> [options]
   preview [--port 4173] [--open]
                                the live player; reloads when scenes or assets change, and
                                rebuilds when timeline.js does
-  still <time>...              full-size PNGs -> out/stills. A time is seconds, a cue, a scene or
+  still <time>... [--entry f]  full-size PNGs -> out/stills (--entry draws another page, like a
+                               character lab, instead of the video). A time is seconds, a cue, a scene or
                                a line id, optionally with an offset: 12.5, title, intro+2, hello-0.1
   sheet [name] [time...]       2x2 contact sheets (default: the timeline's review list)
   render [out.mp4] [--workers 8] [--from s] [--to s] [--scale 0.5|2] [--draft] [--encoder nvenc|x264]
@@ -54,8 +55,8 @@ const commands = {
   },
   voice: () => voice(project(), { voice: opt.voice, audition: opt.audition, music: opt.music, draft: opt.draft }),
   build: () => build(project(), { audio: !opt['no-audio'] }),
-  still: () => stills(project(), pos.length ? pos : fail('clap still <time>...'), { scale: num(opt.scale, 1) }),
-  sheet: () => sheets(project(), pos.shift() || 'review', pos),
+  still: () => stills(project(), pos.length ? pos : fail('clap still <time>...'), { scale: num(opt.scale, 1), entry: opt.entry }),
+  sheet: () => sheets(project(), pos.shift() || 'review', pos, { entry: opt.entry }),
   async render() {
     const P = project();
     const draft = opt.draft;

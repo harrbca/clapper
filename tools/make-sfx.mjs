@@ -75,6 +75,20 @@ const S = {
   thud: () => normalize(ramp(mixIn(decay(glide(180, 120, 55), 22), gain(decay(band(noise(60), 80, 900), 70), 0.4)), 2), 0.7),
   // a small high tick, for counters and steps
   tick: () => normalize(ramp(decay(tone(40, 3200), 120), 2), 0.35),
+  // a small robot's chirp: two quick rising notes, a little square-ish
+  bleep: () => {
+    const note = (ms, f0, f1) => ramp(glide(ms, f0, f1).map(v => Math.tanh(v * 2.2)), 4);
+    return normalize(mixIn(mixIn(buf(260), decay(note(90, 900, 1400), 6)), decay(note(110, 1300, 2100), 6), len(120)), 0.4);
+  },
+  // and its downward reply
+  boop: () => normalize(ramp(decay(glide(200, 700, 380).map(v => Math.tanh(v * 2)), 7), 5), 0.4),
+  // a clapperboard: the wooden sticks snapping shut, bright crack over a short knock
+  clap: () => {
+    const crack = decay(band(noise(90), 1500, 7000), 70);
+    const body = mixIn(gain(decay(tone(120, 920), 45), 0.5), gain(decay(tone(90, 2250), 60), 0.25));
+    const knock = gain(decay(glide(80, 190, 110), 40), 0.6);
+    return normalize(ramp(mixIn(mixIn(crack, body), knock), 1), 0.8);
+  },
   // a wrong-answer buzz
   buzz: () => normalize(ramp(decay(mixIn(mixIn(tone(420, 220), tone(420, 233)), gain(tone(420, 110), 0.6)), 3), 10), 0.4),
 };

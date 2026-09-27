@@ -1,0 +1,49 @@
+{
+ "request": {
+  "text": "No dragging keyframes around by hand.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "And when I say zoom, Bolt can zoom. Change a line, and everything keyed to it moves right along with it.",
+  "next_text": "And because it's all code, the camera can move, things can bounce, and my hair can do this.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "No",
+   "start": 0,
+   "end": 0.197
+  },
+  {
+   "w": "dragging",
+   "start": 0.267,
+   "end": 0.65
+  },
+  {
+   "w": "keyframes",
+   "start": 0.72,
+   "end": 1.3
+  },
+  {
+   "w": "around",
+   "start": 1.347,
+   "end": 1.625
+  },
+  {
+   "w": "by",
+   "start": 1.695,
+   "end": 1.823
+  },
+  {
+   "w": "hand.",
+   "start": 1.904,
+   "end": 2.601
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+{
+  "voice": { "name": "Bella", "id": "hpp4J3VqNfWAUOO0d1Us" },
+  "model": "eleven_multilingual_v2",
+  "settings": { "stability": 0.45, "similarity_boost": 0.75, "style": 0.25, "use_speaker_boost": true, "speed": 1 },
+  "scenes": [
+    { "id": "hi", "lines": [
+      { "id": "hi", "speaker": "pip", "text": "Hi! I'm Pip." },
+      { "id": "drawn", "speaker": "pip", "text": "Everything you're watching right now was drawn by code, one frame at a time." }
+    ]},
+    { "id": "script", "lines": [
+      { "id": "script", "speaker": "pip", "text": "It starts with a script: just the words I'm going to say." }
+    ]},
+    { "id": "voice", "lines": [
+      { "id": "reads", "speaker": "pip", "text": "A voice reads it out, and we get the exact moment of every single word." },
+      { "id": "pop", "speaker": "pip", "text": "So when I say pop, something pops." },
+      { "id": "zoom", "speaker": "pip", "text": "And when I say zoom, Bolt can zoom." }
+    ]},
+    { "id": "change", "lines": [
+      { "id": "change", "speaker": "pip", "text": "Change a line, and everything keyed to it moves right along with it." },
+      { "id": "nodrag", "speaker": "pip", "text": "No dragging keyframes around by hand." }
+    ]},
+    { "id": "look", "lines": [
+      { "id": "look", "speaker": "pip", "text": "And because it's all code, the camera can move, things can bounce, and my hair can do this." }
+    ]},
+    { "id": "outro", "lines": [
+      { "id": "clapper", "speaker": "pip", "text": "That's Clapper." },
+      { "id": "wordsin", "speaker": "pip", "text": "Words in, video out." }
+    ]}
+  ]
+}

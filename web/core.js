@@ -67,3 +67,10 @@ export function ik(sx, sy, tx, ty, a, b, bend = 1) {
   const ang = base + bend * A;
   return { ex: sx + a * Math.cos(ang), ey: sy + a * Math.sin(ang), hx: sx + d * Math.cos(base), hy: sy + d * Math.sin(base) };
 }
+
+// A wiggle from t0: amp * sin at hz, swelling in and dying away over dur. For waves, head shakes, wags.
+export function wiggle(t, t0, dur, amp, hz = 3) {
+  const u = (t - t0) / dur;
+  if (u <= 0 || u >= 1) return 0;
+  return amp * Math.sin((t - t0) * hz * TAU) * Math.sin((Math.PI / 2) * Math.min(1, u * 4)) * (1 - u) ** 0.8;
+}

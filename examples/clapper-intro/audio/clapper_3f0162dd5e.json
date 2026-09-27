@@ -1,0 +1,29 @@
+{
+ "request": {
+  "text": "That's Clapper.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "No dragging keyframes around by hand. And because it's all code, the camera can move, things can bounce, and my hair can do this.",
+  "next_text": "Words in, video out.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "That's",
+   "start": 0,
+   "end": 0.302
+  },
+  {
+   "w": "Clapper.",
+   "start": 0.36,
+   "end": 1.161
+  }
+ ]
+}

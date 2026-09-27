@@ -21,7 +21,12 @@ if (RENDER) document.body.classList.add('render');
 const ctx = canvas.getContext('2d');
 export const stage = {
   W, H, dpr, canvas, ctx, overlay, video: VIDEO, TL,
-  reset() { ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; },
+  // Every frame starts from the background colour, so nothing from the last frame can show through.
+  reset() {
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = VIDEO.background; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  },
 };
 
 function banner(text, kind = 'error') {
@@ -29,15 +34,36 @@ function banner(text, kind = 'error') {
   b.textContent = text; b.className = kind; b.hidden = !text;
 }
 
+// Motion blur: "motionBlur": { "samples": 8, "shutter": 0.5 } in video.json averages that many
+// moments across half a frame's time, as a film camera's shutter does. A scene may export
+// motionBlur(t) returning the samples for that frame (1 for none), so still shots stay cheap.
+// Off in the preview unless the page is opened with ?blur=1.
+const MB = { samples: 1, shutter: 0.5, ...(VIDEO.motionBlur || {}) };
+let acc = null;
+
 let render;
 try {
   await loadFonts(VIDEO.fonts);
-  const mod = await import('/' + VIDEO.entry);
-  if (!mod.render) throw new Error(`${VIDEO.entry} does not export render(stage, t)`);
+  const entry = q.get('entry') || VIDEO.entry;
+  const mod = await import('/' + entry);
+  if (!mod.render) throw new Error(`${entry} does not export render(stage, t)`);
   if (mod.setup) await mod.setup(stage);
-  render = async t => { stage.reset(); await mod.render(stage, t); };
+  const once = async t => { stage.reset(); await mod.render(stage, t); };
+  render = async t => {
+    const n = RENDER || q.has('blur') ? Math.max(1, Math.round(mod.motionBlur ? mod.motionBlur(t) ?? MB.samples : MB.samples)) : 1;
+    if (n === 1) return once(t);
+    acc ??= Object.assign(document.createElement('canvas'), { width: canvas.width, height: canvas.height });
+    const a = acc.getContext('2d');
+    for (let s = 0; s < n; s++) {
+      await once(t + ((s + 0.5) / n - 0.5) * (MB.shutter / FPS));
+      a.globalAlpha = 1 / (s + 1);                 // a running average of the samples
+      a.drawImage(canvas, 0, 0);
+    }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = 1;
+    ctx.drawImage(acc, 0, 0);
+  };
   window.clap = { ready: true, dur: TL.dur, fps: FPS, frame: render, capture };
-
 } catch (e) {
   window.clap = { failed: String(e && e.stack || e) };
   banner(String(e && e.stack || e));
@@ -122,6 +148,7 @@ function player() {
       try { await render(t); drawn = t; } catch (e) { banner(String(e && e.stack || e)); audio.pause(); } finally { busy = false; }
     }
     clock.textContent = `${fmt(t)}  f ${Math.round(t * FPS)}`;
+    if (document.activeElement !== scenes) scenes.value = String(s.start);    // the menu follows the playhead
     if (!hud.hidden) hud.textContent = hudText();
     requestAnimationFrame(loop);
   };

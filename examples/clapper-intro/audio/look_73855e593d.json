@@ -1,0 +1,109 @@
+{
+ "request": {
+  "text": "And because it's all code, the camera can move, things can bounce, and my hair can do this.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Change a line, and everything keyed to it moves right along with it. No dragging keyframes around by hand.",
+  "next_text": "That's Clapper.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "And",
+   "start": 0,
+   "end": 0.151
+  },
+  {
+   "w": "because",
+   "start": 0.197,
+   "end": 0.441
+  },
+  {
+   "w": "it's",
+   "start": 0.464,
+   "end": 0.592
+  },
+  {
+   "w": "all",
+   "start": 0.627,
+   "end": 0.755
+  },
+  {
+   "w": "code,",
+   "start": 0.824,
+   "end": 1.335
+  },
+  {
+   "w": "the",
+   "start": 1.451,
+   "end": 1.544
+  },
+  {
+   "w": "camera",
+   "start": 1.591,
+   "end": 1.939
+  },
+  {
+   "w": "can",
+   "start": 1.985,
+   "end": 2.09
+  },
+  {
+   "w": "move,",
+   "start": 2.148,
+   "end": 2.601
+  },
+  {
+   "w": "things",
+   "start": 2.717,
+   "end": 3.007
+  },
+  {
+   "w": "can",
+   "start": 3.053,
+   "end": 3.17
+  },
+  {
+   "w": "bounce,",
+   "start": 3.239,
+   "end": 3.808
+  },
+  {
+   "w": "and",
+   "start": 3.901,
+   "end": 4.04
+  },
+  {
+   "w": "my",
+   "start": 4.087,
+   "end": 4.18
+  },
+  {
+   "w": "hair",
+   "start": 4.261,
+   "end": 4.447
+  },
+  {
+   "w": "can",
+   "start": 4.493,
+   "end": 4.598
+  },
+  {
+   "w": "do",
+   "start": 4.656,
+   "end": 4.737
+  },
+  {
+   "w": "this.",
+   "start": 4.807,
+   "end": 5.48
+  }
+ ]
+}

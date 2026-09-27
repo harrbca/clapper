@@ -1,0 +1,54 @@
+{
+ "request": {
+  "text": "So when I say pop, something pops.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "It starts with a script: just the words I'm going to say. A voice reads it out, and we get the exact moment of every single word.",
+  "next_text": "And when I say zoom, Bolt can zoom.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "So",
+   "start": 0,
+   "end": 0.163
+  },
+  {
+   "w": "when",
+   "start": 0.209,
+   "end": 0.313
+  },
+  {
+   "w": "I",
+   "start": 0.36,
+   "end": 0.383
+  },
+  {
+   "w": "say",
+   "start": 0.453,
+   "end": 0.604
+  },
+  {
+   "w": "pop,",
+   "start": 0.662,
+   "end": 1.161
+  },
+  {
+   "w": "something",
+   "start": 1.335,
+   "end": 1.637
+  },
+  {
+   "w": "pops.",
+   "start": 1.707,
+   "end": 2.461
+  }
+ ]
+}

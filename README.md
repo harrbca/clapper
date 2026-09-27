@@ -116,12 +116,53 @@ export function render({ ctx }, t) {           // draw frame t, from t alone
 
 The page modules, all under `/@kit/`:
 
-- `core.js`: `on`, `inOut`, `pop`, easings `E`, keyframes `track`, `lerp`, `clamp`, `shake`, `hash`, two-bone `ik`
+- `core.js`: `on`, `inOut`, `pop`, easings `E`, keyframes `track`, `lerp`, `clamp`, `shake`,
+  `wiggle` (waves, head shakes), `hash`, two-bone `ik`
 - `draw.js`: text, rounded boxes, shapes, arrows, speech bubbles, confetti, puffs, speed lines,
   gradients, vignette, grain; `THEME` for the default font and colours
+- `text.js`: text typed on, words that land as they are said, highlighter swipes, counters, tags
 - `captions.js`: word-lit captions from the narration
+- `camera.js`: a camera with pan, zoom and roll (`shot` for keyframed moves), and parallax: `view(ctx, cam, depth, fn)`
+- `puppet.js`: rigged characters (below)
+- `lipsync.js`: `mouth(t, { speaker })`, mouth shapes from the narration's words, opened by how loud the voice is
+- `life.js`: `blink`, `breath`, `glance`, `sway`: what makes a character look alive standing still
+- `spring.js`: `spring`, `spring2` and `lag`: overshoot, wobble and follow-through, deterministic in any frame order
 - `assets.js`: `loadImages`, `IMG`
 - `timeline.js`: `TL`, `cue`, `line(id)`, `scene(id)`, `W`, `H`, `FPS`
+
+### Characters
+
+A `Puppet` is a tree of parts, each drawn around its own pivot. A pose is a flat object of numbers
+(`'head.r'` in radians, `'armL.x'`, `'torso.sy'`, `'mouth.open'`, `'eyes.blink'` ...), so poses blend,
+add, key and spring simply, and each part's drawing reads whatever keys it needs.
+
+```js
+const pip = new Puppet([
+  { name: 'hips', at: [0, -346] },
+  { name: 'torso', parent: 'hips', z: 2, draw: drawTorso },
+  { name: 'armR', parent: 'torso', at: [90, -212], len: 134, z: 3, draw: sleeve },
+  // ...
+]);
+const p = choreo(t, REST, moves);                 // eases each move's keys from wherever they were
+const reach = pip.reach(p, 'armR', 'foreR', [290, -590]);   // IK: put the hand there
+pip.draw(ctx, { ...reach, ...mouthKeys }, { x: 760, y: 880, scale: 0.8 });
+```
+
+Lines in `script.json` can name a `speaker`, and `voice` picks someone from a `cast` with their own
+ElevenLabs voice. `clap build` writes `build/voice.json`, how loud the narration is 100 times a
+second, which the lip-sync uses. `examples/clapper-intro` has two full characters: Pip (a presenter
+with lip-sync, blinking, IK gestures and a spring-driven ponytail) and Bolt (a hovering robot).
+
+### Motion blur
+
+`"motionBlur": { "samples": 8, "shutter": 0.5 }` in video.json averages 8 moments across half a
+frame, as a film camera's shutter does. A scene can export `motionBlur(t)` returning the samples for
+each frame, so only fast moves pay for it. It is off in the preview unless the page has `?blur=1`.
+
+### Lab pages
+
+`clap still 0 --entry scenes/lab.js` draws another page instead of the video: a character sheet, a
+prop on its own. The page has the same stage and timeline.
 
 ## Tools
 
