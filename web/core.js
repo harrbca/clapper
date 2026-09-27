@@ -15,6 +15,7 @@ export const E = {
   in: k => k * k * k,
   io: k => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2),
   back: k => 1 + 2.9 * Math.pow(k - 1, 3) + 1.9 * Math.pow(k - 1, 2),          // overshoots, then settles
+  snap: k => 1 - Math.pow(1 - k, 4),                                          // gets there fast, settles slowly
   el: k => (k <= 0 ? 0 : k >= 1 ? 1 : Math.pow(2, -10 * k) * Math.sin((k * 10 - 0.75) * (TAU / 3)) + 1),
   bounce: k => {
     const n1 = 7.5625, d1 = 2.75;
@@ -74,3 +75,7 @@ export function wiggle(t, t0, dur, amp, hz = 3) {
   if (u <= 0 || u >= 1) return 0;
   return amp * Math.sin((t - t0) * hz * TAU) * Math.sin((Math.PI / 2) * Math.min(1, u * 4)) * (1 - u) ** 0.8;
 }
+
+// Animation "on twos": time held so each drawing lasts n frames (n = 2 at 30 fps is 15 drawings a
+// second, as TV animation does). Use it for characters; leave camera moves and effects on ones.
+export const onTwos = (t, fps = 30, n = 2) => (Math.floor((t * fps) / n + 1e-6) * n) / fps;

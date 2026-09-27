@@ -1,0 +1,44 @@
+{
+ "request": {
+  "text": "No keyframes? No timeline? Nothing?",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Wait. It draws every single frame... by itself?",
+  "next_text": "Okay. That's actually... kind of amazing.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "No",
+   "start": 0,
+   "end": 0.163
+  },
+  {
+   "w": "keyframes?",
+   "start": 0.232,
+   "end": 0.882
+  },
+  {
+   "w": "No",
+   "start": 1.033,
+   "end": 1.196
+  },
+  {
+   "w": "timeline?",
+   "start": 1.265,
+   "end": 1.916
+  },
+  {
+   "w": "Nothing?",
+   "start": 2.09,
+   "end": 3.019
+  }
+ ]
+}

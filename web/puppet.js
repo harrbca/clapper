@@ -90,14 +90,19 @@ export function add(pose, ...layers) {
 // Choreography: each move eases the keys it names from wherever they were to its values, over its
 // span, then they hold. Moves may overlap, and other keys keep whatever earlier moves left them at.
 //   choreo(t, rest, [{ t: 2.1, dur: 0.5, pose: { 'armR.r': -1.2 }, ease: E.back }, ...])
+// `anticipate: 0.2` first draws back the other way by that fraction of the move, just before m.t,
+// so a big move winds up before it goes.
 export function choreo(t, rest, moves) {
   const s = { ...rest };
   for (const m of moves) {
-    if (t <= m.t) break;
-    const k = (m.ease || E.io)(inv(m.t, m.t + (m.dur ?? 0.5), t));
+    const ad = m.anticipate ? Math.min(0.2, (m.dur ?? 0.5) * 0.7) : 0;
+    if (t <= m.t - ad) continue;
+    const k = t < m.t ? 0 : (m.ease || E.io)(inv(m.t, m.t + (m.dur ?? 0.5), t));
+    const wind = ad && t < m.t ? E.io(inv(m.t - ad, m.t, t)) : ad ? 1 : 0;
     for (const [key, to] of Object.entries(m.pose)) {
       const from = s[key] ?? (/\.(s|sx|sy)$/.test(key) ? 1 : 0);
-      s[key] = lerp(from, to, k);
+      const back = from - (to - from) * (m.anticipate || 0) * wind;
+      s[key] = lerp(back, to, k);
     }
   }
   return s;

@@ -168,11 +168,24 @@ ElevenLabs voice. `clap build` writes `build/voice.json`, how loud the narration
 second, which the lip-sync uses. `examples/clapper-intro` has two full characters: Pip (a presenter
 with lip-sync, blinking, IK gestures and a spring-driven ponytail) and Bolt (a hovering robot).
 
+### Pip, a stock character
+
+`/@kit/characters/pip.js` is a toon character to cast in any video: ink outlines, cel shading, bendy
+limbs, four-fingered hands, and a face built for acting. `pose(t, moves, { extra })` gives her pose at
+t, on twos by default, with springs on her joints, breathing, blinks, glances, lip-sync to the
+narration (`speaker` to pick her lines) and a swinging ponytail. `EXPR` holds expressions (happy,
+laugh, surprised, shocked, skeptical, smug, angry, sad, worried, disgusted, delighted, deadpan) and
+`POSES` body poses, both partial poses to key with `choreo`. `examples/acting-test` shows her off.
+
+In `choreo`, a move can `anticipate` (wind back before it goes), and `E.snap` lands fast and settles.
+`onTwos(t)` holds time in steps of two frames, for anything else that should move like drawn animation.
+
 ### Motion blur
 
 `"motionBlur": { "samples": 8, "shutter": 0.5 }` in video.json averages 8 moments across half a
 frame, as a film camera's shutter does. A scene can export `motionBlur(t)` returning the samples for
 each frame, so only fast moves pay for it. It is off in the preview unless the page has `?blur=1`.
+Don't use it on things animated on twos: blur across a change of drawing shows both drawings.
 
 ### Lab pages
 
