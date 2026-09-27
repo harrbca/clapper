@@ -126,9 +126,24 @@ The page modules, all under `/@kit/`:
 - `puppet.js`: rigged characters (below)
 - `lipsync.js`: `mouth(t, { speaker })`, mouth shapes from the narration's words, opened by how loud the voice is
 - `life.js`: `blink`, `breath`, `glance`, `sway`: what makes a character look alive standing still
-- `spring.js`: `spring`, `spring2` and `lag`: overshoot, wobble and follow-through, deterministic in any frame order
+- `spring.js`: `spring`, `spring2`, `springs` (a set of joints, each with its own feel) and `lag`: overshoot,
+  wobble and follow-through, deterministic in any frame order
+- `scene3d.js`: 3D layers with three.js (below)
+- `finish.js`: `grade` (contrast, saturation, warmth, vignette) and `focus` (depth of field by layer depth)
 - `assets.js`: `loadImages`, `IMG`
 - `timeline.js`: `TL`, `cue`, `line(id)`, `scene(id)`, `W`, `H`, `FPS`
+
+### 3D
+
+`layer3d(stage)` makes a three.js scene that renders on the GPU and is drawn into the frame wherever
+the scene draws it, so 2D and 3D share one shot. Its units are the 2D scene's pixels: `layer.match(cam)`
+lines its camera up with the 2D camera, so a 3D object at `[x, -y, 0]` sits on the 2D point `[x, y]`
+through every pan, zoom and roll, with real perspective in depth. `studioLights()` lights it to sit
+with flat art (and casts shadows straight down); `shadowFloor(y)` lets those shadows fall on the 2D
+floor; `paintedTexture` makes canvas textures, for faces and labels that animate. Scenes import three
+as `import * as THREE from 'three'` and its add-ons from `'three/addons/...'`; text can be extruded
+from the kit's Roboto with `TTFLoader`. Frames stay deterministic: the same t gives the same pixels
+in every Chrome process.
 
 ### Characters
 

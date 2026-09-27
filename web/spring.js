@@ -40,3 +40,25 @@ export const spring2 = (key, t, target, o) => [
 // How far a spring is lagging its target: the wobble alone, for dangling things (hair, antennas,
 // tails) that should swing when their parent moves. Feed it the parent's position.
 export const lag = (key, t, pos, o) => spring(key, t, pos, o) - pos(t);
+
+// Several springs at once, one per named key of target(t), each with its own feel:
+//   springs('pip', t, u => choreo(u, REST, moves), { 'armR.r': { stiffness: 190, damping: 17 }, ... })
+// target(u) is called once per step for all of them. Returns { key: value }.
+export function springs(key, t, target, feel, { t0 = 0 } = {}) {
+  const names = Object.keys(feel);
+  const pick = v => names.map(n => v[n] ?? 0);
+  if (t <= t0) return Object.fromEntries(names.map((n, i) => [n, pick(target(t))[i]]));
+  const N = Math.floor((t - t0) / DT);
+  let s = cache.get(key);
+  if (!s || s.n > N || s.t0 !== t0) s = { n: 0, t0, x: pick(target(t0)), v: names.map(() => 0) };
+  let n = s.n;
+  const x = [...s.x], v = [...s.v];
+  const step = (tg, dt) => names.forEach((nm, i) => {
+    const f = feel[nm], a = f.stiffness * (tg[i] - x[i]) - f.damping * v[i];
+    v[i] += a * dt; x[i] += v[i] * dt;
+  });
+  while (n < N) { step(pick(target(t0 + n * DT)), DT); n++; }
+  cache.set(key, { n, t0, x: [...x], v: [...v] });
+  step(pick(target(t0 + N * DT)), t - t0 - N * DT);           // the part-step to t, not kept
+  return Object.fromEntries(names.map((nm, i) => [nm, x[i]]));
+}

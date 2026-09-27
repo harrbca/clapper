@@ -5,13 +5,29 @@ import { caption } from '/@kit/captions.js';
 import { starPath, text, withAlpha } from '/@kit/draw.js';
 import { tag } from '/@kit/text.js';
 import { cue as c, line, scene, TL } from '/@kit/timeline.js';
-import { bolt, boltPose } from '../characters/bolt.js';
+import { boltPose } from '../characters/bolt.js';
+import { bolt3d } from '../characters/bolt3d.js';
 import { pip, pose } from '../characters/pip.js';
 import { boltFace, boltPath, camera, PIP, PIP_MOVES, pipExtra } from './acting.js';
-import { balls, bubble, clapperboard, codePanel, filmStrip, noDrag, scriptPage, skeleton, timelinePanel, wavePanel } from './props.js';
+import { balls, bubble, codePanel, filmStrip, noDrag, scriptPage, skeleton, timelinePanel, wavePanel } from './props.js';
+import { clapperboard3d, confetti3d } from './props3d.js';
+import { layer3d } from '/@kit/scene3d.js';
+import { grade } from '/@kit/finish.js';
+import { clamp } from '/@kit/core.js';
 import { backdrop, shadow } from './set.js';
 
 export { motionBlur } from './acting.js';
+
+// The 3D layer: Bolt, the clapperboard and its confetti, lit to sit in the 2D set.
+let L, bot, board, bits;
+export async function setup(stage) {
+  L = layer3d(stage);
+  L.lights = L.studioLights();
+  L.shadowFloor(880, 0.26);
+  bot = bolt3d(L);
+  board = await clapperboard3d(L);
+  bits = confetti3d(L);
+}
 
 const say = id => line(id);
 
@@ -44,14 +60,18 @@ export function render({ ctx, W, H }, t) {
     // in front: the bubble, the no-dragging sign, the clapperboard, and Bolt
     bubble(ctx, t, c.bubble, c.popped, 1000, 300);
     noDrag(ctx, t, c.nope, say('nodrag').end + 0.25);
-    clapperboard(ctx, t, c.clap - 1.1, c.clap, 1330, 460);
-    if (t >= c.bolt) {
-      const [bx, by] = boltPath(t);
-      shadow(ctx, bx, 90, 880 - by - 80);
-      bolt.draw(ctx, boltPose(t, boltPath, boltFace(t)), { x: bx, y: by, scale: 0.9 });
-    }
   });
 
+  // 3D: Bolt turns to face where he is flying, and sways a little when he hovers, so we see his depth
+  const [bx, by] = boltPath(t), vx = (boltPath(t + 0.01)[0] - boltPath(t - 0.01)[0]) / 0.02;
+  bot.root.visible = t >= c.bolt;
+  bot.update(boltPose(t, boltPath, boltFace(t)), { x: bx, y: by, scale: 0.9, yaw: clamp(vx * 0.0006, -0.9, 0.9) + Math.sin(t * 0.7) * 0.28 });
+  board.update(t, c.clap - 1.1, c.clap, 1330, 470, 1);
+  bits.update(t, c.clap, 1330, 300);
+  L.match(cam); L.lights.follow(cam);
+  L.draw(ctx);
+
+  grade(ctx);                                            // the finishing pass, before the captions
   caption(ctx, t, { bottom: 1050, size: 34, lineH: 44 });
   endCard(ctx, t, W, H);
   const black = Math.max(1 - on(t, 0, 0.5), on(t, TL.dur - 0.7, 0.7));

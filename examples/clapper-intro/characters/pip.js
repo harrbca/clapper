@@ -4,7 +4,7 @@ import { clamp, lerp, TAU } from '/@kit/core.js';
 import { add, choreo, Puppet } from '/@kit/puppet.js';
 import { blink, breath, glance, sway } from '/@kit/life.js';
 import { loudness, mouth } from '/@kit/lipsync.js';
-import { lag } from '/@kit/spring.js';
+import { lag, springs } from '/@kit/spring.js';
 
 export const PAL = {
   skin: '#F5C9A6', skinShade: '#E2A883', skinDeep: '#C98B69', blush: 'rgba(238,110,100,0.28)',
@@ -121,15 +121,19 @@ const HAIR_BACK = P2('M 0 -310 C 98 -310 160 -248 160 -158 C 160 -112 154 -80 14
 const FRINGE = P2('M -134 -168 C -146 -262 -64 -306 12 -302 C 94 -298 146 -252 138 -176 C 128 -206 104 -228 72 -236 C 50 -204 2 -186 -48 -194 C -84 -198 -114 -186 -134 -168 Z');
 const FRINGE_LIGHT = P2('M -60 -284 C -20 -298 40 -296 80 -276 C 50 -282 0 -284 -40 -274 C -52 -272 -62 -276 -60 -284 Z');
 
-function drawHairBack(ctx) {
+function drawHairBack(ctx, pose) {
+  ctx.save(); ctx.translate(-Math.sin(clamp(pose['head.turn'] ?? 0, -1, 1) * 0.5) * 10, 0);
   ctx.fillStyle = PAL.hairShade; ctx.fill(HAIR_BACK);
+  ctx.restore();
 }
 
-function drawFringe(ctx) {
+function drawFringe(ctx, pose) {
+  ctx.save(); ctx.translate(Math.sin(clamp(pose['head.turn'] ?? 0, -1, 1) * 0.5) * 24, 0);
   const g = ctx.createLinearGradient(-130, -300, 130, -170);
   g.addColorStop(0, PAL.hair); g.addColorStop(1, PAL.hairLight);
   ctx.fillStyle = g; ctx.fill(FRINGE);
   ctx.fillStyle = 'rgba(255,255,255,0.16)'; ctx.fill(FRINGE_LIGHT);
+  ctx.restore();
 }
 
 // The ponytail hangs from its tie; the rig swings it.
@@ -230,21 +234,31 @@ function drawMouth(ctx, pose) {
   ctx.strokeStyle = PAL.lip; ctx.lineWidth = 3; ctx.stroke(shape);
 }
 
+// The head turns in 2.5D: 'head.turn' (-1 to 1) slides the features round a curved face, the far
+// eye and brow narrow, the nose moves most, the near ear tucks away and the fringe shifts over.
+const FACE_R = 115;
 function drawHead(ctx, pose) {
-  // ears
+  const th = clamp(pose['head.turn'] ?? 0, -1, 1) * 0.5, c = Math.cos(th), sn = Math.sin(th);
+  const at = (x, depth = 1) => x * c + sn * FACE_R * depth;                  // where a feature lands
+  const width = x => Math.cos(th + x / FACE_R) / Math.cos(x / FACE_R);      // how wide it looks
+  const feature = (x, depth, fn) => { ctx.save(); ctx.translate(at(x, depth), 0); ctx.scale(width(x), 1); fn(); ctx.restore(); };
   for (const s of [-1, 1]) {
-    ctx.fillStyle = PAL.skinShade; ctx.beginPath(); ctx.ellipse(s * 126, -142, 19, 29, s * 0.15, 0, TAU); ctx.fill();
-    ctx.fillStyle = PAL.skinDeep; ctx.beginPath(); ctx.ellipse(s * 128, -142, 8, 15, s * 0.15, 0, TAU); ctx.fill();
+    const hide = s * sn > 0 ? 1 - Math.min(1, Math.abs(sn) * 2.4) : 1;       // the ear on the side she turns to
+    if (hide <= 0.02) continue;
+    ctx.save(); ctx.translate(s * 126 * c, -142); ctx.scale(hide, 1);
+    ctx.fillStyle = PAL.skinShade; ctx.beginPath(); ctx.ellipse(0, 0, 19, 29, s * 0.15, 0, TAU); ctx.fill();
+    ctx.fillStyle = PAL.skinDeep; ctx.beginPath(); ctx.ellipse(s * 2, 0, 8, 15, s * 0.15, 0, TAU); ctx.fill();
+    ctx.restore();
   }
   ctx.fillStyle = faceFill(ctx); ctx.fill(FACE);
   ctx.fillStyle = PAL.blush;
-  for (const s of [-1, 1]) { ctx.beginPath(); ctx.ellipse(s * 80, -96, 22, 13, 0, 0, TAU); ctx.fill(); }
-  eye(ctx, -50, pose, -1); eye(ctx, 50, pose, 1);
-  brow(ctx, -50, pose, -1); brow(ctx, 50, pose, 1);
-  // nose
-  ctx.strokeStyle = PAL.skinDeep; ctx.lineWidth = 4.5; ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.moveTo(-6, -106); ctx.quadraticCurveTo(2, -98, 10, -104); ctx.stroke();
-  drawMouth(ctx, pose);
+  for (const s of [-1, 1]) feature(s * 80, 0.7, () => { ctx.beginPath(); ctx.ellipse(0, -96, 22, 13, 0, 0, TAU); ctx.fill(); });
+  for (const s of [-1, 1]) { feature(s * 50, 0.85, () => eye(ctx, 0, pose, s)); feature(s * 50, 0.9, () => brow(ctx, 0, pose, s)); }
+  feature(0, 1.25, () => {                                                   // the nose sticks out furthest
+    ctx.strokeStyle = PAL.skinDeep; ctx.lineWidth = 4.5; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-6, -106); ctx.quadraticCurveTo(2 + sn * 6, -98, 10, -104); ctx.stroke();
+  });
+  feature(0, 1, () => drawMouth(ctx, pose));
 }
 
 // ---------- the rig ----------
@@ -290,10 +304,27 @@ export const POSES = {
 
 // Pip at time t: the choreography, then breathing, weight shift, blinks, glances, lip-sync, a
 // nod with loud syllables, and the ponytail swinging behind the head's movements.
-export function pose(t, moves, { speaker = 'pip', extraBlinks = [], still = false, extra } = {}) {
-  // `extra(t)` adds motion on top of the choreography (waves, head shakes, hops); the ponytail feels it too.
-  const base = u => (extra ? add(choreo(u, REST, moves), extra(u)) : choreo(u, REST, moves));
-  let p = base(t);
+// How each joint follows its choreography: the shoulder leads, the elbow lags it, the hand lags
+// that, so a move overlaps down the arm and each part overshoots a little and settles.
+const FEEL = {
+  arm: { stiffness: 200, damping: 18 }, fore: { stiffness: 150, damping: 12.5 }, hand: { stiffness: 115, damping: 10 },
+  head: { stiffness: 120, damping: 15 }, body: { stiffness: 90, damping: 14 },
+};
+const JOINTS = {
+  'armL.r': FEEL.arm, 'armR.r': FEEL.arm, 'foreL.r': FEEL.fore, 'foreR.r': FEEL.fore, 'handL.r': FEEL.hand, 'handR.r': FEEL.hand,
+  'head.r': FEEL.head, 'head.turn': FEEL.head, 'torso.r': FEEL.body,
+};
+
+export function pose(t, moves, { speaker = 'pip', extraBlinks = [], still = false, extra, springy = !still } = {}) {
+  // The choreography, with the head turning to follow the eyes when they look sideways.
+  const chore = u => { const q = choreo(u, REST, moves); q['head.turn'] = (q['head.turn'] ?? 0) + (q['eyes.x'] ?? 0) * 0.45; return q; };
+  // `extra(t)` adds motion on top (waves, head shakes, hops); the ponytail feels it too.
+  const base = u => (extra ? add(chore(u), extra(u)) : chore(u));
+  let p = chore(t);
+  if (springy) Object.assign(p, springs('pip.joints', t, chore, JOINTS));
+  if (extra) p = add(p, extra(t));
+  // moving holds: never quite still
+  if (!still) p = add(p, { 'armL.r': 0.022 * Math.sin(t * 1.3 + 1), 'armR.r': 0.022 * Math.sin(t * 1.1 + 2), 'foreL.r': 0.03 * Math.sin(t * 1.7), 'foreR.r': 0.03 * Math.sin(t * 1.5 + 1) });
   const br = breath(t, 3), sw = still ? 0 : sway(t, 3);
   p = add(p, {
     'torso.sy': 1 + 0.009 * br, 'head.y': -1.5 * br, 'hips.x': sw * 4, 'torso.r': sw * 0.012, 'head.r': -sw * 0.02,

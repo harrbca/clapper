@@ -1,6 +1,7 @@
 // The studio: a warm wall, a floor, and soft shapes at three depths, so camera moves show parallax.
 import { hash, TAU } from '/@kit/core.js';
 import { view } from '/@kit/camera.js';
+import { focus } from '/@kit/finish.js';
 
 export const FLOOR = 880;          // where the floor meets the wall, and the feet stand
 export const WALL = { top: '#FFF4E6', bottom: '#FADFC4' };
@@ -19,14 +20,15 @@ export function backdrop(ctx, cam, t, W, H) {
     g.addColorStop(0, WALL.top); g.addColorStop(1, WALL.bottom);
     ctx.fillStyle = g; ctx.fillRect(-600, -400, W + 1200, FLOOR + 1400);
   });
-  view(ctx, cam, 0.3, () => {
+  // the far layers are out of focus, more so when the camera pushes in
+  focus(ctx, cam, 0.3, () => view(ctx, cam, 0.3, () => {
     for (const [x, y, r, col] of FAR) {
       ctx.fillStyle = col; ctx.globalAlpha = 0.75;
       ctx.beginPath(); ctx.arc(x + Math.sin(t * 0.15 + x) * 12, y + Math.cos(t * 0.12 + y) * 10, r, 0, TAU); ctx.fill();
     }
     ctx.globalAlpha = 1;
-  });
-  view(ctx, cam, 0.6, () => {
+  }));
+  focus(ctx, cam, 0.6, () => view(ctx, cam, 0.6, () => {
     ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     for (const m of MID) {
       const x = m.x + Math.sin(t * 0.3 + m.x) * 18, y = m.y + Math.cos(t * 0.25 + m.y) * 14;
@@ -38,7 +40,7 @@ export function backdrop(ctx, cam, t, W, H) {
       ctx.restore();
     }
     ctx.globalAlpha = 1;
-  });
+  }));
   // the floor, on the scene's own plane
   view(ctx, cam, 1, () => {
     const g = ctx.createLinearGradient(0, FLOOR, 0, H + 300);
