@@ -75,9 +75,11 @@ export function scanner3d(layer, { screen = null, scale = 1 } = {}) {
   const bumper = solid(roundBox(100, 34, 34, 12), edge); bumper.position.y = 90; body.add(bumper);
   const foot = solid(roundBox(100, 26, 34, 12), edge); foot.position.y = -92; body.add(foot);
   // the screen, glass-dark round a picture that glows
-  const bezel = solid(roundBox(84, 128, 3, 6), toon('#0A0C0E'), { ink: 1.4 }); bezel.position.set(0, 22, 15.5); body.add(bezel);
+  // (the picture is 80 x 115, a phone's shape, 480 x 692 for a texture)
+  const SCR = { w: 80, h: 115, y: 20, z: 17.2 };
+  const bezel = solid(roundBox(SCR.w + 8, SCR.h + 7, 3, 6), toon('#0A0C0E'), { ink: 1.4 }); bezel.position.set(0, SCR.y, 15.5); body.add(bezel);
   const screenMat = new THREE.MeshBasicMaterial({ color: screen ? '#FFFFFF' : '#14213D', map: screen, toneMapped: false });
-  const glass = new THREE.Mesh(new THREE.PlaneGeometry(76, 120), screenMat); glass.position.set(0, 22, 17.2); body.add(glass);
+  const glass = new THREE.Mesh(new THREE.PlaneGeometry(SCR.w, SCR.h), screenMat); glass.position.set(0, SCR.y, SCR.z); body.add(glass);
   // keys
   for (let r = 0; r < 3; r++) for (let i = 0; i < 4; i++) {
     const k = solid(roundBox(16, 9, 3, 2), key, { ink: 1 }); k.position.set(-27 + i * 18, -52 - r * 13, 15.8); body.add(k);
@@ -127,6 +129,14 @@ export function scanner3d(layer, { screen = null, scale = 1 } = {}) {
       const quat = new THREE.Quaternion(); gripJ.getWorldQuaternion(quat); quat.multiply(FLIP);
       const at = V().set(side * grip.at[0], grip.at[1], grip.at[2]).multiplyScalar(grip.scale).applyQuaternion(quat);
       return { wrist: gripJ.localToWorld(V().copy(HANDLE)).sub(at), quat };
+    },
+    // A point on the screen, u across and v down (0..1, as on the picture), lifted off the glass by
+    // `lift`, in the world; and the screen's facing. -> { at, normal }
+    screenAt(u, v, lift = 0) {
+      root.updateMatrixWorld(true);
+      const at = body.localToWorld(V(-SCR.w / 2 + SCR.w * u, SCR.y + SCR.h / 2 - SCR.h * v, SCR.z + lift));
+      const normal = V(0, 0, 1).applyQuaternion(body.getWorldQuaternion(new THREE.Quaternion()));
+      return { at, normal };
     },
     // Where the scan window is, in the world.
     nose(v = V()) { root.updateMatrixWorld(true); return v.set(0, 110, 0).applyMatrix4(body.matrixWorld); },

@@ -283,10 +283,14 @@ export function pip3d(layer, { vest = false } = {}) {
     world(v) { facing.updateWorldMatrix(true, false); return facing.localToWorld(v.clone()); },
     // Turn a hand to a world orientation after update() (to fit it round something it holds; see
     // scanner3d's handFrame).
-    orientHand(side, q) {
+    // w eases from the hand's own turn (0) to q (1).
+    orientHand(side, q, w = 1) {
       const A = arms[side === 'L' ? 0 : 1];
+      if (w <= 0) return;
       A.wrist.updateWorldMatrix(true, false); A.wrist.getWorldQuaternion(WQ);
+      const own = A.hand.hand.quaternion.clone();
       A.hand.hand.quaternion.copy(WQ.invert().multiply(q));
+      if (w < 1) A.hand.hand.quaternion.slerpQuaternions(own, A.hand.hand.quaternion.clone(), w);
       A.hand.hand.updateMatrixWorld(true);
     },
     update(p, { x = 0, y = 0, z = 0, scale = 1 } = {}) {
