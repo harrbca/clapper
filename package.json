@@ -1,0 +1,13 @@
+{
+  "name": "clapper",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Narrated, animated videos drawn in a browser: voice, timeline, mix, preview and render",
+  "bin": {
+    "clap": "bin/clap.js"
+  },
+  "dependencies": {
+    "puppeteer-core": "^25.12.0"
+  }
+}

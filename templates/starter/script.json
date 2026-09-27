@@ -1,0 +1,14 @@
+{
+  "voice": { "name": "Bella", "id": "hpp4J3VqNfWAUOO0d1Us" },
+  "model": "eleven_multilingual_v2",
+  "settings": { "stability": 0.5, "similarity_boost": 0.75, "style": 0, "use_speaker_boost": true, "speed": 1 },
+  "scenes": [
+    {
+      "id": "intro",
+      "lines": [
+        { "id": "hello", "text": "This is a new Clapper video." },
+        { "id": "how", "text": "Every word the narrator says can move something on the screen." }
+      ]
+    }
+  ]
+}

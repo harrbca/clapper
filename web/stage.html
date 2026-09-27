@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clapper</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/@kit/stage.css">
+</head>
+<body>
+<div id="wrap"><div id="stage"><canvas id="canvas"></canvas><div id="overlay"></div></div></div>
+<div id="ui">
+  <button id="play" title="Play or pause (Space)">Play</button>
+  <input id="seek" type="range" min="0" step="0.001" value="0" aria-label="Position">
+  <span id="clock">0:00.00</span>
+  <select id="scenes" aria-label="Jump to scene"></select>
+  <select id="rate" aria-label="Speed"><option value="0.5">0.5x</option><option value="1" selected>1x</option></select>
+  <label title="Loop the current scene"><input id="loop" type="checkbox"> Loop</label>
+  <label title="Show cues and the current line (D)"><input id="debug" type="checkbox"> Cues</label>
+</div>
+<div id="hud" hidden></div>
+<div id="banner" hidden></div>
+<audio id="audio" preload="auto"></audio>
+<script type="module" src="/@kit/stage.js"></script>
+</body>
+</html>
