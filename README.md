@@ -145,6 +145,26 @@ as `import * as THREE from 'three'` and its add-ons from `'three/addons/...'`; t
 from the kit's Roboto with `TTFLoader`. Frames stay deterministic: the same t gives the same pixels
 in every Chrome process.
 
+`/@kit/toon3d.js` makes 3D look like the 2D toons: `toon(color)` is a cel-shaded material with three
+flat tones, and `solid(geometry, material)` adds an ink outline that stays the same width on screen
+at any distance. `roundBox`, `ball` and `limbGeometry` (a tapered limb with rounded ends) are parts
+to build from, `joint(parent, at)` a pivot to hang them on, and `reach(upper, lower, a, b, target,
+pole)` two-bone IK for arms and legs. Two 3D stock characters are made from it:
+
+- `/@kit/characters/pip3d.js`: Pip in 3D, with a rig. Hands and feet are placed by IK (`handR.x/y/z`,
+  in her own space), each palm faces a direction you give (`handR.px/py/pz`), and hands take the same
+  forms as the 2D ones. Her eyeballs turn to look under lids that blink and squint, with lash lines;
+  her brows move; her mouth is painted onto her face by the 2D Pip's code, so the lip-sync and
+  `EXPR3` expressions are the same keys. She has a sculpted bob and a ponytail on springs.
+  `pip3dPose(t, moves)` brings her to life as `toonPose` does in 2D.
+- `/@kit/characters/tilly3d.js`: Tilly, a forklift robot, Bolt's cousin. A glowing screen face (moods,
+  gaze, blinks, brows, a mouth for beeps) in a cab that turns and tilts like a head, a beacon that
+  spins and flashes, a telescoping mast, and forks she can lift, tilt, spread and wave one at a time.
+  `tillyPose(t, moves, { path })` rolls her wheels along a path and pitches her on her springs as
+  she speeds up and brakes. `forkTop()` says where a load on her forks goes.
+
+`examples/3d-cast` puts them both in a toon warehouse, all in 3D, with lab pages for each.
+
 ### Characters
 
 A `Puppet` is a tree of parts, each drawn around its own pivot. A pose is a flat object of numbers
