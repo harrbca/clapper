@@ -12,7 +12,8 @@
 //   yaw (radians; body.turn -1..1 turns 3/4 as the 2D one does), hips.x/y/z, torso.rx/ry/rz (lean,
 //   twist, side bend), head.rx (nod), head.turn, head.r (tilt), handL.x/y/z and handR.x/y/z (where
 //   the wrists go, in her own space: origin between her feet, y up, z forward), handL.form (0 open,
-//   1 point, 2 fist, 3 thumbs up, 4 relaxed), handL.palm (roll), handL.bend (wrist), footL.x/y/z ...
+//   1 point, 2 fist, 3 thumbs up, 4 relaxed, 5 grip, 6 pinch), handL.px/py/pz (which way the palm
+//   faces), handL.palm (roll), handL.bend (wrist), footL.x/y/z ...
 import { clamp, lerp, TAU } from '../core.js';
 import { add, choreo } from '../puppet.js';
 import { blink, breath, glance, sway } from '../life.js';
@@ -103,6 +104,8 @@ const CURLS = [
   [[1.55, 1.55, 1.55, 1.55], 1.1],    // 2 fist
   [[1.55, 1.55, 1.55, 1.55], -0.7],   // 3 thumbs up
   [[0.35, 0.45, 0.55, 0.65], 0.35],   // 4 relaxed
+  [[1.15, 1.2, 1.25, 1.3], 0.95],     // 5 gripping a handle (a scanner's)
+  [[0.55, 0.7, 1.25, 1.35], 0.7],     // 6 pinching something flat (a label) against the thumb
 ];
 const WQ = new THREE.Quaternion();
 function buildHand(wrist, side, skin) {
@@ -121,7 +124,7 @@ function buildHand(wrist, side, skin) {
     // form, and which way the palm faces: palm (a direction in the world, or null to leave it), then
     // an extra roll and a bend at the wrist
     pose(form, palm, roll, bend) {
-      const [curls, th] = CURLS[clamp(Math.round(form), 0, 4)];
+      const [curls, th] = CURLS[clamp(Math.round(form), 0, CURLS.length - 1)];
       const splay = form === 0 ? 0.14 : 0.05;               // open fingers fan out
       fingers.forEach((f, i) => { f.rotation.set((1.5 - i) * splay, 0, -side * curls[i], 'ZXY'); });
       thumb.rotation.set(th < 0 ? -1.65 : -0.6 - th * 0.3, 0, th < 0 ? -side * 0.25 : -side * th * 0.9);   // thumbs up: square to the fingers
@@ -137,7 +140,8 @@ function buildHand(wrist, side, skin) {
 }
 
 // ---------- the model ----------
-export function pip3d(layer) {
+// Options: vest: true dresses her in a hi-vis safety vest over the sweater.
+export function pip3d(layer, { vest = false } = {}) {
   const M = {
     skin: toon(PAL.skin), hair: toon(PAL.hair), top: toon(PAL.top), cuff: toon(PAL.cuff), pants: toon(PAL.pants),
     shoe: toon(PAL.shoe), sole: toon(PAL.sole), tie: toon(PAL.tie), white: toon('#FFFFFF'), pin: toon('#1B2330'),
@@ -167,7 +171,18 @@ export function pip3d(layer) {
   const ring = (r, tube, y, mat) => { const m = solid(new THREE.TorusGeometry(r, tube, 12, 64), mat, { ink: 2 }); m.rotation.x = Math.PI / 2; m.scale.set(1, 0.72, 1); m.position.y = y; torso.add(m); return m; };
   ring(84, 9, -26, M.cuff);
   ring(36, 7, 247, M.cuff);
+  if (vest) {                               // hi-vis, with two reflective bands and a zip
+    const vp = [[96, -24], [95, 20], [92, 80], [98, 150], [103, 190], [97, 222], [78, 240], [54, 248], [50, 246]];
+    const shell = solid(new THREE.LatheGeometry(vp.map(([r, y]) => new THREE.Vector2(r, y)), 64), toon('#D6EE1F', { side: THREE.DoubleSide }));
+    shell.scale.z = 0.74; torso.add(shell);
+    for (const y of [70, 128]) {
+      const band = solid(new THREE.CylinderGeometry(94.5 + (y > 100 ? 3 : 0), 94.5 + (y > 100 ? 3 : 0), 18, 64, 1, true), toon('#E6EBEF', { side: THREE.DoubleSide }), { ink: 0 });
+      band.scale.z = 0.745; band.position.y = y; torso.add(band);
+    }
+    const zip = solid(roundBox(6, 250, 4, 2), toon('#8A9A18'), { ink: 0 }); zip.position.set(0, 112, 71); torso.add(zip);
+  }
   const pin = new THREE.Group(); pin.position.set(-46, 176, 64); pin.rotation.y = -0.45; torso.add(pin);
+  pin.visible = !vest;
   { const b = solid(roundBox(30, 22, 6, 3), M.pin, { ink: 1.6 }); pin.add(b); const top = solid(roundBox(30, 8, 7, 2), M.tie, { ink: 1.6 }); top.position.y = 15; top.rotation.z = -0.12; pin.add(top); }
 
   // arms, from the shoulders: sleeves with cuffs, and hands
@@ -230,8 +245,13 @@ export function pip3d(layer) {
 
   // Put every part where the pose says.
   const W = new THREE.Vector3(), Pole = new THREE.Vector3(), q = new THREE.Quaternion(), q2 = new THREE.Quaternion();
+  const palmPoint = new THREE.Vector3();
   return {
     root, head,
+    // Her hands, to hang props on: hands.L / hands.R are the hand groups (palm facing -x on the
+    // right hand, +x on the left, fingers down -y). palm('R', v) is the middle of the palm, in the world.
+    hands: { L: arms[0].hand.hand, R: arms[1].hand.hand },
+    palm(side, v = palmPoint) { const h = arms[side === 'L' ? 0 : 1].hand.hand; h.updateWorldMatrix(true, false); return v.set(0, -30, 0).applyMatrix4(h.matrixWorld); },
     update(p, { x = 0, y = 0, z = 0, scale = 1 } = {}) {
       const g = (k, d = 0) => p[k] ?? d;
       root.position.set(x, -y, z); root.scale.setScalar(scale);

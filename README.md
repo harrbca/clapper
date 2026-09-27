@@ -165,6 +165,15 @@ pole)` two-bone IK for arms and legs. Two 3D stock characters are made from it:
 
 `examples/3d-cast` puts them both in a toon warehouse, all in 3D, with lab pages for each.
 
+`/@kit/props3d.js` has props in the same style: `scanner3d` (a pistol-grip handheld whose screen shows a
+texture you paint, with a trigger, an indicator light and a red scan beam, and `hold(hand, aim, face)`
+to put it in a hand and point it), `label3d` (a bin label with decorative bars, old and yellowed or
+new, whose backing peels off), `rack3d` (pallet racking with `slot()` for labels on its beams), and
+`carton3d`, `pallet3d` and `palletLoad`. The bars are made up on purpose, so nothing can be scanned for
+real. 3D Pip can wear a hi-vis vest (`pip3d(layer, { vest: true })`), grip a handle (hand form 5) or
+pinch a label (6), and `pip.palm('R')` says where her palm is, to hang props on. `examples/3d-props`
+shows them.
+
 ### Characters
 
 A `Puppet` is a tree of parts, each drawn around its own pivot. A pose is a flat object of numbers
