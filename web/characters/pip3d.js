@@ -98,36 +98,57 @@ function hairGeometry() {
 
 // ---------- hands ----------
 // Four fingers and a thumb. The palm faces in towards her side at rest, fingers down, thumb forward.
+// Each finger bends at two knuckles: [[base, middle] for each finger, index first], then the thumb.
+const F4 = (a, b) => [[a, b], [a, b], [a, b], [a, b]];
 const CURLS = [
-  [[0.1, 0.1, 0.1, 0.12], 0.05],      // 0 open
-  [[0, 1.5, 1.5, 1.5], 1.0],          // 1 pointing
-  [[1.55, 1.55, 1.55, 1.55], 1.1],    // 2 fist
-  [[1.55, 1.55, 1.55, 1.55], -0.7],   // 3 thumbs up
-  [[0.35, 0.45, 0.55, 0.65], 0.35],   // 4 relaxed
-  [[1.15, 1.2, 1.25, 1.3], 0.95],     // 5 gripping a handle (a scanner's)
-  [[0.55, 0.7, 1.25, 1.35], 0.7],     // 6 pinching something flat (a label) against the thumb
+  [F4(0.08, 0.05), 0.05],                                              // 0 open
+  [[[0, 0.03], [1.5, 1.6], [1.5, 1.6], [1.5, 1.6]], 1.0],             // 1 pointing
+  [F4(1.5, 1.6), 1.1],                                                 // 2 fist
+  [F4(1.5, 1.6), -0.7],                                                // 3 thumbs up
+  [[[0.22, 0.2], [0.28, 0.26], [0.34, 0.3], [0.4, 0.36]], 0.35],       // 4 relaxed
+  [F4(0.8, 1.05), 'grip'],                                             // 5 closed round a handle (see GRIP)
+  [[[0.35, 0.35], [0.5, 0.45], [1.35, 1.45], [1.45, 1.5]], 0.7],       // 6 pinching something flat against the thumb
 ];
+// Where a handle sits in a hand closed with form 5, in the hand's own space (for side +1; mirror x
+// for side -1): it runs along z, touching the palm, the fingers wrapped round it. Props use it.
+export const GRIP = { at: [-24, -40.7, 0], radius: 11, scale: 1.2 };
+
 const WQ = new THREE.Quaternion();
 function buildHand(wrist, side, skin) {
   const hand = joint(wrist);
-  hand.scale.setScalar(1.2);
+  hand.scale.setScalar(GRIP.scale);
   const palm = solid(ball(24, 32), skin, { ink: 2.2 }); palm.scale.set(0.58, 1.08, 1.12); palm.position.y = -26; hand.add(palm);
   const fingers = [19.5, 6.5, -6.5, -19.5].map((z, i) => {
-    const f = joint(hand, [side * 2, -44, z]);
-    f.add(solid(limbGeometry([36, 39, 37, 31][i], 6.3, 5.8, 16), skin, { ink: 2 }));
-    return f;
+    const len = [36, 39, 37, 31][i], a = len * 0.54, b = len * 0.46;
+    const base = joint(hand, [-side * 6, -45, z]);
+    base.add(solid(limbGeometry(a, 6.3, 6, 16), skin, { ink: 2 }));
+    const mid = joint(base, [0, -a, 0]);
+    mid.add(solid(limbGeometry(b, 6, 5.6, 16), skin, { ink: 2 }));
+    return { base, mid, b };
   });
   const thumb = joint(hand, [side * 3, -16, 17]);
   thumb.add(solid(limbGeometry(24, 7.8, 7, 16), skin, { ink: 2 }));
+  const T1 = new THREE.Vector3(), T2 = new THREE.Vector3();
   return {
     hand,
+    // Between the tips of the thumb and the index finger, in the world: where a pinched thing is held.
+    pinch(v = new THREE.Vector3()) {
+      hand.updateWorldMatrix(true, true);
+      fingers[0].mid.localToWorld(T1.set(0, -fingers[0].b + 4, 0));
+      thumb.localToWorld(T2.set(0, -20, 0));
+      return v.addVectors(T1, T2).multiplyScalar(0.5);
+    },
     // form, and which way the palm faces: palm (a direction in the world, or null to leave it), then
     // an extra roll and a bend at the wrist
     pose(form, palm, roll, bend) {
       const [curls, th] = CURLS[clamp(Math.round(form), 0, CURLS.length - 1)];
-      const splay = form === 0 ? 0.14 : 0.05;               // open fingers fan out
-      fingers.forEach((f, i) => { f.rotation.set((1.5 - i) * splay, 0, -side * curls[i], 'ZXY'); });
-      thumb.rotation.set(th < 0 ? -1.65 : -0.6 - th * 0.3, 0, th < 0 ? -side * 0.25 : -side * th * 0.9);   // thumbs up: square to the fingers
+      const splay = Math.round(form) === 0 ? 0.14 : 0.04;               // open fingers fan out
+      fingers.forEach((f, i) => {
+        f.base.rotation.set((1.5 - i) * splay, 0, -side * curls[i][0], 'ZXY');
+        f.mid.rotation.set(0, 0, -side * curls[i][1]);
+      });
+      if (th === 'grip') thumb.rotation.set(0, 0, -side * 1.37);          // over the top of the handle
+      else thumb.rotation.set(th < 0 ? -1.65 : -0.6 - th * 0.3, 0, th < 0 ? -side * 0.25 : -side * th * 0.9);   // thumbs up: square to the fingers
       let twist = 0;
       if (palm) {                               // turn round the forearm so the palm (local -side x) faces it
         wrist.getWorldQuaternion(WQ);
@@ -158,8 +179,11 @@ export function pip3d(layer, { vest = false } = {}) {
     const knee = joint(thigh, [0, -160, 0]);
     knee.add(solid(limbGeometry(150, 29, 25), M.pants));
     const ankle = joint(knee, [0, -150, 0]);
-    const upper = solid(roundBox(66, 44, 106, 22), M.shoe); upper.position.set(0, -16, 22); ankle.add(upper);
-    const sole = solid(roundBox(70, 12, 110, 6), M.sole, { ink: 2 }); sole.position.set(0, -36, 22); ankle.add(sole);
+    // a trainer: a rounded upper, and a sole that is the same shape squashed flat and a touch bigger,
+    // so it follows the upper's outline as a band round the bottom; the floor is at -42
+    const shoe = roundBox(60, 50, 100, 22);
+    const upper = solid(shoe, M.shoe); upper.position.set(0, -15, 22); ankle.add(upper);
+    const sole = solid(shoe, M.sole, { ink: 1.6 }); sole.scale.set(1.035, 0.3, 1.025); sole.position.set(0, -34.5, 22); ankle.add(sole);
     return { s, thigh, knee, ankle };
   });
 
@@ -251,7 +275,20 @@ export function pip3d(layer, { vest = false } = {}) {
     // Her hands, to hang props on: hands.L / hands.R are the hand groups (palm facing -x on the
     // right hand, +x on the left, fingers down -y). palm('R', v) is the middle of the palm, in the world.
     hands: { L: arms[0].hand.hand, R: arms[1].hand.hand },
+    pinch(side, v) { return arms[side === 'L' ? 0 : 1].hand.pinch(v); },
     palm(side, v = palmPoint) { const h = arms[side === 'L' ? 0 : 1].hand.hand; h.updateWorldMatrix(true, false); return v.set(0, -30, 0).applyMatrix4(h.matrixWorld); },
+    // Between the world and her own space (origin between her feet, y up, z where she faces), as
+    // hand and foot targets are given.
+    local(v) { facing.updateWorldMatrix(true, false); return facing.worldToLocal(v.clone()); },
+    world(v) { facing.updateWorldMatrix(true, false); return facing.localToWorld(v.clone()); },
+    // Turn a hand to a world orientation after update() (to fit it round something it holds; see
+    // scanner3d's handFrame).
+    orientHand(side, q) {
+      const A = arms[side === 'L' ? 0 : 1];
+      A.wrist.updateWorldMatrix(true, false); A.wrist.getWorldQuaternion(WQ);
+      A.hand.hand.quaternion.copy(WQ.invert().multiply(q));
+      A.hand.hand.updateMatrixWorld(true);
+    },
     update(p, { x = 0, y = 0, z = 0, scale = 1 } = {}) {
       const g = (k, d = 0) => p[k] ?? d;
       root.position.set(x, -y, z); root.scale.setScalar(scale);

@@ -1,13 +1,13 @@
-// The 3D props, in a corner of a warehouse: racking with old and new bin labels, a new label with its
-// backing half peeled, Pip in a hi-vis vest scanning a label, and a scanner up close with a live screen.
+// The 3D props, in a corner of a warehouse: racking with old and new bin labels, cartons on pallets,
+// Pip in a hi-vis vest scanning an old label, a new label with its backing half peeled in her other hand.
 //   clap still 3
 import { E, inv } from '/@kit/core.js';
 import { layer3d, paintedTexture, THREE } from '/@kit/scene3d.js';
 import { roundBox, solid, toon } from '/@kit/toon3d.js';
 import { label3d, palletLoad, rack3d, scanner3d } from '/@kit/props3d.js';
-import { EXPR3, pip3d, pip3dPose } from '/@kit/characters/pip3d.js';
+import { EXPR3, GRIP, pip3d, pip3dPose } from '/@kit/characters/pip3d.js';
 
-let L, rack, pip, inHand, big, held;
+let L, rack, pip, inHand, held;
 const screen = paintedTexture(480, 800, (g, w, h, t = 0) => {         // a made-up app, for the demo
   g.fillStyle = '#14213D'; g.fillRect(0, 0, w, h);
   g.fillStyle = 'rgba(255,255,255,0.7)'; g.font = '500 26px Roboto'; g.textAlign = 'left'; g.fillText('Aisle A', 24, 48);
@@ -25,18 +25,17 @@ export function setup(stage) {
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(8000, 6000), toon('#D8CDBA')); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; L.scene.add(floor);
   const wall = new THREE.Mesh(new THREE.PlaneGeometry(8000, 3000), toon('#A7C0CE')); wall.position.set(0, 1500, -700); L.scene.add(wall);
   rack = rack3d({ bays: 2 }); rack.group.position.set(0, 0, -300); L.scene.add(rack.group);
-  for (const [b, lv, seed] of [[0, 0, 1], [1, 0, 2], [0, 1, 3], [1, 1, 4], [0, 2, 5]]) {
-    const load = palletLoad({ seed }); load.position.set(rack.bayX(b), rack.levels[lv] + rack.BEAM.h / 2, -150); rack.group.add(load);
+  for (const [b, lv, seed] of [[0, -1, 1], [1, -1, 2], [0, 0, 3], [1, 0, 4], [0, 1, 5]]) {
+    const load = palletLoad({ ...rack.PALLET, seed }); load.position.copy(rack.spot(b, lv)); rack.group.add(load);
   }
   // labels on the level-1 beams: two old, one already covered by its new label
-  const put = (lab, b, dx) => { lab.group.position.copy(rack.slot(b, 1, dx)); rack.group.add(lab.group); };
+  const put = (lab, b, dx) => { lab.group.position.copy(rack.slot(b, 0, dx)); rack.group.add(lab.group); };
   put(label3d({ title: 'A1-01', value: '41100188', old: true }), 0, -110);
   put(label3d({ title: 'A1-02', value: '41100226', old: true }), 0, 110);
   put(label3d({ title: 'A1-03', value: 'NEWA103' }), 1, -110);
   held = label3d({ title: 'A1-01', value: 'NEWA101' }); L.scene.add(held.group);
   pip = pip3d(L, { vest: true });
   inHand = scanner3d(L, { screen, scale: 0.9 });
-  big = scanner3d(L, { screen, scale: 1.8 });
 }
 
 const HEAD = new THREE.Vector3(), TARGET = new THREE.Vector3(), P = new THREE.Vector3(), A = new THREE.Vector3(), F = new THREE.Vector3();
@@ -48,22 +47,29 @@ export function render({ ctx, W, H }, t) {
     'handR.x': 70, 'handR.y': 640, 'handR.z': 230, 'handR.form': 5, 'handR.px': -1, 'handR.pz': 0,
     'handL.x': -150, 'handL.y': 470, 'handL.z': 150, 'handL.form': 6, 'handL.px': 0.4, 'handL.pz': -1,
   } }], { id: 'lab' });
-  pip.update(pose, { x: -120, y: 0, z: 420 });
+  const AT = { x: -120, y: 0, z: 420 };
+  pip.update(pose, AT);
   rack.group.updateMatrixWorld(true);
-  TARGET.copy(rack.slot(0, 1, -110)).add(new THREE.Vector3(33, 0, 0)).applyMatrix4(rack.group.matrixWorld);
+  TARGET.copy(rack.slot(0, 0, -110)).add(new THREE.Vector3(33, 0, 0)).applyMatrix4(rack.group.matrixWorld);
   pip.head.updateWorldMatrix(true, false); HEAD.set(0, 150, 60).applyMatrix4(pip.head.matrixWorld);
-  pip.palm('R', P);
+  // the scanner is aimed first, then her right hand is fitted round its handle
+  P.copy(pip.world(new THREE.Vector3(80, 650, 250)));
   inHand.hold(P, A.subVectors(TARGET, P), F.subVectors(HEAD, P));
+  const grip = inHand.handFrame(GRIP, 1), w = pip.local(grip.wrist);
+  Object.assign(pose, { 'handR.x': w.x, 'handR.y': w.y, 'handR.z': w.z });
+  pip.update(pose, AT); pip.orientHand('R', grip.quat);
   const k = 0.5 + 0.5 * Math.sin(t * 5);
   inHand.update({ trigger: 1, led: 'green', beam: { to: TARGET, k: 0.6 + 0.4 * k }, camera: L.camera });
-  // the new label in her left hand, its backing half off
-  pip.palm('L', P); held.group.position.copy(P).add(new THREE.Vector3(10, 34, 20));
-  held.group.lookAt(HEAD.x, P.y + 40, HEAD.z + 800); held.setLiner(0.45);
-  // a scanner up close, on the right, turning a little
-  big.hold(new THREE.Vector3(1250, 380, 120), new THREE.Vector3(Math.sin(t * 0.6) * 0.25, 1, 0.1), new THREE.Vector3(0.75, 0.15, 0.55));
-  big.update({ led: 'amber' });
-
+  // the new label pinched by its corner in her left hand, its backing half off, facing her
+  pip.pinch('L', P);
+  held.group.position.copy(P); held.group.lookAt(HEAD);
+  held.group.translateX(-80); held.group.translateY(-26); held.setLiner(0.45);   // the label's corner at the pinch
   L.camera.position.set(2300, 900, 1700); L.camera.lookAt(-60, 560, -40);
+  const close = globalThis.CLOSE;                    // lab-close.js looks at the details
+  if (close === 'hand') { const c = inHand.root.position; L.camera.position.set(c.x + 260, c.y + 110, c.z + 330); L.camera.lookAt(c.x, c.y - 20, c.z); }
+  else if (close === 'hand2') { const c = inHand.root.position; L.camera.position.set(c.x + 330, c.y - 60, c.z - 160); L.camera.lookAt(c.x, c.y - 30, c.z); }
+  else if (close === 'hand3') { const c = inHand.root.position; L.camera.position.set(c.x - 60, c.y + 360, c.z + 120); L.camera.lookAt(c.x, c.y - 30, c.z); }
+  else if (close) { L.camera.position.set(...close.pos); L.camera.lookAt(...close.at); }
   L.camera.near = 50; L.camera.far = 30000; L.camera.updateProjectionMatrix();
   L.lights.rig.position.set(0, 0, 0);
   ctx.fillStyle = '#A7C0CE'; ctx.fillRect(0, 0, W, H);

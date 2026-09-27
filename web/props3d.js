@@ -5,7 +5,7 @@ import { clamp, hash, TAU } from './core.js';
 import { paintedTexture, THREE } from './scene3d.js';
 import { ball, joint, roundBox, solid, toon } from './toon3d.js';
 
-const V = () => new THREE.Vector3();
+const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 
 // ---------- barcodes ----------
 // Bars made up from the text: they look like a barcode but are decorative on purpose, so nothing in a
@@ -87,10 +87,11 @@ export function scanner3d(layer, { screen = null, scale = 1 } = {}) {
   const ledMat = new THREE.MeshBasicMaterial({ color: '#223322' });
   const led = new THREE.Mesh(ball(3.6, 12), ledMat); led.position.set(34, 92, 17.5); body.add(led);
   // the pistol grip and its trigger
+  // (slim enough for a toon hand to close round: see handFrame)
   const gripJ = joint(body, [0, -18, -15]); gripJ.rotation.x = 0.32;
-  const grip = solid(roundBox(40, 46, 112, 16), edge); grip.position.z = -54; gripJ.add(grip);
-  const band = solid(roundBox(42, 12, 60, 5), accent, { ink: 1.4 }); band.position.set(0, -18, -64); gripJ.add(band);
-  const trigger = solid(roundBox(16, 18, 30, 6), accent, { ink: 1.4 }); trigger.position.set(0, 30, -26); gripJ.add(trigger);
+  const grip = solid(roundBox(28, 30, 112, 12), edge); grip.position.z = -54; gripJ.add(grip);
+  const band = solid(roundBox(30, 10, 60, 4), accent, { ink: 1.4 }); band.position.set(0, -12, -64); gripJ.add(band);
+  const trigger = solid(roundBox(12, 14, 24, 5), accent, { ink: 1.4 }); trigger.position.set(0, 20, -22); gripJ.add(trigger);
 
   // the beam: a fan of red light from the window to where it is aimed, and a bright line there
   const beamMat = new THREE.MeshBasicMaterial({ color: '#FF2A2A', transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
@@ -101,20 +102,31 @@ export function scanner3d(layer, { screen = null, scale = 1 } = {}) {
   layer.scene.add(fan, spot);
   const setQuad = (m, pts) => { const a = m.geometry.attributes.position; pts.forEach((p, i) => a.setXYZ(i, p.x, p.y, p.z)); a.needsUpdate = true; m.geometry.computeBoundingSphere(); };
 
-  const X = V(), Y = V(), Z = V(), M4 = new THREE.Matrix4(), P = V(), Q = V(), S = V(), D = V(), N = V(), grip0 = V(0, -34, -70);
+  const X = V(), Y = V(), Z = V(), M4 = new THREE.Matrix4(), P = V(), Q = V(), S = V(), D = V(), N = V();
+  const HANDLE = V(0, 0, -48), FLIP = new THREE.Quaternion().setFromAxisAngle(V().set(0, 0, 1), Math.PI);
   const LED = { off: '#223322', green: '#39E26A', red: '#FF3B30', amber: '#FFB21F' };
   return {
-    root, body, screen: glass,
-    // Hold it with the grip at `hand`, the nose pointing along `aim`, and the screen turned towards
-    // `face` (all in the world): the scanner's own "look at".
+    root, body, screen: glass, grip: gripJ,
+    // Hold it with the middle of the handle at `hand`, the nose pointing along `aim`, and the screen
+    // turned towards `face` (all in the world): the scanner's own "look at".
     hold(hand, aim, face) {
       Y.copy(aim).normalize();
       Z.copy(face).addScaledVector(Y, -face.dot(Y)).normalize();         // the screen's way, square to the aim
       X.crossVectors(Y, Z).normalize(); Z.crossVectors(X, Y);
       root.quaternion.setFromRotationMatrix(M4.makeBasis(X, Y, Z));
-      P.copy(grip0).multiplyScalar(scale).applyQuaternion(root.quaternion);
+      root.position.set(0, 0, 0); root.updateMatrixWorld(true);
+      gripJ.localToWorld(P.copy(HANDLE));
       root.position.copy(hand).sub(P);
       root.updateMatrixWorld(true);
+    },
+    // Where a hand goes to hold it, pistol-fashion: closed round the handle (hand form 5) with the index
+    // finger at the top by the trigger and the forearm behind. grip is the character's GRIP (where a
+    // handle sits in its closed hand); side is the hand's (+1 or -1). -> { wrist, quat } in the world,
+    // for the arm's IK target and orientHand.
+    handFrame(grip, side = 1) {
+      const quat = new THREE.Quaternion(); gripJ.getWorldQuaternion(quat); quat.multiply(FLIP);
+      const at = V().set(side * grip.at[0], grip.at[1], grip.at[2]).multiplyScalar(grip.scale).applyQuaternion(quat);
+      return { wrist: gripJ.localToWorld(V().copy(HANDLE)).sub(at), quat };
     },
     // Where the scan window is, in the world.
     nose(v = V()) { root.updateMatrixWorld(true); return v.set(0, 110, 0).applyMatrix4(body.matrixWorld); },
@@ -141,9 +153,10 @@ export function scanner3d(layer, { screen = null, scale = 1 } = {}) {
 
 // ---------- racking ----------
 // Pallet racking: blue uprights, orange beams, bays side by side along x, the beams' faces towards +z.
-// levels are the beams' heights (their middles). slot(bay, level, dx) says where a label goes on a
-// front beam: its middle, facing out. Returns { group, slot, bayX, BEAM }.
-export function rack3d({ bays = 3, bayW = 440, levels = [40, 560, 1080], depth = 300, height = 1500, upright = '#2F5F9E', beam = '#E36F22' } = {}) {
+// levels are the beams' heights (their middles); the bottom level is the floor. slot(bay, level, dx)
+// says where a label goes on a front beam (its middle, facing out); spot(bay, level) where a pallet
+// goes, resting on the front and back beams (level -1: on the floor); PALLET is the size that spans them.
+export function rack3d({ bays = 3, bayW = 440, levels = [560, 1080], depth = 300, height = 1500, upright = '#2F5F9E', beam = '#E36F22' } = {}) {
   const group = new THREE.Group();
   const up = toon(upright), bm = toon(beam), brace = toon('#5A7FB5');
   const BEAM = { h: 64, d: 26 };
@@ -163,9 +176,11 @@ export function rack3d({ bays = 3, bayW = 440, levels = [40, 560, 1080], depth =
     const m = solid(roundBox(bayW - 30, BEAM.h, BEAM.d, 5), bm, { ink: 2 }); m.position.set(x0 + b * bayW + bayW / 2, y, z); group.add(m);
   }
   const bayX = b => x0 + b * bayW + bayW / 2;
+  const front = BEAM.d / 2 + 15, back = -depth - BEAM.d / 2 - 15;
   return {
-    group, bayX, BEAM, levels,
-    slot(bay, level, dx = 0) { return new THREE.Vector3(bayX(bay) + dx, levels[level], BEAM.d + 15 + 1.5); },
+    group, bayX, BEAM, levels, PALLET: { w: bayW - 70, d: front - back + 50 },
+    slot(bay, level, dx = 0) { return new THREE.Vector3(bayX(bay) + dx, levels[level], front + BEAM.d / 2 + 1.5); },
+    spot(bay, level) { return new THREE.Vector3(bayX(bay), level < 0 ? 0 : levels[level] + BEAM.h / 2, (front + back) / 2); },
   };
 }
 
