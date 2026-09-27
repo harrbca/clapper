@@ -16,3 +16,4 @@ reluctant delight to smug, with an eye roll and a wink.
 
     clap voice && clap build && clap render
     clap still 0 --entry scenes/lab.js     # Pip's poses, expressions and mouth chart
+    clap still 0 --entry scenes/lab-turn.js  # her turnaround, and arms crossing the face

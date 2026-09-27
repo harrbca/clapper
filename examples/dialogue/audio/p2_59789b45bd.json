@@ -1,0 +1,39 @@
+{
+ "request": {
+  "text": "Um... a robot, mostly.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Now Clapper draws them for us! Oh yeah? And who draws Clapper?",
+  "next_text": "Hmph. Kids these days.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Um...",
+   "start": 0,
+   "end": 0.604
+  },
+  {
+   "w": "a",
+   "start": 0.929,
+   "end": 0.987
+  },
+  {
+   "w": "robot,",
+   "start": 1.08,
+   "end": 1.625
+  },
+  {
+   "w": "mostly.",
+   "start": 1.695,
+   "end": 2.601
+  }
+ ]
+}

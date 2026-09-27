@@ -32,11 +32,16 @@ export class Puppet {
     return M;
   }
 
-  // Draw the puppet with its origin at (x, y). `flip` mirrors it to face the other way.
+  // Draw the puppet with its origin at (x, y). `flip` mirrors it to face the other way. A pose can
+  // move a part in the drawing order with '<part>.z' (an arm in front of the head, or behind the
+  // body when turned away); parts without one keep their own z.
   draw(ctx, pose, { x = 0, y = 0, scale = 1, flip = false, hide = [] } = {}) {
     const M = this.matrices(pose);
     const base = ctx.getTransform().translate(x, y).scale(flip ? -scale : scale, scale);
-    for (const p of this.drawOrder) {
+    const moved = this.parts.some(p => pose[`${p.name}.z`] !== undefined);
+    const order = !moved ? this.drawOrder
+      : [...this.parts].sort((a, b) => (pose[`${a.name}.z`] ?? a.z) - (pose[`${b.name}.z`] ?? b.z) || a.order - b.order);
+    for (const p of order) {
       if (!p.draw || hide.includes(p.name)) continue;
       ctx.save();
       ctx.setTransform(base.multiply(M[p.name]));

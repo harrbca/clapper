@@ -168,14 +168,30 @@ ElevenLabs voice. `clap build` writes `build/voice.json`, how loud the narration
 second, which the lip-sync uses. `examples/clapper-intro` has two full characters: Pip (a presenter
 with lip-sync, blinking, IK gestures and a spring-driven ponytail) and Bolt (a hovering robot).
 
-### Pip, a stock character
+### Stock characters: Pip and Gus
 
-`/@kit/characters/pip.js` is a toon character to cast in any video: ink outlines, cel shading, bendy
-limbs, four-fingered hands, and a face built for acting. `pose(t, moves, { extra })` gives her pose at
-t, on twos by default, with springs on her joints, breathing, blinks, glances, lip-sync to the
-narration (`speaker` to pick her lines) and a swinging ponytail. `EXPR` holds expressions (happy,
-laugh, surprised, shocked, skeptical, smug, angry, sad, worried, disgusted, delighted, deadpan) and
-`POSES` body poses, both partial poses to key with `choreo`. `examples/acting-test` shows her off.
+`/@kit/characters/pip.js` (Pip, a young presenter) and `/@kit/characters/gus.js` (Gus, an old-school
+animator with glasses, a mustache and a cardigan) are toon characters to cast in any video: ink
+outlines, cel shading, bendy limbs, four-fingered hands, and faces built for acting. Both are made
+from `/@kit/toon.js`, the toon kit, which a new character can be built from too.
+
+`pose(t, moves, { speaker, extra })` gives a character's pose at t: on twos by default, with springs
+on the joints, breathing, blinks, glances, and lip-sync to their own lines (`speaker`). `EXPR` holds
+expressions (happy, laugh, surprised, shocked, skeptical, smug, angry, sad, worried, disgusted,
+delighted, deadpan, grumpy, horrified) and `POSES` body poses, both partial poses to key with `choreo`.
+
+- `body.turn` (-1..1) turns the body towards 3/4: the torso narrows, what's on its front slides round,
+  the shoulders and hips come in, and the shoes turn. `head.turn` does the same for the head, and the
+  eyes lead the head (`eyes.x`) and the body leads both, so a character facing someone looks at them.
+- Drawing order follows the pose. Facing us, arms are drawn in front of the head, so a hand at the
+  chin or over the face stays whole. Turned, the near arm and leg come in front and the far ones go
+  behind the body. `arms.front: 1` keeps both arms in front whichever way they turn (arms folded),
+  and any part can be moved in the order with `'<part>.z'`.
+- Pip's ponytail and Gus's two wisps of hair swing on springs; Gus's `glasses.y` slides his glasses
+  down his nose, to peer over them.
+
+`examples/acting-test` is Pip alone, `examples/dialogue` is Pip and Gus in a conversation cut between
+a two-shot and singles.
 
 In `choreo`, a move can `anticipate` (wind back before it goes), and `E.snap` lands fast and settles.
 `onTwos(t)` holds time in steps of two frames, for anything else that should move like drawn animation.

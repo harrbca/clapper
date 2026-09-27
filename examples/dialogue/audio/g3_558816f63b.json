@@ -1,0 +1,39 @@
+{
+ "request": {
+  "text": "Hmph. Kids these days.",
+  "voice": "pqHfZKP75CvOlQylNhV4",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.35,
+   "similarity_boost": 0.75,
+   "style": 0.5,
+   "use_speaker_boost": true,
+   "speed": 0.95
+  },
+  "previous_text": "Oh yeah? And who draws Clapper? Um... a robot, mostly.",
+  "next_text": null,
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Hmph.",
+   "start": 0,
+   "end": 0.511
+  },
+  {
+   "w": "Kids",
+   "start": 1.045,
+   "end": 1.498
+  },
+  {
+   "w": "these",
+   "start": 1.567,
+   "end": 1.823
+  },
+  {
+   "w": "days.",
+   "start": 1.869,
+   "end": 2.786
+  }
+ ]
+}

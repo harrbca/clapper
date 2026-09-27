@@ -1,0 +1,49 @@
+{
+ "request": {
+  "text": "Now Clapper draws them for us!",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Back in my day, we drew every frame by hand.",
+  "next_text": "Oh yeah? And who draws Clapper?",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Now",
+   "start": 0,
+   "end": 0.163
+  },
+  {
+   "w": "Clapper",
+   "start": 0.232,
+   "end": 0.615
+  },
+  {
+   "w": "draws",
+   "start": 0.673,
+   "end": 0.952
+  },
+  {
+   "w": "them",
+   "start": 0.987,
+   "end": 1.115
+  },
+  {
+   "w": "for",
+   "start": 1.173,
+   "end": 1.289
+  },
+  {
+   "w": "us!",
+   "start": 1.37,
+   "end": 1.997
+  }
+ ]
+}

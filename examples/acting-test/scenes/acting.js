@@ -9,8 +9,10 @@ import { EXPR, pip, POSES, REST } from '/@kit/characters/pip.js';
 export const PIP = { x: 960, y: 1390, scale: 1.36 };
 
 // Arms placed by where the hands go, in Pip's space (origin at her feet, up is -y).
-const reachL = (x, y, bend = -1) => { const p = pip.reach(REST, 'armL', 'foreL', [x, y], bend); return { 'armL.r': p['armL.r'], 'foreL.r': p['foreL.r'] }; };
-const reachR = (x, y, bend = 1) => { const p = pip.reach(REST, 'armR', 'foreR', [x, y], bend); return { 'armR.r': p['armR.r'], 'foreR.r': p['foreR.r'] }; };
+// (angles wrapped to within half a turn, so arms swing the short way round, not across the body)
+const wrap = a => a - Math.round(a / (2 * Math.PI)) * 2 * Math.PI;
+const reachL = (x, y, bend = -1) => { const p = pip.reach(REST, 'armL', 'foreL', [x, y], bend); return { 'armL.r': wrap(p['armL.r']), 'foreL.r': wrap(p['foreL.r']) }; };
+const reachR = (x, y, bend = 1) => { const p = pip.reach(REST, 'armR', 'foreR', [x, y], bend); return { 'armR.r': wrap(p['armR.r']), 'foreR.r': wrap(p['foreR.r']) }; };
 const ARMS = { ...POSES.rest, 'handL.r': 0, 'handR.r': 0 };
 const LOOK = (x = 0, y = 0) => ({ 'eyes.x': x, 'eyes.y': y });
 
@@ -46,8 +48,10 @@ export const PIP_MOVES = moves([
   { t: c.actually - 0.3, dur: 0.4, pose: { ...CHIN, ...EXPR.neutral, 'mood.smile': -0.05, 'mouth.cornerL': -0.3, 'browR.up': 0.6, 'head.r': -0.06, ...LOOK(0.5, -0.75) } },
   // "...kind of amazing." Delighted: jazz hands
   { t: c.amazing - 0.15, dur: 0.22, pose: { ...ARMS, ...JAZZ, ...EXPR.delighted, 'head.r': 0, ...LOOK(0, 0) }, ease: E.snap, anticipate: 0.3 },
+  // (the jazz hands drop first, so they don't sweep down across her face on the way to crossing)
+  { t: c.not - 0.5, dur: 0.25, pose: { ...ARMS, 'handL.form': 0, 'handR.form': 0 }, ease: E.in },
   // "Not that I needed the help." Arms crossed, turning away, smug
-  { t: c.not - 0.2, dur: 0.4, pose: { ...ARMS, ...CROSSED, ...EXPR.smug, 'head.r': -0.1, 'torso.r': -0.04, ...LOOK(-1, -0.05) } },
+  { t: c.not - 0.22, dur: 0.35, pose: { ...ARMS, ...CROSSED, ...EXPR.smug, 'head.r': -0.1, 'torso.r': -0.04, ...LOOK(-1, -0.05) } },
   // "Obviously." An eye roll, up and over
   { t: c.obviously - 0.05, dur: 0.25, pose: { ...LOOK(-0.2, -1), 'lids.drop': 0.3 } },
   { t: c.obviously + 0.22, dur: 0.3, pose: { ...LOOK(0.9, -0.35), 'lids.drop': 0.45 } },
