@@ -220,6 +220,45 @@ character's own space, for its pose.
 - **Scanner keys:** `scanner3d` has `keys` (twelve; the last is Enter) and `keyAt(i)`, where the top of
   key i is, to press it. It also has `screenAt(u, v)`, a point on its screen.
 
+### Skinned characters: rig3d, hand3d and Ray
+
+Pip and Tilly are stacks of rigid parts. `/@kit/rig3d.js` builds characters with a skin instead: a
+skeleton of bones, and smooth meshes that bend with them at knuckles, wrists, elbows and hips.
+
+- `skeleton(group, bones)` makes the bones. Each is `{ name, parent, at, rest }` and hangs down its
+  -y, as in toon3d. `turn(bone, x, y, z)` turns a bone on top of its rest pose.
+- A body part is modelled from shapes hung on bones: `cone` (a tapered capsule), `ell`, `box` and
+  `ring`. They are joined with `smooth(k, ...)` (blended), `attach(k, base, ...)` (each part blended
+  into the base but not into its neighbours, as fingers into a palm) and `carve`.
+- `skinned(sk, shape, material, { cell })` meshes the shape once, at setup, and binds each vertex to
+  the bones whose shapes are nearest it. The ink outline bends with the bones (`skinnedInk`). `key`
+  shares a mesh between copies of a character, and `uvs` and `colors` paint it.
+
+`/@kit/hand3d.js` is a human hand for these characters. Each finger has three joints and the thumb
+can reach across the palm. The finger's end joint follows its middle one, as tendons make it, and
+fingers pull their neighbours a little.
+
+- **Shapes:** `HAND` has shapes to key with `choreo`: relaxed, open, flat, fist, point, thumbsUp,
+  peace, claw, count(n), touch(f), ok, reach and grasp. Every shape sets every joint, so hands blend
+  smoothly from one shape to the next.
+- **Grasp:** `grasp` closes the fingers round what the hand holds (a handle or a ball of any size)
+  until each segment meets it.
+- **Touch:** `touch` brings the thumb's pad to a fingertip.
+- **`handLife`:** the fingers move one after another, settle on springs, and trail the wrist.
+
+`/@kit/characters/ray3d.js` is Ray, a grown-up warehouse lead built on both. He is modelled in
+millimetres (1.76 m), with hands from hand3d and the 2D toon mouth painted onto his face (so
+lip-sync and expressions work as for Pip).
+
+- **Arms:** they reach by IK. The forearm turns along its length to face the palm where it is asked,
+  and the shoulders lift and come forward with the arms.
+- **Body:** the spine bends along its length, and his hips go back when he bends.
+- **Keys:** `rayPose` works as `pip3dPose` does, with the same keys plus hand3d's.
+- **Setup:** his meshes take about 5 s to make as the page loads.
+
+`examples/hand-rig` puts one hand through its paces, and `examples/ray-rig` does the same for Ray,
+with lab pages for both.
+
 ### Web captures
 
 `clap capture capture/print.js` drives a web page in Chrome as its script says: pointing, clicking and

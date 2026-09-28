@@ -1,0 +1,16 @@
+{
+  "title": "Ray rig test",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "background": "#DDE7EC",
+  "entry": "scenes/index.js",
+  "capture": "canvas",
+  "hidpi": true,
+  "fonts": [
+    { "family": "Roboto", "weight": 500, "src": "@kit/fonts/Roboto-Medium.ttf" },
+    { "family": "Roboto", "weight": 700, "src": "@kit/fonts/Roboto-Bold.ttf" }
+  ],
+  "chapters": { "ray": "Ray", "end": null },
+  "loudness": -16
+}
