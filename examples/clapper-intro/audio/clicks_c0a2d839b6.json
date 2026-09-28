@@ -1,0 +1,64 @@
+{
+ "request": {
+  "text": "Every click and every keystroke lands right on cue.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "And because it's all code, the camera can move, things can bounce, and my hair can do this. Clapper can drive a web page, too.",
+  "next_text": "Hit print, and it comes out in 3D.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Every",
+   "start": 0,
+   "end": 0.313
+  },
+  {
+   "w": "click",
+   "start": 0.383,
+   "end": 0.662
+  },
+  {
+   "w": "and",
+   "start": 0.731,
+   "end": 0.836
+  },
+  {
+   "w": "every",
+   "start": 0.906,
+   "end": 1.091
+  },
+  {
+   "w": "keystroke",
+   "start": 1.149,
+   "end": 1.672
+  },
+  {
+   "w": "lands",
+   "start": 1.73,
+   "end": 2.032
+  },
+  {
+   "w": "right",
+   "start": 2.125,
+   "end": 2.345
+  },
+  {
+   "w": "on",
+   "start": 2.392,
+   "end": 2.496
+  },
+  {
+   "w": "cue.",
+   "start": 2.577,
+   "end": 3.297
+  }
+ ]
+}

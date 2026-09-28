@@ -268,7 +268,9 @@ pip.draw(ctx, { ...reach, ...mouthKeys }, { x: 760, y: 880, scale: 0.8 });
 Lines in `script.json` can name a `speaker`, and `voice` picks someone from a `cast` with their own
 ElevenLabs voice. `clap build` writes `build/voice.json`, how loud the narration is 100 times a
 second, which the lip-sync uses. `examples/clapper-intro` has two full characters: Pip (a presenter
-with lip-sync, blinking, IK gestures and a spring-driven ponytail) and Bolt (a hovering robot).
+with lip-sync, blinking, IK gestures and a spring-driven ponytail) and Bolt (a hovering robot). It
+goes on to a web capture and a 3D tour: a label printed, walked to its bin and picked with a scanner,
+onto Tilly.
 
 ### Stock characters: Pip and Gus
 

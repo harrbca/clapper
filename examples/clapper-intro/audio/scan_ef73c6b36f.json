@@ -1,0 +1,94 @@
+{
+ "request": {
+  "text": "I stick it on, and my scanner keeps up with every scan and every tap.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "I tear it off, and there's the label, ready to read. Then I walk it over, on my own two feet.",
+  "next_text": "Scan the bin. Tilly pulls up: scan her,",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "I",
+   "start": 0,
+   "end": 0.058
+  },
+  {
+   "w": "stick",
+   "start": 0.174,
+   "end": 0.383
+  },
+  {
+   "w": "it",
+   "start": 0.43,
+   "end": 0.488
+  },
+  {
+   "w": "on,",
+   "start": 0.534,
+   "end": 0.894
+  },
+  {
+   "w": "and",
+   "start": 1.01,
+   "end": 1.138
+  },
+  {
+   "w": "my",
+   "start": 1.196,
+   "end": 1.265
+  },
+  {
+   "w": "scanner",
+   "start": 1.347,
+   "end": 1.707
+  },
+  {
+   "w": "keeps",
+   "start": 1.765,
+   "end": 2.009
+  },
+  {
+   "w": "up",
+   "start": 2.055,
+   "end": 2.136
+  },
+  {
+   "w": "with",
+   "start": 2.171,
+   "end": 2.287
+  },
+  {
+   "w": "every",
+   "start": 2.345,
+   "end": 2.635
+  },
+  {
+   "w": "scan",
+   "start": 2.717,
+   "end": 3.111
+  },
+  {
+   "w": "and",
+   "start": 3.17,
+   "end": 3.262
+  },
+  {
+   "w": "every",
+   "start": 3.355,
+   "end": 3.669
+  },
+  {
+   "w": "tap.",
+   "start": 3.727,
+   "end": 4.598
+  }
+ ]
+}

@@ -10,7 +10,7 @@
    "use_speaker_boost": true,
    "speed": 1
   },
-  "previous_text": "No dragging keyframes around by hand. And because it's all code, the camera can move, things can bounce, and my hair can do this.",
+  "previous_text": "tap Done, and she takes it from here. And when the video's done, one command puts it on YouTube.",
   "next_text": "Words in, video out.",
   "seed": 7
  },
@@ -18,12 +18,12 @@
   {
    "w": "That's",
    "start": 0,
-   "end": 0.302
+   "end": 0.255
   },
   {
    "w": "Clapper.",
-   "start": 0.36,
-   "end": 1.161
+   "start": 0.302,
+   "end": 1.115
   }
  ]
 }

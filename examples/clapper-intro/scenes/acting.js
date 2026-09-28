@@ -66,6 +66,14 @@ export const PIP_MOVES = moves([
   { t: c.bounce - 0.4, dur: 0.4, pose: { ...ARMS, 'eyes.x': 1, 'eyes.y': 0.5, 'head.r': 0.06 } },
   { t: c.hair - 0.45, dur: 0.4, pose: { ...ARMS, ...HIPS, ...FACE, 'mood.smile': 0.9 } },
   { t: c.hair + 1.2, dur: 0.4, pose: { 'eyes.squint': 0.8, 'mood.smile': 1 } },
+  // "Clapper can drive a web page, too." (then the page fills the frame)
+  { t: say('web').start - 0.1, dur: 0.45, pose: { ...ARMS, ...OPEN, ...FACE } },
+  { t: c.webCard - 0.1, dur: 0.4, pose: { ...ARMS, ...POSES.point, 'armR.r': -1.55, 'eyes.x': 0.9 }, ease: E.back },
+  // "And when the video's done, one command puts it on YouTube."
+  { t: say('share').start - 0.3, dur: 0.5, pose: { ...ARMS, ...FACE, 'eyes.x': 0.6 } },
+  { t: c.command - 0.2, dur: 0.4, pose: { ...PALM_UP, 'eyes.x': 0.9 }, ease: E.back },
+  { t: c.youtube - 0.1, dur: 0.35, pose: { ...ARMS, ...POSES.point, 'armR.r': -1.45, 'eyes.x': 0.8, 'brows.up': 0.6, 'mood.smile': 1 }, ease: E.back },
+  { t: say('share').end + 0.3, dur: 0.5, pose: { ...ARMS, ...FACE } },
   // "That's Clapper. Words in, video out."
   { t: c.clap - 0.25, dur: 0.3, pose: { ...ARMS, ...POSES.cheer, ...FACE, 'mood.smile': 1, 'eyes.squint': 0.6 }, ease: E.back },
   { t: say('wordsin').start, dur: 0.5, pose: { ...ARMS, ...OPEN, 'eyes.squint': 0.3 } },
@@ -128,7 +136,8 @@ export function camera(t) {
     [c.camera - 0.05, {}], [c.camera + 0.8, { x: 760, y: 380, zoom: 1.5, rot: -0.07 }], [c.camera + 2.0, { x: 980, y: 520 }],
     [c.bounce - 0.5, { x: 980, y: 520 }], [c.bounce + 0.2, { x: 1180, y: 540 }],
     [c.hair - 0.45, { x: 1180, y: 540 }], [c.hair + 0.05, { x: 780, y: 330, zoom: 1.45 }],
-    [c.hair + 1.7, { x: 780, y: 330, zoom: 1.45 }], [s('outro') + 0.4, { x: 1000, y: 520 }],
+    [c.hair + 1.7, { x: 780, y: 330, zoom: 1.45 }], [s('web') + 0.6, { x: 1000, y: 520 }],
+    [s('share'), { x: 1000, y: 520 }], [s('outro') + 0.4, { x: 1000, y: 520 }],
   ]);
 }
 

@@ -315,3 +315,39 @@ export function clapperboard(ctx, t, tDrop, tClap, x, y) {
   ctx.restore();
   confetti(ctx, t, tClap, x, yy - 120, { n: 90, spread: 2.4, speed: 1300 });
 }
+
+// ---------- sharing: `clap upload` typed into a terminal, its progress, and the video, private ----------
+export function uploadCard(ctx, t, t0, tCmd, tLink, t1) {
+  const { dx, a } = slideIn('upload', t, t0, t1);
+  if (a <= 0) return;
+  withAlpha(ctx, a, () => {
+    const x = 1090 + dx, y = 170, w = 720;
+    card(ctx, x, y, w, 250, PANEL, 24);
+    for (const [i, col] of ['#FF6B6B', '#FFC24A', '#3DDC97'].entries()) { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x + 34 + i * 26, y + 30, 8, 0, TAU); ctx.fill(); }
+    text(ctx, 'terminal', x + 130, y + 31, { size: 20, weight: 500, color: '#8FA3B8', align: 'left' });
+    font(ctx, 28, 500, 'Consolas, "Cascadia Mono", monospace'); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    const cmd = 'clap upload', n = Math.floor(clamp((t - tCmd) / 0.5) * cmd.length);
+    ctx.fillStyle = '#3DDC97'; ctx.fillText('>', x + 34, y + 90);
+    ctx.fillStyle = '#E8EEF3'; ctx.fillText(cmd.slice(0, n), x + 64, y + 90);
+    const up = clamp((t - tCmd - 0.6) / (tLink - tCmd - 0.9));
+    if (t > tCmd + 0.6) {
+      font(ctx, 22, 400, 'Consolas, "Cascadia Mono", monospace'); ctx.fillStyle = '#8FA3B8';
+      ctx.fillText(`uploading video.mp4  ${Math.round(up * 100)}%`, x + 34, y + 140);
+      fillRR(ctx, x + 34, y + 164, w - 68, 12, 6, '#2C3A4E'); fillRR(ctx, x + 34, y + 164, (w - 68) * up, 12, 6, '#61F0FF');
+    }
+    if (t > tLink - 0.2) { ctx.fillStyle = '#3DDC97'; ctx.fillText('on YouTube, private: youtu.be/…', x + 34, y + 212); }
+    // the video's card pops up under the terminal
+    const k = E.back(on(t, tLink, 0.4));
+    if (k > 0.01) {
+      ctx.save(); ctx.translate(x + w / 2, y + 420); ctx.scale(k, k);
+      card(ctx, -300, -120, 600, 250, '#FFFFFF', 22);
+      fillRR(ctx, -276, -96, 300, 170, 14, '#FFE3C8');
+      ctx.fillStyle = '#FF3B30'; rr(ctx, -166, -48, 80, 56, 16); ctx.fill();
+      poly(ctx, [[-136, -34], [-136, -6], [-112, -20]]); ctx.fillStyle = '#FFFFFF'; ctx.fill();
+      text(ctx, 'Clapper: words in,', 44, -70, { size: 26, weight: 700, color: INK, align: 'left' });
+      text(ctx, 'video out', 44, -38, { size: 26, weight: 700, color: INK, align: 'left' });
+      tag(ctx, 'Private', 100, 24, { size: 20, fill: '#EEF1F5', color: '#4A5A70' });
+      ctx.restore();
+    }
+  });
+}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Label</title>
+<!-- A made-up 4 x 6 shipping label for the intro, captured to a picture (capture/label.js) that the 3D
+     label printer prints. Its bars are decorative: made up from the text, nothing scans for real. -->
+<style>
+  html, body { margin: 0; width: 400px; height: 600px; background: #fff; color: #111; font-family: "Segoe UI", system-ui, sans-serif; }
+  .l { padding: 14px 18px; box-sizing: border-box; height: 600px; display: flex; flex-direction: column; }
+  .co { font-weight: 800; font-size: 22px; letter-spacing: .5px; border-bottom: 3px solid #111; padding-bottom: 6px; }
+  small { display: block; font-size: 11px; font-weight: 600; letter-spacing: .6px; margin-top: 6px; }
+  .to { font-size: 19px; font-weight: 700; line-height: 1.2; margin-top: 2px; }
+  .row { display: flex; gap: 18px; border-top: 2px solid #111; margin-top: 7px; padding-top: 0; }
+  .row div { flex: 1; }
+  .big { font-size: 27px; font-weight: 800; }
+  .bin { font-size: 30px; font-weight: 800; }
+  .bars { margin-top: 8px; text-align: center; font-size: 14px; font-weight: 600; }
+  svg { display: block; margin: 4px auto 0; }
+</style>
+</head>
+<body>
+<div class="l">
+  <div class="co">PIP'S PARTS CO.</div>
+  <small>SHIP TO</small>
+  <div class="to">MAPLE STREET HARDWARE<br>12 MAPLE STREET<br>SPRINGFIELD</div>
+  <div class="row">
+    <div><small>ORDER</small><div class="big">4821</div></div>
+    <div><small>QTY</small><div class="big">24 BX</div></div>
+  </div>
+  <div class="row"><div><small>ITEM</small><div style="font-size:20px;font-weight:700">BOLT-7 · ROBOT BOLTS, 12 PACK</div></div></div>
+  <div class="row"><div><small>BIN</small><div class="bin" id="bin">A-01-03</div></div></div>
+  <div class="bars" id="order"></div>
+  <div class="bars" id="pkg"></div>
+</div>
+<script>
+  // made-up bars from the text: they look like a barcode but encode nothing
+  const bars = (text, h) => {
+    let seed = 0, x = 0, out = '';
+    for (const ch of text) seed = (seed * 31 + ch.charCodeAt(0)) % 100003;
+    const r = i => { const v = Math.sin((seed + i) * 127.1 + 311.7) * 43758.5453; return v - Math.floor(v); };
+    for (let i = 0; x < 330; i++) { const w = 2 + Math.floor(r(i) * 3) * 2, g = 2 + Math.floor(r(i + 99) * 2) * 2; out += `<rect x="${x}" width="${w}" height="${h}"/>`; x += w + g; }
+    return `<svg width="330" height="${h}"><g fill="#111">${out}</g></svg>`;
+  };
+  document.getElementById('order').innerHTML = `ORDER# ${bars('ORDER 4821', 52)}4821`;
+  document.getElementById('pkg').innerHTML = `PACKAGE# ${bars('PKG 77120', 52)}77120`;
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+ "viewport": {
+  "width": 1600,
+  "height": 816
+ },
+ "scale": 2,
+ "address": "parts-desk/orders",
+ "steps": [
+  {
+   "id": "start",
+   "kind": "shot",
+   "img": "00-start.png",
+   "title": "Orders · Parts Desk"
+  },
+  {
+   "id": "search",
+   "kind": "click",
+   "at": [
+    236,
+    148.796875
+   ],
+   "box": [
+    80,
+    137.296875,
+    520,
+    23
+   ],
+   "cursor": "text",
+   "hover": "01-search-hover.png",
+   "img": "02-search.png",
+   "title": "Orders · Parts Desk"
+  },
+  {
+   "id": "typed",
+   "kind": "type",
+   "text": "4821",
+   "at": [
+    236,
+    148.796875
+   ],
+   "imgs": [
+    "03-typed-1.png",
+    "04-typed-2.png",
+    "05-typed-3.png",
+    "06-typed-4.png"
+   ],
+   "title": "Orders · Parts Desk"
+  },
+  {
+   "id": "open",
+   "kind": "click",
+   "at": [
+    75.1015625,
+    237.9921875
+   ],
+   "box": [
+    23,
+    214.09375,
+    104.203125,
+    47.796875
+   ],
+   "cursor": "pointer",
+   "hover": "07-open-hover.png",
+   "img": "08-open.png",
+   "title": "Orders · Parts Desk"
+  },
+  {
+   "id": "print",
+   "kind": "click",
+   "at": [
+    1480.390625,
+    753
+   ],
+   "box": [
+    1409.78125,
+    731,
+    141.21875,
+    44
+   ],
+   "cursor": "pointer",
+   "hover": "09-print-hover.png",
+   "img": "10-print.png",
+   "title": "Orders · Parts Desk"
+  }
+ ],
+ "pointer": [
+  992,
+  636
+ ]
+}

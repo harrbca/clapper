@@ -10,7 +10,7 @@
    "use_speaker_boost": true,
    "speed": 1
   },
-  "previous_text": "And because it's all code, the camera can move, things can bounce, and my hair can do this. That's Clapper.",
+  "previous_text": "And when the video's done, one command puts it on YouTube. That's Clapper.",
   "next_text": null,
   "seed": 7
  },
@@ -18,22 +18,22 @@
   {
    "w": "Words",
    "start": 0,
-   "end": 0.337
+   "end": 0.348
   },
   {
    "w": "in,",
    "start": 0.406,
-   "end": 0.662
+   "end": 0.685
   },
   {
    "w": "video",
-   "start": 0.778,
-   "end": 1.138
+   "start": 0.859,
+   "end": 1.219
   },
   {
    "w": "out.",
-   "start": 1.207,
-   "end": 1.765
+   "start": 1.289,
+   "end": 1.858
   }
  ]
 }

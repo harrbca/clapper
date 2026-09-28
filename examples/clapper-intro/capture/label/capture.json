@@ -1,0 +1,20 @@
+{
+ "viewport": {
+  "width": 400,
+  "height": 600
+ },
+ "scale": 2,
+ "address": "label/index.html",
+ "steps": [
+  {
+   "id": "label",
+   "kind": "shot",
+   "img": "00-label.png",
+   "title": "Label"
+  }
+ ],
+ "pointer": [
+  248,
+  468
+ ]
+}
