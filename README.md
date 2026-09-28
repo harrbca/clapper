@@ -33,6 +33,11 @@ YouTube, a Google OAuth client (see [YouTube](#youtube)).
 
 `npm link` puts `clap` on the PATH; otherwise run `node <this folder>/bin/clap.js`.
 
+Working with Claude Code: `CLAUDE.md` has the rules and habits it follows in this repo (the key,
+credits, checking frames). Your own, such as your commit identity or where your private projects
+live, go in `CLAUDE.local.md` next to it, which git ignores. Keep your own videos in their own
+folders outside the kit, and point `clap` at them (`--project`, or run it from inside one).
+
 ## Making a video
 
     clap new my-video && cd my-video
@@ -43,8 +48,11 @@ YouTube, a Google OAuth client (see [YouTube](#youtube)).
     clap build
     clap render                 # out/video.mp4
 
+`clap new my-video --template 3d` starts a 3D video instead: see [Making a 3D video](#making-a-3d-video).
+
 | command | what it does |
 |---|---|
+| `clap new <folder> [--template 3d]` | a new project from a starter: 2D, or 3D (Pip, a desk and a label printer) |
 | `clap voice [--voice NAME] [--audition] [--music] [--draft]` | narration (and a voice audition, and the music bed) from ElevenLabs |
 | `clap build [--no-audio]` | `build/timeline.json`, `build/mix.wav`, `build/captions.srt` and `.vtt` |
 | `clap preview [--port 4173] [--open]` | the live player. Space plays, arrows skip (Shift: 1 s), `,` `.` step a frame, `[` `]` jump scenes, D shows cues |
@@ -311,6 +319,86 @@ Don't use it on things animated on twos: blur across a change of drawing shows b
 
 `clap still 0 --entry scenes/lab.js` draws another page instead of the video: a character sheet, a
 prop on its own. The page has the same stage and timeline.
+
+## Making a 3D video
+
+`clap new my-video --template 3d` starts one: Pip beside a desk with a label printer. When she says
+"print", a label prints, and when she says "read", it comes up to the camera. It is about 100 lines of
+scene to grow from. For a big one, `examples/clapper-intro` has a warehouse in `scenes/tour3d.js`:
+Pip tears the label off, walks it to its bin and does the pick with a scanner, and Tilly takes the
+load away. The rest of this section is what that took.
+
+**Scale.** Work in millimetres, as the printers are. The characters and warehouse props were modelled
+in units of their own, so scale them in:
+
+| thing | scale | so that |
+|---|---|---|
+| 3D Pip | 1.8 | she is about 1.64 m tall (910 in her own units) |
+| Tilly | 3.2 | she is about 1.05 m tall and her forks slide under a pallet |
+| `rack3d`, `palletLoad`, `pallet3d`, `carton3d` | 1.8 | they stand with Pip |
+| `scanner3d` | 0.9 × Pip's | it fits her hand |
+| printers, labels, desk | 1 | they are already in millimetres |
+
+Poses and hand positions are in the character's own units and space (origin between her feet, y up,
+z forward); `pip.local(v)` turns a point in the world into them.
+
+**Camera.** `layer3d(stage, { fov: 30 })` for rooms (the default of 18 suits matching a 2D camera).
+Set `near` and `far` for millimetres (30 and 40000). At fov 30 a standing person fills the frame
+from about 4 m; `fitDistance(camera, size, frac)` works it out. Key the camera's position and target
+with `track(t, keys)`: keys glide, and two keys at the same time cut. What worked:
+
+- Frame both the thing and the person acting on it. A push-in that leaves only a hand at the edge
+  of the frame looks like a mistake.
+- Never shoot along a rack's face: the uprights stack up and hide everything. Shoot over the
+  shoulder from the aisle, about 4 m back, or square on.
+- Cut rather than fly the camera through racks or walls.
+- Move the lights with the shot (`L.lights.rig.position` to the camera's target) and widen the
+  shadow camera for a room, so shadows stay sharp where you are looking.
+
+**Moving Pip.** `pip3dPose(t, moves, { speaker })` works as `toonPose` does in 2D: each move eases
+into its pose at its time and holds it. It adds breathing and blinks, and lip-syncs her to the lines
+whose `speaker` matches. Hands are placed by IK (`handL.x/y/z`), with a form (0 open, 1 point,
+2 fist, 3 thumbs up, 4 relaxed, 5 grip, 6 pinch) and a palm direction (`handL.px/py/pz`). `REST3`
+is her rest pose. `yaw` turns her whole body; `head.turn` and `eyes.x` aim her look.
+
+**Hands on things.** IK puts the wrist where you ask, not the fingers. To land a fingertip on a key
+or a pinch on a label: set the wrist, `pip.update(pose, place)`, measure `pip.tip(side)` or
+`pip.pinch(side)`, move the wrist by the difference, and repeat once. Two passes land it. For the
+scanner: `scanner.hold(hand, aim, face)` places it; `scanner.handFrame(GRIP)` says where the
+wrist goes round its handle (`GRIP` is in pip3d.js); and after the update,
+`pip.orientHand('R', frame.quat)` turns the hand to fit. `scanner.keyAt(i)` and
+`scanner.screenAt(u, v)` are points to press. `tour3d.js` does all of this in its `render`.
+
+**Carrying things.** A carried thing is a pose `{ c, f, u }`. `poseBetween(a, b, k, arc)` goes from
+one to another, lifting by `arc` on the way, so a label comes up out of the printer before it turns
+instead of swinging through it. `printer.hang(label, mm)` feeds a label out and `printer.hung(label)`
+is where it hangs; `poseInFront(camera, fitDistance(camera, label.pitch, 0.8))` holds it up to be
+read. Anything in a hand follows `pip.pinch` or `pip.palm`, recomputed each frame from the pose.
+
+**Walking.** `walk(t, { path, t0, t1 })` gives the body's `x`, `z` and `yaw` and both feet. Put the
+feet into her pose with `footLocal(foot, body, scale)` (`footL.x/y/z`, plus 42 on y for the
+ankle), lower her hips a little by `go`, and the feet stay planted. For footsteps, sample `walk` in
+`timeline.js` and put an `L.sfx` where each foot touches down (the intro's timeline does).
+
+**Timing.** Cue on words: `L.w('line', 'word')` with the bare word (no punctuation), `nth` for a
+repeat. Lay the video out with `clap voice --draft`, then voice it and check again: real timings
+move things. A line with `say` (spoken differently from its caption) can split into different
+words in the draft and the real voice, so cue only on words that are in both. When one moment
+depends on another (grab the label after it has printed), build it from both with `Math.max`, so
+the order holds whatever the voice does. Everything is a function of `t`: no state carried from
+one frame to the next, and springs simulated from 0.
+
+**Checking.** Look at frames; don't assume them.
+
+- `clap sheet` shows the timeline's review moments. `clap sheet mid print+0.3 read+0.5` shows any
+  others: aim for the in-between moments, where things break.
+- For contacts (feet on the floor, a hand round a handle, a label in a pinch, a pallet on its
+  beams), make a lab page (`scenes/lab-*.js`, drawn with `clap still 0 --entry scenes/lab-grip.js`)
+  with close-ups from two or three sides.
+- After rendering, pull frames between the review moments from the video:
+  `ffmpeg -ss 12.3 -i out/video.mp4 -frames:v 1 f.png`.
+- When something is off, `console.warn` the positions: it prints in clap's output. That beats
+  guessing.
 
 ## YouTube
 

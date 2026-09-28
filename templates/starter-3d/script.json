@@ -1,0 +1,15 @@
+{
+  "voice": { "name": "Bella", "id": "hpp4J3VqNfWAUOO0d1Us" },
+  "model": "eleven_multilingual_v2",
+  "settings": { "stability": 0.5, "similarity_boost": 0.75, "style": 0, "use_speaker_boost": true, "speed": 1 },
+  "scenes": [
+    {
+      "id": "intro",
+      "lines": [
+        { "id": "hello", "speaker": "pip", "text": "Hi, I'm Pip, and this is a 3D Clapper video." },
+        { "id": "print", "speaker": "pip", "text": "When I say print, the printer prints a label." },
+        { "id": "read", "speaker": "pip", "text": "And when I say read, it comes up for you to read." }
+      ]
+    }
+  ]
+}

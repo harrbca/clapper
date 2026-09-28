@@ -15,7 +15,8 @@ import * as youtube from '../lib/youtube.js';
 
 const HELP = `clap <command> [options]
 
-  new <folder>                 start a project from the starter template
+  new <folder> [--template 3d] start a project from a starter template (2D, or 3D: Pip at a desk
+                               with a label printer)
   voice [--voice NAME]         narration from ElevenLabs, with word timings (cached in audio/)
         [--audition] [--music] also a voice audition (out/audition.mp3) and the music bed
         [--draft]              no ElevenLabs: timings estimated from the text, and no sound, to lay
@@ -56,9 +57,11 @@ const num = (x, d) => (x === undefined ? d : Number(x));
 
 const commands = {
   async new() {
-    const dir = path.resolve(pos[0] || fail('clap new <folder>'));
+    const dir = path.resolve(pos[0] || fail('clap new <folder> [--template 3d]'));
+    const template = path.join(KIT, 'templates', opt.template ? `starter-${opt.template}` : 'starter');
+    if (!fs.existsSync(template)) fail(`no starter template called ${opt.template}`);
     if (fs.existsSync(dir) && fs.readdirSync(dir).length) fail(`${dir} is not empty`);
-    fs.cpSync(path.join(KIT, 'templates', 'starter'), dir, { recursive: true });
+    fs.cpSync(template, dir, { recursive: true });
     console.log(`  made ${dir}\n  next: cd there, edit script.json, then clap voice, clap build, clap preview`);
   },
   voice: () => voice(project(), { voice: opt.voice, audition: opt.audition, music: opt.music, draft: opt.draft }),
