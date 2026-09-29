@@ -2,7 +2,7 @@
 // contacts that keep his feet, knee and fist where they touch, and the camera.
 import { clamp, E, inv, lerp, onTwos, shake, wiggle } from '/@kit/core.js';
 import { shot } from '/@kit/camera.js';
-import { HAND, mixKeys, MOUTH } from '/@kit/cutout.js';
+import { HAND, mixKeys, MOUTH, reachChain } from '/@kit/cutout.js';
 import { moves } from '/@kit/puppet.js';
 import { cue as c } from '/@kit/timeline.js';
 import { dex, EXPR, REST } from '/@kit/characters/dex.js';
@@ -82,7 +82,7 @@ export function withContacts(p, t) {
   // the knee: a hand to it
   if (t >= c.knee) {
     const knee = dex.where('shinL', p, [10, 10]);
-    p = mixKeys(p, { ...p, ...dex.reach(p, 'armL', 'foreL', knee, 1) }, E.out(inv(c.knee, c.knee + 0.12, t)), ARM_L);
+    p = mixKeys(p, reachChain(dex, p, 'armL', knee), E.out(inv(c.knee, c.knee + 0.12, t)), ARM_L);
   }
   return p;
 }

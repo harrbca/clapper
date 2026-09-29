@@ -3,9 +3,15 @@
 // back, back) instead of morphed. A library of drawn hands, a mouth chart picked by the sound being
 // said, and eyes, lids and brows as layers of their own. characters/dex.js is made from it.
 //
+// A cut-out character is defined as data with defineCutout (see character.js for the format and its
+// checks): its bones, pieces (angleSet, handPiece, mouthChart, or plain drawings), and tags that say
+// which bones are its root, chest and head (look) and which chains are arms and legs, on which side
+// and bending which way. The kit finds everything through the tags, so it has no bone names in it.
+//
 // Poses are flat objects of numbers, as for any Puppet. Keys ending in '.shape' (a hand, a mouth)
 // swap drawings: choreo doesn't blend them, they change halfway through the move that keys them.
 import { clamp, onTwos } from './core.js';
+import { defineCharacter } from './character.js';
 import { add, choreo } from './puppet.js';
 import { blink, breath, glance, sway } from './life.js';
 import { loudness, viseme } from './lipsync.js';
@@ -41,48 +47,59 @@ export function angle(x) { const n = ((Math.round(x) + 4) % 8 + 8) % 8 - 4; retu
 export const bodyAngle = pose => angle(v(pose, 'body.view'));
 export const headAngle = pose => angle(v(pose, 'body.view') + v(pose, 'head.view'));
 
-// The face keys that belong to a side, swapped when a drawing is mirrored: facing left, the eye
-// drawn on the drawing's left is the character's other eye.
-const SIDED = /^(eye|lid|brow|hand|arm|fore|leg|shin|foot)([LR])\.|^(mouth\.corner)([LR])$/;
-const other = S => (S === 'L' ? 'R' : 'L');
-export const swapSide = k => k.replace(SIDED, (_, a, b, c, d) => (a ? `${a}${other(b)}.` : `${c}${other(d)}`));
-export function mirrored(pose) {
-  const out = {};
-  for (const [k, val] of Object.entries(pose)) out[swapSide(k)] = val;
-  out['eyes.x'] = -v(pose, 'eyes.x');
-  out['mouth.shift'] = -v(pose, 'mouth.shift');
-  return out;
+// A swap set of drawings by angle, as a piece: angleSet('body', { 0: front, 1: threeQuarter, ...
+// 4: back }) draws the one for the body's angle ('head' for the head's: body.view plus head.view),
+// mirrored, and given the mirrored pose, to face left. Each drawing is fn(ctx, pose, n). Every angle
+// needs a drawing unless `fallback` names one to stand in ({ 3: 2 }: the profile for 3/4 back).
+// around(ctx, n, draw) wraps the drawing (a scale, a turn) and calls draw() inside.
+export function angleSet(of, drawings, { fallback = {}, around } = {}) {
+  const angleOf = of === 'head' ? headAngle : bodyAngle;
+  const drawAt = (ctx, n, pose, character) => {
+    const a = Math.abs(n);
+    ctx.save();
+    if (n < 0) ctx.scale(-1, 1);
+    (drawings[a] ?? drawings[fallback[a]])(ctx, n < 0 ? character.mirrored(pose) : pose, n);
+    ctx.restore();
+  };
+  return {
+    kind: 'angle', of, variants: drawings, required: [0, 1, 2, 3, 4], fallback,
+    describe: a => `angle ${a} (${ANGLES[a]})`,
+    keys: of === 'head' ? { 'body.view': [-4, 4], 'head.view': [-4, 4] } : { 'body.view': [-4, 4] },
+    draw(ctx, pose, character) {
+      const n = angleOf(pose);
+      if (around) around(ctx, n, () => drawAt(ctx, n, pose, character));
+      else drawAt(ctx, n, pose, character);
+    },
+  };
 }
 
-// Draw angle n's drawing from a set { 0: fn, 1: fn, ... 4: fn }, each fn(ctx, pose, n). Facing left,
-// the facing-right drawing mirrored (and given the mirrored pose). An angle with no drawing uses the
-// nearest that has one.
-export function byAngle(ctx, n, set, pose) {
-  const a = Math.abs(n);
-  const k = [a, a - 1, a + 1, a - 2, a + 2, a - 3, a + 3, a - 4, a + 4].find(i => set[i]);
-  ctx.save();
-  if (n < 0) ctx.scale(-1, 1);
-  set[k](ctx, n < 0 ? mirrored(pose) : pose, n);
-  ctx.restore();
-}
+// Where a chain goes in the drawing order as the body turns, by its kind: near (the side towards us),
+// far, and facing us (front) or away (back); `end` is added for its last bone (a hand, a foot). A
+// chain can give its own `layers`; chains of other kinds keep their bones' own z.
+const LAYERS = { arm: { near: 5.5, far: -0.6, front: 5.5, back: -0.6, end: 0.5 }, leg: { near: 0.3, far: 0, front: 0, back: 0, end: 0.1 } };
 
-// Where the limbs hang at angle n: the shoulders and hips come round (L is the screen's left when
-// facing us, so it is the near side facing right), the near arm and leg in front of the body and
-// the far ones behind it (and behind the legs). `table` adds a character's own offsets per angle ({ 2: { 'neck.x': 12 } }),
-// mirrored for negative angles. Offsets are added to the pose; draw orders set where not given.
-export function turnRig(pose, n, { shoulder, hip, table = {}, front = 5.5, behind = -0.6 }) {
-  const th = (n * Math.PI) / 4, c = Math.cos(th), s = Math.sin(th);
-  const p = add(pose, { 'armL.x': shoulder * (1 - c), 'armR.x': -shoulder * (1 - c), 'legL.x': hip * (1 - c), 'legR.x': -hip * (1 - c) });
-  for (const [k0, val] of Object.entries(table[Math.abs(n)] || {})) {
-    const k = n < 0 ? swapSide(k0) : k0;
+// Where the limbs hang at angle n. Each chain with a side comes round towards the middle (L is the
+// screen's left when facing us, so it is the near side facing right) by as far as its first bone's
+// pivot is from the middle, and goes in front of the body or behind it (and behind the legs).
+// tags.turn.offsets adds the character's own offsets per angle ({ 2: { 'neck.x': 12 } }), mirrored
+// for negative angles. Offsets are added to the pose; draw orders are set where not given.
+export function turnRig(pose, n, character) {
+  const th = (n * Math.PI) / 4, c = Math.cos(th), s = Math.sin(th), back = c < -0.1;
+  const sided = character.chainsOf().filter(([, ch]) => ch.side);
+  const shift = {};
+  for (const [, ch] of sided) shift[`${ch.bones[0]}.x`] = (ch.side === 'L' ? 1 : -1) * Math.abs(character.by[ch.bones[0]].at[0]) * (1 - c);
+  const p = add(pose, shift);
+  for (const [k0, val] of Object.entries(character.tags.turn?.offsets?.[Math.abs(n)] || {})) {
+    const k = n < 0 ? character.swapSide(k0) : k0;
     p[k] = /\.z$/.test(k) ? val : v(p, k) + (n < 0 && /\.(x|r)$/.test(k) ? -val : val);
   }
-  const back = c < -0.1;
-  for (const S of ['L', 'R']) {
-    const near = S === 'L' ? s > 0.1 : s < -0.1, far = S === 'L' ? s < -0.1 : s > 0.1;
-    const z = near ? front : far || back ? behind : front;
-    p[`arm${S}.z`] ??= z; p[`hand${S}.z`] ??= p[`arm${S}.z`] + 0.5;
-    p[`leg${S}.z`] ??= near ? 0.3 : 0; p[`foot${S}.z`] ??= p[`leg${S}.z`] + 0.1;
+  for (const [, ch] of sided) {
+    const L = ch.layers || LAYERS[ch.kind];
+    if (!L) continue;
+    const near = ch.side === 'L' ? s > 0.1 : s < -0.1, far = ch.side === 'L' ? s < -0.1 : s > 0.1;
+    const first = ch.bones[0], last = ch.bones[ch.bones.length - 1];
+    p[`${first}.z`] ??= near ? L.near : far ? L.far : back ? L.back : L.front;
+    p[`${last}.z`] ??= p[`${first}.z`] + L.end;
   }
   return p;
 }
@@ -116,14 +133,32 @@ export function sleeve(ctx, len, w, col) {
 }
 
 // ---------- contact ----------
-// Plant a foot: the leg reaches its ankle to `target` (in the puppet's space) by IK, and the foot
-// turns to `tilt` from level whatever the leg does, for crouches, landings and kneels. `bend` picks
-// the way the knee points (-1 forward when facing right). Run it on a finished pose (after
-// cutoutPose, which moves the hips round for the angle).
-export function plant(puppet, pose, S, target, { bend = -1, tilt = 0 } = {}) {
-  const p = puppet.reach(pose, `leg${S}`, `shin${S}`, target, bend);
-  p[`foot${S}.r`] = tilt - puppet.angle(`shin${S}`, p);
+// Which way IK bends a chain's middle joint: the chain's tag ('forward', a knee; 'back', an elbow)
+// turned into a side of the reach for the way the body faces. An explicit `bend` (+1 or -1) wins.
+function bendOf(character, name, ch, pose, bend) {
+  if (bend !== undefined) return bend;
+  if (!ch.bend) throw new Error(`${character.name}: chain ${name} doesn't say which way it bends (bend: 'forward' or 'back'), so IK can't choose.`);
+  return (ch.bend === 'back' ? 1 : -1) * (bodyAngle(pose) < 0 ? -1 : 1);
+}
+
+// Plant a foot: a leg chain (hip, knee, foot) reaches its ankle to `target` (in the character's
+// space) by IK, and the foot turns to `tilt` from level whatever the leg does, for crouches,
+// landings and kneels. Run it on a finished pose (after the pose function, which moves the hips
+// round for the angle).
+export function plant(character, pose, chain, target, { bend, tilt = 0 } = {}) {
+  const ch = character.chain(chain, 'plant');
+  if (ch.bones.length < 3) throw new Error(`${character.name}: plant needs a chain of three bones (hip, knee, foot), and ${chain} has ${ch.bones.length}.`);
+  const [upper, lower, foot] = ch.bones;
+  const p = character.reach(pose, upper, lower, target, bendOf(character, chain, ch, pose, bend));
+  p[`${foot}.r`] = tilt - character.angle(lower, p);
   return p;
+}
+
+// Reach a chain's end (a hand, at the end of its forearm) to `target` by IK.
+export function reachChain(character, pose, chain, target, { bend } = {}) {
+  const ch = character.chain(chain, 'reachChain');
+  if (ch.bones.length < 2) throw new Error(`${character.name}: reachChain needs a chain of at least two bones, and ${chain} has ${ch.bones.length}.`);
+  return character.reach(pose, ch.bones[0], ch.bones[1], target, bendOf(character, chain, ch, pose, bend));
 }
 
 // Mix the keys of two poses by k (for easing IK in and out over animation).
@@ -185,6 +220,17 @@ export function hand(ctx, pose, side, key, { skin, size = 1, name } = {}) {
   });
   for (const l of d.lines || []) stroke(ctx, l, LW * 0.75);
   ctx.restore();
+}
+
+// A hand from the library as a piece, for its bone: '<bone>.shape' picks the drawing and
+// '<bone>.flip' shows the other side. What the draw call's `held[bone]` draws goes in the hand,
+// under the fingers, so a 'grip' closes over a handle: dex.draw(ctx, pose, { held: { handL: fn } }).
+export function handPiece(bone, side, opts) {
+  return {
+    kind: 'shape', variants: { ...HANDS }, required: HANDS.map((_, i) => i), describe: i => `hand ${i} (${HANDS[i]})`,
+    keys: { [`${bone}.shape`]: { shape: HANDS }, [`${bone}.flip`]: [0, 1] },
+    draw(ctx, pose, character, drawOpts) { drawOpts?.held?.[bone]?.(ctx, pose); hand(ctx, pose, side, bone, opts); },
+  };
 }
 
 // ---------- eyes and brows ----------
@@ -338,6 +384,13 @@ export function mouth(ctx, name, { w = 26, smile = 0, cornerL = 0, cornerR = 0, 
   if (m.pucker) for (const s of [-1, 1]) stroke(ctx, P(`M ${s * W * 1.5} ${top - 2} Q ${s * W * 2} ${(top + bot) / 2} ${s * W * 1.5} ${bot + 2}`), lw * 0.7);
 }
 
+// The mouth chart as a piece. It has no bone: a head's drawings draw it (with mouth() and
+// mouthName()), and declaring it lists its drawings and keys with the character's.
+export const mouthChart = () => ({
+  kind: 'shape', within: 'head', variants: { ...MOUTH_NAMES }, required: MOUTH_NAMES.map((_, i) => i), describe: i => `mouth ${i} (${MOUTH_NAMES[i]})`,
+  keys: { 'mouth.shape': { shape: MOUTH_NAMES }, 'mouth.say': [-1, MOUTH_NAMES.length - 1] },
+});
+
 // ---------- expressions ----------
 // The neutral face every expression starts from, so moving between expressions resets the keys. The
 // same face keys as the toon kit's, plus the expression's mouth drawing.
@@ -365,11 +418,17 @@ export const EXPR = {
 };
 
 // ---------- bringing a character to life ----------
-// Joints on springs: lighter than the toon kit's, as cut-out shows move in eases and holds.
+// Joints on springs: lighter than the toon kit's, as cut-out shows move in eases and holds. Arms
+// spring bone by bone, the shoulder leading and the hand trailing, and so does the head (tags.look).
+// A chain can give its own `springs`.
 const FEEL = { arm: { stiffness: 260, damping: 22 }, fore: { stiffness: 200, damping: 17 }, hand: { stiffness: 170, damping: 15 }, head: { stiffness: 200, damping: 19 } };
-export const JOINTS = {
-  'armL.r': FEEL.arm, 'armR.r': FEEL.arm, 'foreL.r': FEEL.fore, 'foreR.r': FEEL.fore, 'handL.r': FEEL.hand, 'handR.r': FEEL.hand, 'head.r': FEEL.head,
-};
+const SPRING_FEEL = { arm: [FEEL.arm, FEEL.fore, FEEL.hand] };
+export function jointsOf(character) {
+  const out = {};
+  for (const [, ch] of character.chainsOf()) (ch.springs ?? SPRING_FEEL[ch.kind])?.forEach((f, i) => { if (ch.bones[i]) out[`${ch.bones[i]}.r`] = f; });
+  if (character.tags.look) out[`${character.tags.look}.r`] = FEEL.head;
+  return out;
+}
 
 // choreo, with '.shape' keys swapped rather than blended: each takes the value of the latest move
 // keying it that is halfway done.
@@ -385,20 +444,29 @@ export function stepped(t, rest, moves) {
   return p;
 }
 
-// Make a character's pose(t, moves, opts) function. `id` keeps its springs apart from other
-// characters'; `shoulder` and `hip` are the joints' distances from the middle; `table` its offsets
-// per angle (see turnRig). On twos by default, with blinks, glances, breathing and the mouth chart
-// following the lines the character says (`speaker`).
-export function cutoutPose({ rest, id, seed = 5, shoulder, hip, table }) {
+// A character's pose(t, moves, opts) function. On twos by default, with springs on the arms and
+// head, breathing (tags.chest), a sway (tags.root), blinks, glances, and the mouth chart following
+// the lines the character says (`speaker`). Checks each move list when it first comes in, and
+// what extra(t) adds each frame.
+export function cutoutPose(character, { rest = character.rest, seed = 5 } = {}) {
+  character.needs(['root', 'chest', 'look'], 'cutoutPose');
+  const { root, chest, look } = character.tags;
+  const joints = jointsOf(character);
   return function pose(t, moves, { speaker, extra, twos = true, still = false, springy = !still, fps = 30 } = {}) {
+    character.checkMoves(moves);
     if (twos) t = onTwos(t, fps);
+    character.now = t;
     const chore = u => stepped(u, rest, moves);
     let p = chore(t);
-    if (springy) Object.assign(p, springs(`${id}.joints`, t, chore, JOINTS));
-    if (extra) p = add(p, extra(t));
+    if (springy) Object.assign(p, springs(`${character.id}.joints`, t, chore, joints));
+    if (extra) {
+      const e = extra(t);
+      character.checkPose(e, `extra() at t = ${Number(t.toFixed(3))}`);
+      p = add(p, e);
+    }
     if (!still) {
       const br = breath(t, seed), sw = sway(t, seed);
-      p = add(p, { 'torso.sy': 1 + 0.006 * br, 'head.y': -1.2 * br, 'hips.x': sw * 2, 'head.r': -sw * 0.01 });
+      p = add(p, { [`${chest}.sy`]: 1 + 0.006 * br, [`${look}.y`]: -1.2 * br, [`${root}.x`]: sw * 2, [`${look}.r`]: -sw * 0.01 });
       const g = glance(t, seed);
       p['eyes.x'] = v(p, 'eyes.x') + g[0] * 0.25;
       p['eyes.y'] = v(p, 'eyes.y') + g[1] * 0.25;
@@ -408,8 +476,28 @@ export function cutoutPose({ rest, id, seed = 5, shoulder, hip, table }) {
     const s = viseme(t, { speaker });
     p['mouth.say'] = s === 'rest' ? -1 : MOUTH[SAYS[s]];
     const talk = s === 'rest' ? 0 : loudness(t);
-    p['head.r'] = v(p, 'head.r') + Math.sin(t * 8 + seed) * 0.018 * talk;
-    p['head.y'] = v(p, 'head.y') - talk * 2.5;
-    return turnRig(p, bodyAngle(p), { shoulder, hip, table });
+    p[`${look}.r`] = v(p, `${look}.r`) + Math.sin(t * 8 + seed) * 0.018 * talk;
+    p[`${look}.y`] = v(p, `${look}.y`) - talk * 2.5;
+    return turnRig(p, bodyAngle(p), character);
   };
+}
+
+// The pose keys the cut-out kit reads beyond the bones' own: the angles and the face. Sideways
+// numbers change sign in a mirrored drawing; CUTOUT_SIDES pairs the face's left and right keys.
+export const CUTOUT_KEYS = {
+  'body.view': [-4, 4], 'head.view': [-4, 4],
+  'eyes.x': { range: [-1.3, 1.3], mirror: 'negate' }, 'eyes.y': [-1, 1], 'eyes.blink': [0, 1], 'eyes.open': [0, 1.4],
+  'eyes.squint': [0, 1], 'eyes.pupil': [0, 2], 'eyeL.open': [0, 1.4], 'eyeR.open': [0, 1.4], 'eyeL.squint': [0, 1], 'eyeR.squint': [0, 1],
+  'lids.drop': [0, 1], 'lids.slant': [-1, 1], 'lidL.drop': [0, 1], 'lidR.drop': [0, 1], 'lidL.slant': [-1, 1], 'lidR.slant': [-1, 1],
+  'brows.up': [-1, 1.5], 'brows.in': [-1.2, 1.2], 'browL.up': [-1, 1.5], 'browR.up': [-1, 1.5], 'browL.slant': [-1.2, 1.2], 'browR.slant': [-1.2, 1.2],
+  'mood.smile': [-1, 1], 'mouth.cornerL': [-1, 1], 'mouth.cornerR': [-1, 1], 'mouth.shift': { range: [-1, 1], mirror: 'negate' },
+};
+export const CUTOUT_SIDES = [['eyeL.', 'eyeR.'], ['lidL.', 'lidR.'], ['browL.', 'browR.'], ['mouth.cornerL', 'mouth.cornerR']];
+
+// A cut-out character: defineCharacter with the kit's keys and sides, and its pose function
+// (character.pose). `life` sets cutoutPose's options ({ seed }).
+export function defineCutout({ life, keys = {}, sides = [], ...def }) {
+  const character = defineCharacter({ ...def, keys: { ...CUTOUT_KEYS, ...keys }, sides: [...CUTOUT_SIDES, ...sides] });
+  character.pose = cutoutPose(character, life);
+  return character;
 }

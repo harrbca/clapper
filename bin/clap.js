@@ -139,4 +139,5 @@ function fail(msg) { console.error(msg); process.exit(1); }
 
 if (!cmd || opt.help || !commands[cmd]) { console.log(HELP); process.exit(cmd && !commands[cmd] ? 1 : 0); }
 try { await commands[cmd](); }
-catch (e) { console.error('clap ' + cmd + ': ' + (e.stack || e.message)); process.exit(1); }
+// the message alone (a failed check says what and where); CLAP_DEBUG=1 adds the stack
+catch (e) { console.error('clap ' + cmd + ': ' + (process.env.CLAP_DEBUG ? e.stack || e.message : e.message || e)); process.exit(1); }

@@ -353,14 +353,48 @@ In `choreo`, a move can `anticipate` (wind back before it goes), and `E.snap` la
 adult animated sitcoms): flat colour and one even ink line, with drawings swapped rather than bent.
 `/@kit/characters/dex.js` is Dex, a warehouse picker in a hi-vis vest, made from it.
 
+**A character is declared as data** (`/@kit/character.js`), so it can be checked:
+
+```js
+export const dex = defineCutout({
+  id: 'dex', version: 1, name: 'Dex',
+  bones: [{ name: 'hips', at: [0, -424] }, { name: 'legL', parent: 'hips', at: [-34, -4], len: 196, piece: 'legL' }, ...],
+  tags: {
+    root: 'hips', chest: 'torso', look: 'head',
+    chains: { legL: { bones: ['legL', 'shinL', 'footL'], side: 'L', kind: 'leg', bend: 'forward' }, ... },
+  },
+  pieces: { head: angleSet('head', { 0: front, 1: threeQuarter, 2: profile, 3: backThreeQuarter, 4: back }), handL: handPiece('handL', -1, { skin }), mouth: mouthChart(), ... },
+  rest, poses, expressions, life: { seed: 7 },
+});
+```
+
+- **Bones** are the engine's parts (name, parent, pivot `at`, `len`, `z`), each wearing a piece or
+  nothing. **Tags** say what they are for: `root`, `chest` and `look` (the head), and **chains**,
+  lines of bones with a `side` (L pairs with its R twin, for mirroring), a `kind` (`arm`, `leg`) and
+  which way they `bend`. The kit finds everything through the tags, so a character can have any
+  bones: nothing in cutout.js names an arm.
+- **Pose keys** are each bone's `.r`, `.x`, `.y`, `.s`, `.sx`, `.sy` and `.z`, and whatever the
+  character and its pieces declare (`'mouth.shape'`, `'handR.flip'`, `'eyes.x'` ...).
+- **Checks** fail loudly, saying what and where. At definition: bones, parents, pieces and tags that
+  don't exist, chains that aren't lines of bones, swap sets missing a drawing (an angle, a hand)
+  without a declared stand-in, and typos in the rest pose, poses and expressions. When moves load and
+  as frames are drawn: a key the character doesn't have ("the move at t = 7.35 uses 'handR.shpe' ...
+  Did you mean 'handR.shape'?"), values that aren't numbers (NaN, undefined), `.shape` values that
+  aren't one of its drawings, and a helper asking for a tag or chain it hasn't got. `clap` prints the
+  message; `CLAP_DEBUG=1` adds the stack.
+
+What the kit draws:
+
 - **Angles:** a character is drawn from set angles, `0` front, `1` 3/4, `2` profile, `3` 3/4 from
   behind and `4` back, negative to face left (the same drawings mirrored). `body.view` turns the body
   and `head.view` turns the head on from there, so the head can lead a turn. Both key like any number
-  and the drawing swaps at each half step, passing through every angle in between. `byAngle` picks a
-  drawing from a set; `turnRig` moves the shoulders and hips round and puts the far limbs behind.
+  and the drawing swaps at each half step, passing through every angle in between. `angleSet` is a
+  piece with a drawing per angle (`fallback: { 3: 2 }` lets one stand in for another); `turnRig`
+  brings the sided chains round and puts the far limbs behind.
 - **Hands:** a library of drawn hands (`HAND.relaxed`, `open`, `spread`, `palm`, `point`, `fist`,
   `thumb`, `grip`, `ok`, `peace`), keyed as `'handR.shape'`. `'handR.flip': 1` shows the other side.
-  Keys ending in `.shape` swap halfway through the move that keys them instead of blending.
+  Keys ending in `.shape` swap halfway through the move that keys them instead of blending. A prop
+  goes in a hand through the draw call: `dex.draw(ctx, pose, { x, y, held: { handL: fn } })`.
 - **Mouth chart:** one drawing per sound (lipsync.js's shapes, from `viseme(t)`) plus expression
   mouths (`smile`, `grin`, `frown`, `grimace`, `shout`, `smirk`, `gasp`), keyed as `'mouth.shape'`.
   While a character talks, the chart follows the words; between words it shows the expression's
@@ -368,12 +402,12 @@ adult animated sitcoms): flat colour and one even ink line, with drawings swappe
 - **Faces:** big eyes with dot pupils and lids inside the outline, and brows, with the toon kit's
   face keys (`lids.drop`, `lids.slant`, `brows.in` ...). `EXPR` has 14 expressions.
 - **Limbs:** `noodle` bends an arm or leg as one even tube; `sleeve` puts a short sleeve over it.
-- **Contacts:** `plant(puppet, pose, 'L', [x, y])` puts a foot on a spot by IK and keeps it level,
-  for crouches, kneels and landings; `mixKeys` eases a contact in and out. Run them on the finished
-  pose.
-- `cutoutPose` brings a character to life as `toonPose` does: on twos, springs on the arms, blinks,
-  glances, breathing and the mouth chart. Dex's `HELD.L` / `HELD.R` draw a prop in his hand, under
-  the fingers.
+- **Contacts:** `plant(character, pose, 'legL', [x, y])` puts a foot on a spot by IK and keeps it
+  level, for crouches, kneels and landings; `reachChain(character, pose, 'armR', [x, y])` puts a hand
+  there. Knees and elbows bend the way their chain's tag says, for the way the body faces.
+  `mixKeys` eases a contact in and out. Run them on the finished pose.
+- `character.pose(t, moves, opts)` brings a character to life as `toonPose` does: on twos, springs
+  on the arms and head, blinks, glances, breathing and the mouth chart.
 
 `examples/cutout-rig` has Dex's model sheet, face sheet and poses as lab pages, and a short acting
 test in a warehouse: a scanner, a turn to the racking, and a walk off. `examples/cutout-jump` is a

@@ -11,7 +11,16 @@ export class Puppet {
   // (a bone's length, for IK), draw(ctx, pose, part) }]. One part has no parent: the root.
   constructor(parts) {
     this.parts = parts.map((p, i) => ({ z: 0, at: [0, 0], ...p, order: i }));
-    this.by = Object.fromEntries(this.parts.map(p => [p.name, p]));
+    this.by = {};
+    for (const p of this.parts) {
+      if (!p.name) throw new Error('Puppet: a part has no name');
+      if (this.by[p.name]) throw new Error(`Puppet: two parts are called ${p.name}`);
+      this.by[p.name] = p;
+    }
+    for (const p of this.parts) {
+      if (p.parent != null && !this.by[p.parent]) throw new Error(`Puppet: ${p.name} hangs from ${p.parent}, which isn't a part`);
+      for (let q = p, n = 0; q.parent != null; q = this.by[q.parent]) if (++n > this.parts.length) throw new Error(`Puppet: ${p.name} hangs from itself, further up`);
+    }
     this.drawOrder = [...this.parts].sort((a, b) => a.z - b.z || a.order - b.order);
   }
 
@@ -34,8 +43,10 @@ export class Puppet {
 
   // Draw the puppet with its origin at (x, y). `flip` mirrors it to face the other way. A pose can
   // move a part in the drawing order with '<part>.z' (an arm in front of the head, or behind the
-  // body when turned away); parts without one keep their own z.
-  draw(ctx, pose, { x = 0, y = 0, scale = 1, flip = false, hide = [] } = {}) {
+  // body when turned away); parts without one keep their own z. Each part's draw(ctx, pose, part,
+  // opts) gets these options too, so a scene can hand parts things to draw (a prop in a hand).
+  draw(ctx, pose, opts = {}) {
+    const { x = 0, y = 0, scale = 1, flip = false, hide = [] } = opts;
     const M = this.matrices(pose);
     const base = ctx.getTransform().translate(x, y).scale(flip ? -scale : scale, scale);
     const moved = this.parts.some(p => pose[`${p.name}.z`] !== undefined);
@@ -45,7 +56,7 @@ export class Puppet {
       if (!p.draw || hide.includes(p.name)) continue;
       ctx.save();
       ctx.setTransform(base.multiply(M[p.name]));
-      p.draw(ctx, pose, p);
+      p.draw(ctx, pose, p, opts);
       ctx.restore();
     }
   }

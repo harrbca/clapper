@@ -1,7 +1,7 @@
 // The key poses of the stunt, as an animator draws them first: stand, crouch, take-off, tuck, open,
 // impact, the hero landing, and the look up. Feet and hands that touch something are placed by IK
 // on the finished pose (contacts), so they stay put whatever the body does.
-import { HAND, MOUTH, plant } from '/@kit/cutout.js';
+import { HAND, MOUTH, plant, reachChain } from '/@kit/cutout.js';
 import { dex, EXPR } from '/@kit/characters/dex.js';
 
 // the ankle sits this far above the sole (Dex's boots are drawn at 1.2x)
@@ -34,22 +34,22 @@ export const KEY = {
 // the crouch's feet, the impact's, or the hero landing's knee, foot and fist.
 export function contacts(p, which) {
   if (which === 'stand') {
-    p = plant(dex, p, 'L', [16, ANKLE], { bend: -1 });
-    return plant(dex, p, 'R', [-16, ANKLE], { bend: -1 });
+    p = plant(dex, p, 'legL', [16, ANKLE]);
+    return plant(dex, p, 'legR', [-16, ANKLE]);
   }
   if (which === 'tuck') {                                          // hands on the shins
-    p = { ...p, ...dex.reach(p, 'armL', 'foreL', dex.where('shinL', p, [0, 90]), 1) };
-    return { ...p, ...dex.reach(p, 'armR', 'foreR', dex.where('shinR', p, [0, 70]), 1) };
+    p = reachChain(dex, p, 'armL', dex.where('shinL', p, [0, 90]));
+    return reachChain(dex, p, 'armR', dex.where('shinR', p, [0, 70]));
   }
   if (which === 'impact') {
-    p = plant(dex, p, 'L', [-120, ANKLE], { bend: -1 });
-    p = plant(dex, p, 'R', [120, ANKLE], { bend: -1 });
-    return { ...p, ...dex.reach(p, 'armL', 'foreL', [150, -70], 1) };
+    p = plant(dex, p, 'legL', [-120, ANKLE]);
+    p = plant(dex, p, 'legR', [120, ANKLE]);
+    return reachChain(dex, p, 'armL', [150, -70]);
   }
   if (which === 'hero') {
-    p = plant(dex, p, 'L', [-214, -30], { bend: -1, tilt: 1.3 });  // the knee on the floor, the shin behind
-    p = plant(dex, p, 'R', [150, ANKLE], { bend: -1 });            // the front foot flat, knee up
-    const a = dex.reach(p, 'armL', 'foreL', [70, -84], 1);         // the fist on the floor
+    p = plant(dex, p, 'legL', [-214, -30], { tilt: 1.3 });         // the knee on the floor, the shin behind
+    p = plant(dex, p, 'legR', [150, ANKLE]);                       // the front foot flat, knee up
+    const a = reachChain(dex, p, 'armL', [70, -84]);               // the fist on the floor
     return { ...a, 'handL.r': -dex.angle('foreL', a) + Math.PI * 0.02 };
   }
   return p;

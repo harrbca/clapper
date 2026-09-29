@@ -3,10 +3,11 @@
 // between his feet; L and R are the screen's left and right as he faces us.
 // Made from cutout.js: drawn from five angles (body.view, head.view: 0 front, 1 three-quarter,
 // 2 profile, 3 three-quarter back, 4 back, negative to face left), hands from the hand library
-// ('handR.shape': HAND.point), and a mouth chart that follows what he says.
-import { Puppet } from '../puppet.js';
+// ('handR.shape': HAND.point), and a mouth chart that follows what he says. He is declared at the
+// bottom (defineCutout): his bones, the tags that say what they are, and the pieces drawn on them.
+// A prop goes in a hand through the draw call: dex.draw(ctx, pose, { x, y, held: { handL: fn } }).
 import {
-  brow, byAngle, bodyAngle, cutoutPose, EXPR as FACES, eye, HAND, hand, headAngle, ink, jawDrop, line, LW, mouth, mouthName, noodle, P,
+  angleSet, brow, defineCutout, EXPR as FACES, eye, HAND, handPiece, ink, jawDrop, line, LW, mouth, mouthChart, mouthName, noodle, P,
   sleeve, stroke, v, within,
 } from '../cutout.js';
 
@@ -118,7 +119,6 @@ function head34Back(ctx) {
     [-95, 99], ['M -26 -248 C -36 -224 -42 -196 -44 -170', 'M 22 -246 C 34 -220 40 -196 42 -170']);
 }
 const HEADS = { 0: headFront, 1: head34, 2: headSide, 3: head34Back, 4: headBack };
-const drawHead = (ctx, pose) => byAngle(ctx, headAngle(pose), HEADS, pose);
 
 function drawNeck(ctx) { ink(ctx, P('M -22 20 L -22 -34 L 22 -34 L 22 20 Z'), PAL.skin); }
 
@@ -192,21 +192,16 @@ function torsoBack(ctx) {
 }
 const torso34Back = ctx => put(ctx, 0, 0, 0.9, () => torsoBack(ctx));
 const TORSOS = { 0: torsoFront, 1: torso34, 2: torsoSide, 3: torso34Back, 4: torsoBack };
-const drawTorso = (ctx, pose) => byAngle(ctx, bodyAngle(pose), TORSOS, pose);
 
 // The seat of his trousers, joining the legs under the vest.
 const PELVIS = { 0: P('M -64 -12 L 64 -12 L 62 34 Q 0 46 -62 34 Z'), 1: P('M -54 -12 L 62 -12 L 60 34 Q 6 44 -52 34 Z'), 2: P('M -42 -12 L 48 -12 L 46 32 Q 2 40 -40 32 Z') };
 const pelvis = path => ctx => ink(ctx, path, PAL.pants);
-const drawPelvis = (ctx, pose) => byAngle(ctx, bodyAngle(pose), { 0: pelvis(PELVIS[0]), 1: pelvis(PELVIS[1]), 2: pelvis(PELVIS[2]), 3: pelvis(PELVIS[1]), 4: pelvis(PELVIS[0]) }, pose);
 
 // ---------- limbs ----------
 const ARM = 150, FORE = 138, THIGH = 196, SHIN = 190;
 const arm = S => (ctx, pose) => { noodle(ctx, ARM, FORE, v(pose, `fore${S}.r`), 27, PAL.skin, { w2: 25 }); sleeve(ctx, 60, 42, PAL.shirt); };
 const leg = S => (ctx, pose) => noodle(ctx, THIGH, SHIN, v(pose, `shin${S}.r`), 46, PAL.pants, { w2: 42, round: 0.3 });
-// What he holds: a scene sets HELD.L or HELD.R to fn(ctx, pose), drawn in the hand's space under the
-// fingers (so a 'grip' hand closes over a handle), and clears it after.
-export const HELD = { L: null, R: null };
-const handOf = (S, side) => (ctx, pose) => { HELD[S]?.(ctx, pose); hand(ctx, pose, side, `hand${S}`, { skin: PAL.skin, size: 1.05 }); };
+const HAND_LOOK = { skin: PAL.skin, size: 1.05 };
 
 // Work boots, one drawing per angle; in the foot's space, the ankle at the origin, the sole at 38.
 function bootFront(ctx) {
@@ -233,38 +228,19 @@ function bootBack(ctx) {
   ink(ctx, P('M -6 -10 h 12 v 12 h -12 Z'), PAL.toe, 2);
 }
 const BOOTS = { 0: bootFront, 1: boot34, 2: bootSide, 4: bootBack };
-const boot = side => (ctx, pose) => {
-  const n = bodyAngle(pose);
-  ctx.save(); ctx.scale(1.2, 1.2);
-  if (n === 0) { ctx.scale(side, 1); ctx.rotate(0.06); }    // facing us, the toes turn out a little
-  byAngle(ctx, n, BOOTS, pose);
-  ctx.restore();
-};
+// A boot from the four drawings (3/4 back shows the profile's), 1.2x; facing us, the toes turn out
+// a little.
+const boots = side => angleSet('body', BOOTS, {
+  fallback: { 3: 2 },
+  around(ctx, n, draw) {
+    ctx.save(); ctx.scale(1.2, 1.2);
+    if (n === 0) { ctx.scale(side, 1); ctx.rotate(0.06); }
+    draw();
+    ctx.restore();
+  },
+});
 
-// ---------- the rig ----------
-export const dex = new Puppet([
-  { name: 'hips', at: [0, -424] },
-  { name: 'legL', parent: 'hips', at: [-34, -4], len: THIGH, z: 0, draw: leg('L') },
-  { name: 'shinL', parent: 'legL', at: [0, THIGH], len: SHIN, z: 0 },
-  { name: 'footL', parent: 'shinL', at: [0, SHIN], z: 0.1, draw: boot(-1) },
-  { name: 'legR', parent: 'hips', at: [34, -4], len: THIGH, z: 0, draw: leg('R') },
-  { name: 'shinR', parent: 'legR', at: [0, THIGH], len: SHIN, z: 0 },
-  { name: 'footR', parent: 'shinR', at: [0, SHIN], z: 0.1, draw: boot(1) },
-  { name: 'pelvis', parent: 'hips', at: [0, 0], z: 1, draw: drawPelvis },
-  { name: 'torso', parent: 'hips', at: [0, 0], z: 2, draw: drawTorso },
-  { name: 'neck', parent: 'torso', at: [0, -250], z: 1.5, draw: drawNeck },
-  { name: 'head', parent: 'neck', at: [0, -22], z: 4, draw: drawHead },
-  { name: 'armL', parent: 'torso', at: [-72, -236], len: ARM, z: 5.5, draw: arm('L') },
-  { name: 'foreL', parent: 'armL', at: [0, ARM], len: FORE, z: 5.5 },
-  { name: 'handL', parent: 'foreL', at: [0, FORE - 2], z: 6, draw: handOf('L', -1) },
-  { name: 'armR', parent: 'torso', at: [72, -236], len: ARM, z: 5.5, draw: arm('R') },
-  { name: 'foreR', parent: 'armR', at: [0, ARM], len: FORE, z: 5.5 },
-  { name: 'handR', parent: 'foreR', at: [0, FORE - 2], z: 6, draw: handOf('R', 1) },
-]);
-
-// Offsets per angle, facing right (mirrored facing left): the neck comes forward of the shoulders.
-const TABLE = { 1: { 'neck.x': 8 }, 2: { 'neck.x': 12 }, 3: { 'neck.x': -4 } };
-
+// ---------- poses ----------
 export const REST = {
   'armL.r': 0.1, 'foreL.r': -0.1, 'armR.r': -0.1, 'foreR.r': 0.1, 'handL.shape': HAND.relaxed, 'handR.shape': HAND.relaxed,
   'legL.r': 0.02, 'legR.r': -0.02, 'shinL.r': 0, 'shinR.r': 0, ...FACES.neutral,
@@ -283,5 +259,53 @@ export const POSES = {
   peace: { 'armR.r': -0.35, 'foreR.r': -2.2, 'handR.shape': HAND.peace, 'handR.flip': 1, 'handR.r': 0.1 },
 };
 
+// ---------- the character ----------
+export const dex = defineCutout({
+  id: 'dex', version: 1, name: 'Dex',
+  bones: [
+    { name: 'hips', at: [0, -424] },
+    { name: 'legL', parent: 'hips', at: [-34, -4], len: THIGH, z: 0, piece: 'legL' },
+    { name: 'shinL', parent: 'legL', at: [0, THIGH], len: SHIN, z: 0 },
+    { name: 'footL', parent: 'shinL', at: [0, SHIN], z: 0.1, piece: 'footL' },
+    { name: 'legR', parent: 'hips', at: [34, -4], len: THIGH, z: 0, piece: 'legR' },
+    { name: 'shinR', parent: 'legR', at: [0, THIGH], len: SHIN, z: 0 },
+    { name: 'footR', parent: 'shinR', at: [0, SHIN], z: 0.1, piece: 'footR' },
+    { name: 'pelvis', parent: 'hips', at: [0, 0], z: 1, piece: 'pelvis' },
+    { name: 'torso', parent: 'hips', at: [0, 0], z: 2, piece: 'torso' },
+    { name: 'neck', parent: 'torso', at: [0, -250], z: 1.5, piece: 'neck' },
+    { name: 'head', parent: 'neck', at: [0, -22], z: 4, piece: 'head' },
+    { name: 'armL', parent: 'torso', at: [-72, -236], len: ARM, z: 5.5, piece: 'armL' },
+    { name: 'foreL', parent: 'armL', at: [0, ARM], len: FORE, z: 5.5 },
+    { name: 'handL', parent: 'foreL', at: [0, FORE - 2], z: 6, piece: 'handL' },
+    { name: 'armR', parent: 'torso', at: [72, -236], len: ARM, z: 5.5, piece: 'armR' },
+    { name: 'foreR', parent: 'armR', at: [0, ARM], len: FORE, z: 5.5 },
+    { name: 'handR', parent: 'foreR', at: [0, FORE - 2], z: 6, piece: 'handR' },
+  ],
+  tags: {
+    root: 'hips', chest: 'torso', look: 'head',
+    chains: {
+      armL: { bones: ['armL', 'foreL', 'handL'], side: 'L', kind: 'arm', bend: 'back' },
+      armR: { bones: ['armR', 'foreR', 'handR'], side: 'R', kind: 'arm', bend: 'back' },
+      legL: { bones: ['legL', 'shinL', 'footL'], side: 'L', kind: 'leg', bend: 'forward' },
+      legR: { bones: ['legR', 'shinR', 'footR'], side: 'R', kind: 'leg', bend: 'forward' },
+    },
+    // offsets per angle, facing right (mirrored facing left): the neck comes forward of the shoulders
+    turn: { offsets: { 1: { 'neck.x': 8 }, 2: { 'neck.x': 12 }, 3: { 'neck.x': -4 } } },
+  },
+  pieces: {
+    head: angleSet('head', HEADS),
+    mouth: mouthChart(),
+    neck: { draw: drawNeck },
+    torso: angleSet('body', TORSOS),
+    pelvis: angleSet('body', { 0: pelvis(PELVIS[0]), 1: pelvis(PELVIS[1]), 2: pelvis(PELVIS[2]) }, { fallback: { 3: 1, 4: 0 } }),
+    armL: { draw: arm('L') }, armR: { draw: arm('R') },
+    handL: handPiece('handL', -1, HAND_LOOK), handR: handPiece('handR', 1, HAND_LOOK),
+    legL: { draw: leg('L') }, legR: { draw: leg('R') },
+    footL: boots(-1), footR: boots(1),
+  },
+  rest: REST, poses: POSES, expressions: EXPR,
+  life: { seed: 7 },
+});
+
 // Dex at time t: see cutoutPose in cutout.js.
-export const pose = cutoutPose({ rest: REST, id: 'dex', seed: 7, shoulder: 72, hip: 34, table: TABLE });
+export const pose = dex.pose;
