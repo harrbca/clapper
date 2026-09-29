@@ -16,7 +16,7 @@ import { TILLY_SCALE, world } from './world3d.js';
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const S = PL.PIP_SCALE;
 const TAP = { tapPick: [0.5, 0.288], tapDone: [0.5, 0.923] };      // where the taps land on the screen (from the capture)
-const BARS = { order: [0.5, 0.656], package: [0.5, 0.827] };       // the label's two barcodes, on its picture
+const BARS = { order: [0.5, 0.8] };                                 // the label's barcode, on its picture
 const BIN = 'A-01-03';
 let L, W, pip, scanner, label, cap, screenTex, AT;
 

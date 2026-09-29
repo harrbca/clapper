@@ -11,7 +11,7 @@ number of Chrome processes at once.
 ## What it does
 
 - **Voice:** ElevenLabs narration with word timings, cached by request so re-runs cost nothing.
-  `say` lets a line be spoken differently from how it is captioned ("M M S zero zero one" / "MMS001").
+  `say` lets a line be spoken differently from how it is captioned ("B X four two seven" / "BX-427").
   `--draft` estimates the timings from the text instead, to lay a video out before paying for it.
 - **Timeline:** `timeline.js` places the lines and names moments ("cues") on their words.
 - **Sound:** the narration, sound effects placed at cues, and a music bed that ducks under the voice,

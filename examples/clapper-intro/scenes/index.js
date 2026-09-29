@@ -182,7 +182,7 @@ function labelInsert(ctx, t) {
   ctx.drawImage(IMG.label, x, y, w, h);
   const s = w / 800;                                       // the bin, A-01-03, on the 800 x 1200 label
   ctx.globalCompositeOperation = 'multiply';
-  marker(ctx, x + 28 * s, y + 604 * s, 256 * s, 66 * s, E.out(inv(c.binLit - 0.4, c.binLit + 0.2, t)));
+  marker(ctx, x + 60 * s, y + 190 * s, 522 * s, 118 * s, E.out(inv(c.binLit - 0.4, c.binLit + 0.2, t)));
   ctx.restore();
 }
 // The scanner's screen, large, beside the action, with the taps on it.

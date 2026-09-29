@@ -3,35 +3,41 @@
 <head>
 <meta charset="utf-8">
 <title>Label</title>
-<!-- A made-up 4 x 6 shipping label for the intro, captured to a picture (capture/label.js) that the 3D
+<!-- A made-up 4 x 6 pick ticket for the intro, captured to a picture (capture/label.js) that the 3D
      label printer prints. Its bars are decorative: made up from the text, nothing scans for real. -->
 <style>
   html, body { margin: 0; width: 400px; height: 600px; background: #fff; color: #111; font-family: "Segoe UI", system-ui, sans-serif; }
-  .l { padding: 14px 18px; box-sizing: border-box; height: 600px; display: flex; flex-direction: column; }
-  .co { font-weight: 800; font-size: 22px; letter-spacing: .5px; border-bottom: 3px solid #111; padding-bottom: 6px; }
-  small { display: block; font-size: 11px; font-weight: 600; letter-spacing: .6px; margin-top: 6px; }
-  .to { font-size: 19px; font-weight: 700; line-height: 1.2; margin-top: 2px; }
-  .row { display: flex; gap: 18px; border-top: 2px solid #111; margin-top: 7px; padding-top: 0; }
-  .row div { flex: 1; }
-  .big { font-size: 27px; font-weight: 800; }
-  .bin { font-size: 30px; font-weight: 800; }
-  .bars { margin-top: 8px; text-align: center; font-size: 14px; font-weight: 600; }
-  svg { display: block; margin: 4px auto 0; }
+  .l { height: 600px; box-sizing: border-box; display: flex; flex-direction: column; }
+  .head { background: #111; color: #fff; display: flex; justify-content: space-between; align-items: baseline; padding: 12px 18px 10px; }
+  .head b { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+  .head span { font-size: 12px; font-weight: 600; letter-spacing: .5px; }
+  .body { padding: 14px 18px 0; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .8px; }
+  .bin { border: 4px solid #111; border-radius: 10px; padding: 6px 12px 10px; }
+  .bin div { font-size: 64px; font-weight: 800; line-height: 1; letter-spacing: 1px; }
+  .bin span { display: inline-block; }
+  .grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; }
+  .v { font-size: 26px; font-weight: 800; line-height: 1.1; }
+  .item { font-size: 15px; font-weight: 600; margin-top: 2px; }
+  .for { font-size: 15px; font-weight: 600; line-height: 1.3; border-top: 2px solid #111; padding-top: 8px; }
+  .bars { text-align: center; font-size: 15px; font-weight: 700; letter-spacing: 1px; margin-top: auto; padding-bottom: 10px; }
+  .foot { border-top: 2px solid #111; display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; letter-spacing: .5px; padding: 8px 18px 12px; }
+  svg { display: block; margin: 0 auto 4px; }
 </style>
 </head>
 <body>
 <div class="l">
-  <div class="co">PIP'S PARTS CO.</div>
-  <small>SHIP TO</small>
-  <div class="to">MAPLE STREET HARDWARE<br>12 MAPLE STREET<br>SPRINGFIELD</div>
-  <div class="row">
-    <div><small>ORDER</small><div class="big">4821</div></div>
-    <div><small>QTY</small><div class="big">24 BX</div></div>
+  <div class="head"><b>PICK TICKET</b><span>PIP'S PARTS CO.</span></div>
+  <div class="body">
+    <div class="bin"><small>BIN</small><div><span id="bin">A-01-03</span></div></div>
+    <div class="grid">
+      <div><small>ITEM</small><div class="v">BOLT-7</div><div class="item">Robot bolts, 12 pack</div></div>
+      <div><small>QTY</small><div class="v">24 BX</div></div>
+    </div>
+    <div class="for"><small>ORDER 4821 FOR</small>Maple Street Hardware, Springfield</div>
+    <div class="bars" id="order"></div>
   </div>
-  <div class="row"><div><small>ITEM</small><div style="font-size:20px;font-weight:700">BOLT-7 · ROBOT BOLTS, 12 PACK</div></div></div>
-  <div class="row"><div><small>BIN</small><div class="bin" id="bin">A-01-03</div></div></div>
-  <div class="bars" id="order"></div>
-  <div class="bars" id="pkg"></div>
+  <div class="foot"><span>LINE 1 OF 1</span><span>DUE TUESDAY</span></div>
 </div>
 <script>
   // made-up bars from the text: they look like a barcode but encode nothing
@@ -42,8 +48,7 @@
     for (let i = 0; x < 330; i++) { const w = 2 + Math.floor(r(i) * 3) * 2, g = 2 + Math.floor(r(i + 99) * 2) * 2; out += `<rect x="${x}" width="${w}" height="${h}"/>`; x += w + g; }
     return `<svg width="330" height="${h}"><g fill="#111">${out}</g></svg>`;
   };
-  document.getElementById('order').innerHTML = `ORDER# ${bars('ORDER 4821', 52)}4821`;
-  document.getElementById('pkg').innerHTML = `PACKAGE# ${bars('PKG 77120', 52)}77120`;
+  document.getElementById('order').innerHTML = `${bars('ORDER 4821', 96)}4821`;
 </script>
 </body>
 </html>

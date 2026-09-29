@@ -58,7 +58,7 @@
     '</g><rect x="0" y="16" width="60" height="1.6" fill="#E53935"/></svg>';
   function render() {
     const m = $('main');
-    if (view === 'home') { bar('Pick', 'Scan to start'); m.innerHTML = `<div class="home">${BARCODE}<b>Scan an order</b><span>The ORDER# barcode on the label</span></div>`; }
+    if (view === 'home') { bar('Pick', 'Scan to start'); m.innerHTML = `<div class="home">${BARCODE}<b>Scan an order</b><span>The order barcode on the label</span></div>`; }
     else if (view === 'list') {
       bar(`Order ${P.order}`, '1 pick', true);
       m.innerHTML = `<div class="sub">MAPLE STREET HARDWARE · due Tuesday</div>
