@@ -1,0 +1,16 @@
+{
+  "voice": { "name": "Jessica", "id": "cgSgspJ2msm6clMCkdW9" },
+  "model": "eleven_multilingual_v2",
+  "settings": { "stability": 0.4, "similarity_boost": 0.75, "style": 0.35, "use_speaker_boost": true, "speed": 1 },
+  "scenes": [
+    {
+      "id": "show",
+      "lines": [
+        { "id": "hello", "speaker": "tilly", "text": "Morning! I'm the new Tilly." },
+        { "id": "real", "speaker": "tilly", "text": "Real size, and my forks go all the way up." },
+        { "id": "look", "speaker": "tilly", "text": "So, what have we got today?" },
+        { "id": "like", "speaker": "tilly", "text": "Oh, I like it here." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "title": "Tilly v2",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "background": "#B9CBD6",
+  "entry": "scenes/index.js",
+  "capture": "canvas",
+  "hidpi": true,
+  "fonts": [
+    { "family": "Roboto", "weight": 400, "src": "@kit/fonts/Roboto-Regular.ttf" },
+    { "family": "Roboto", "weight": 500, "src": "@kit/fonts/Roboto-Medium.ttf" },
+    { "family": "Roboto", "weight": 700, "src": "@kit/fonts/Roboto-Bold.ttf" }
+  ],
+  "chapters": { "show": "Tilly v2", "end": null },
+  "loudness": -16
+}

@@ -180,6 +180,15 @@ pole)` two-bone IK for arms and legs. Two 3D stock characters are made from it:
   spins and flashes, a telescoping mast, and forks she can lift, tilt, spread and wave one at a time.
   `tillyPose(t, moves, { path })` rolls her wheels along a path and pitches her on her springs as
   she speeds up and brakes. `forkTop()` says where a load on her forks goes.
+- `/@kit/characters/tilly3d-v2.js`: Tilly v2, a real 2.5 t counterbalance forklift, to scale in
+  millimetres, with her face in her: big eyes in the windscreen of her overhead guard (lids for blinks
+  and five moods, a look direction) and a mouth on the front of her body that follows lip-sync. A
+  three-stage mast that stands under her eyes when lowered (raised, its rails cross them, so bring the
+  forks down to act), a tilting mast, steer wheels that turn, a beacon and work lights. She takes the
+  first Tilly's pose keys, so `tillyPose` drives her too (it's re-exported), plus a few of her own
+  (`steer`, lids, `eyes.squint`); `driveAlong(path, t)` drives her round curves. The module's header
+  lists them all. `examples/tilly-v2` shows her off, with lab pages for her turnaround, face, contacts
+  and lift (voiced by Jessica).
 
 `examples/3d-cast` puts them both in a toon warehouse, all in 3D, with lab pages for each.
 
@@ -657,6 +666,7 @@ in units of their own, so scale them in:
 |---|---|---|
 | 3D Pip | 1.8 | she is about 1.64 m tall (910 in her own units) |
 | Tilly | 3.2 | she is about 1.05 m tall and her forks slide under a pallet |
+| Tilly v2 | 1 | she's modelled in millimetres: 2.2 m to the top of her guard |
 | `rack3d`, `palletLoad`, `pallet3d`, `carton3d` | 1.8 | they stand with Pip |
 | `scanner3d` | 0.9 × Pip's | it fits her hand |
 | printers, labels, desk | 1 | they are already in millimetres |

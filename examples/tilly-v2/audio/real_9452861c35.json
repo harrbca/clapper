@@ -1,0 +1,69 @@
+{
+ "request": {
+  "text": "Real size, and my forks go all the way up.",
+  "voice": "cgSgspJ2msm6clMCkdW9",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.4,
+   "similarity_boost": 0.75,
+   "style": 0.35,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Morning! I'm the new Tilly.",
+  "next_text": "So, what have we got today?",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Real",
+   "start": 0,
+   "end": 0.232
+  },
+  {
+   "w": "size,",
+   "start": 0.302,
+   "end": 0.708
+  },
+  {
+   "w": "and",
+   "start": 0.731,
+   "end": 0.801
+  },
+  {
+   "w": "my",
+   "start": 0.848,
+   "end": 0.917
+  },
+  {
+   "w": "forks",
+   "start": 0.987,
+   "end": 1.277
+  },
+  {
+   "w": "go",
+   "start": 1.324,
+   "end": 1.428
+  },
+  {
+   "w": "all",
+   "start": 1.486,
+   "end": 1.602
+  },
+  {
+   "w": "the",
+   "start": 1.649,
+   "end": 1.718
+  },
+  {
+   "w": "way",
+   "start": 1.741,
+   "end": 1.846
+  },
+  {
+   "w": "up.",
+   "start": 1.904,
+   "end": 2.694
+  }
+ ]
+}
