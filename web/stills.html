@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clapper stills</title>
+<link rel="icon" href="data:,">
+<!-- The renders in the project's out/ folder (clap still, sheet and frames), newest first, as they're
+     made: clap preview tells this page when a new one lands. Click one to see it full size. -->
+<style>
+  html, body { margin: 0; background: #0b0f14; color: #E8EEF3; font: 500 14px system-ui, "Segoe UI", sans-serif; }
+  header { position: sticky; top: 0; z-index: 2; display: flex; gap: 16px; align-items: baseline; padding: 14px 20px; background: #141c26; border-bottom: 1px solid #243140; }
+  h1 { margin: 0; font-size: 17px; }
+  header span { color: #8FA0B2; }
+  header a { margin-left: auto; color: #B8C4D0; text-decoration: none; border: 1px solid #334456; border-radius: 6px; padding: 5px 10px; }
+  header a:hover { border-color: #FF8A1F; color: #fff; }
+  main { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; padding: 16px 20px 40px; }
+  figure { margin: 0; background: #141c26; border: 1px solid #243140; border-radius: 10px; overflow: hidden; }
+  figure.new { border-color: #FF8A1F; }
+  figure a { display: block; background: #05080b; }
+  img { display: block; width: 100%; height: auto; }
+  figcaption { display: flex; justify-content: space-between; gap: 10px; padding: 8px 10px; font: 12px ui-monospace, Consolas, monospace; color: #B8C4D0; }
+  figcaption b { color: #E8EEF3; font-weight: 600; overflow-wrap: anywhere; }
+  p.empty { grid-column: 1 / -1; color: #8FA0B2; }
+</style>
+</head>
+<body>
+<header><h1>Stills</h1><span id="count"></span><a href="/@kit/stage.html">Back to the preview</a></header>
+<main id="grid"><p class="empty">Loading…</p></main>
+<script type="module">
+  const grid = document.getElementById('grid'), count = document.getElementById('count');
+  let seen = new Set(), first = true;
+  const ago = ms => { const s = (Date.now() - ms) / 1000; return s < 60 ? `${Math.round(s)} s ago` : s < 3600 ? `${Math.round(s / 60)} min ago` : new Date(ms).toLocaleString(); };
+  async function show() {
+    const list = await fetch('/@stills', { cache: 'no-store' }).then(r => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))));
+    count.textContent = list.length ? `${list.length} in out/, newest first` : '';
+    if (!list.length) { grid.innerHTML = '<p class="empty">Nothing in out/ yet. clap still, clap sheet and clap frames put their pictures there.</p>'; return; }
+    grid.replaceChildren(...list.map(f => {
+      const fig = document.createElement('figure'), key = `${f.path}@${f.mtime}`;
+      if (!first && !seen.has(key)) fig.className = 'new';
+      const src = `/${encodeURI(f.path)}?v=${Math.round(f.mtime)}`;
+      fig.innerHTML = `<a href="${src}" target="_blank"><img loading="lazy" alt=""></a><figcaption><b></b><span></span></figcaption>`;
+      fig.querySelector('img').src = src;
+      fig.querySelector('b').textContent = f.path.replace(/^out\//, '');
+      fig.querySelector('span').textContent = ago(f.mtime);
+      return fig;
+    }));
+    seen = new Set(list.map(f => `${f.path}@${f.mtime}`));
+    first = false;
+  }
+  show().catch(e => { grid.innerHTML = `<p class="empty">The list of stills needs clap preview running (${e.message}).</p>`; });
+  let wait = null;
+  new EventSource('/@events').addEventListener('stills', () => { clearTimeout(wait); wait = setTimeout(() => show().catch(() => {}), 200); });
+</script>
+</body>
+</html>

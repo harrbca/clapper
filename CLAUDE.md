@@ -34,11 +34,16 @@ it; offer to start one when a user states a preference that belongs there.
 
 Look at frames, don't assume them. The user will notice glitches, so find them first.
 
+- Start from the director's notes: `clap notes` lists what they wrote on frames in the preview. When
+  one is dealt with, close it with a reply saying what changed (`clap notes done <id> "..."`).
+- `clap check` draws every drawing and runs the declared characters' checks on all of them. Run it
+  before rendering, and treat its warnings as glitches to fix, or make the contact `quiet` when a
+  scene lets go of it on purpose.
 - `clap still <t> --entry scenes/lab-*.js` renders lab pages (turnarounds, expression charts, prop
   close-ups); `clap sheet` makes contact sheets of the timeline's review moments, and `clap sheet
   <name> <time>...` of any others.
-- Also check in-between frames from the rendered video (`ffmpeg -ss <t> -i out/video.mp4 -frames:v 1`):
-  transitions are where things break.
+- Also check in-between frames: `clap frames <from> <to>` renders each drawing between two times with
+  a labelled strip (`--crop` to look closely). Transitions are where things break.
 - 3D geometry: render close-ups of every contact (feet on the floor, a hand round a handle, a pallet
   on its beams, a label on a beam), from more than one side. When something is off, log positions
   (`console.warn` shows up in clap's output) instead of guessing.

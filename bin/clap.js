@@ -9,7 +9,9 @@ import { chromePath } from '../lib/browser.js';
 import { capture } from '../lib/capture.js';
 import { KIT, loadProject } from '../lib/project.js';
 import { list } from '../lib/list.js';
-import { sheets, stills, video } from '../lib/render.js';
+import { notesCommand } from '../lib/notes.js';
+import { check, frames, sheets, stills, video } from '../lib/render.js';
+import { IMAGE, reviewRoutes } from '../lib/review.js';
 import { serve } from '../lib/server.js';
 import { voice } from '../lib/voice.js';
 import * as youtube from '../lib/youtube.js';
@@ -30,6 +32,14 @@ const HELP = `clap <command> [options]
                                character lab, instead of the video). A time is seconds, a cue, a scene or
                                a line id, optionally with an offset: 12.5, title, intro+2, hello-0.1
   sheet [name] [time...]       2x2 contact sheets (default: the timeline's review list)
+  frames <from> <to> [--every 2] [--crop x,y,w,h] [--tile 6] [--entry f]
+                               each drawing between two times, straight from the page, into
+                               out/frames/, and a strip of them labelled with their times
+  check [--every 2] [--entry f] [--no-sheets]
+                               draws every drawing without saving it, so every character check runs:
+                               errors stop it, warnings are listed once each; then the review sheets
+  notes [all | done <id> [reply] | reopen <id>]
+                               notes written on frames in the preview (press N), from notes.json
   list [character]             what a declared character understands: tags, chains, pieces, pose keys,
                                poses, expressions, clips; and the named shots and easings
   render [out.mp4] [--workers 8] [--from s] [--to s] [--scale 0.5|2] [--draft] [--encoder nvenc|x264]
@@ -44,7 +54,7 @@ const HELP = `clap <command> [options]
   doctor                       check ffmpeg, Chrome, the ElevenLabs key and the YouTube sign-in
 `;
 
-const FLAGS = new Set(['audition', 'music', 'open', 'draft', 'no-audio', 'login', 'headed', 'help']);
+const FLAGS = new Set(['audition', 'music', 'open', 'draft', 'no-audio', 'no-sheets', 'login', 'headed', 'help']);
 const args = process.argv.slice(2), pos = [], opt = {};
 for (let i = 0; i < args.length; i++) {
   const a = args[i];
@@ -73,6 +83,11 @@ const commands = {
   still: () => stills(project(), pos.length ? pos : fail('clap still <time>...'), { scale: num(opt.scale, 1), entry: opt.entry }),
   sheet: () => sheets(project(), pos.shift() || 'review', pos, { entry: opt.entry }),
   list: () => list(pos[0] ? project() : null, pos[0]),
+  frames: () => frames(project(), pos[0] ?? fail('clap frames <from> <to>'), pos[1] ?? fail('clap frames <from> <to>'), {
+    every: num(opt.every, 2), tile: num(opt.tile, 6), entry: opt.entry, crop: opt.crop ? String(opt.crop).split(',').map(Number) : undefined,
+  }),
+  check: () => check(project(), { every: num(opt.every, 2), entry: opt.entry, sheets: !opt['no-sheets'] }),
+  notes: () => notesCommand(project(), pos),
   async render() {
     const P = project();
     const draft = opt.draft;
@@ -84,11 +99,13 @@ const commands = {
   },
   async preview() {
     const P = project();
-    const server = await serve(P, { port: num(opt.port, 4173) });
+    const routes = reviewRoutes(P, { onNote: n => console.log(`  note ${n.id} at ${n.t.toFixed(2)} s (frame ${n.frame}, ${n.scene}): ${n.text}`) });
+    const server = await serve(P, { port: num(opt.port, 4173), routes });
     const url = `${server.url}/@kit/stage.html`;
-    console.log(`  preview: ${url}\n  Space plays, arrows skip (Shift: 1 s), , and . step a frame, [ ] jump scenes, D shows cues. Ctrl+C stops.`);
+    console.log(`  preview: ${url}\n  Space plays, arrows skip (Shift: 1 s), , and . step a frame, [ ] jump scenes, D shows cues, N writes a note.`);
+    console.log(`  stills: ${server.url}/@kit/stills.html (the renders in out/, as they're made). Ctrl+C stops.`);
     if (opt.open) spawn('cmd', ['/c', 'start', '', url], { detached: true, stdio: 'ignore' }).unref();
-    let timer = null, building = false, pending = new Set();
+    let timer = null, stillsTimer = null, building = false, pending = new Set();
     const settle = async () => {
       const files = [...pending]; pending = new Set();
       if (files.some(f => f === P.config.timeline || f === 'video.json')) {
@@ -107,7 +124,10 @@ const commands = {
     fs.watch(P.root, { recursive: true }, (_, name) => {
       if (!name) return;
       const f = name.replace(/\\/g, '/');
-      if (/^(out|audio|node_modules|\.git)\//.test(f) || /^build\/(render|sheet)-tmp/.test(f)) return;
+      // a new render in out/ refreshes the stills page, not the player; notes are the preview's own
+      if (/^out\//.test(f) && IMAGE.test(f)) { clearTimeout(stillsTimer); stillsTimer = setTimeout(() => server.notify('stills'), 300); return; }
+      if (/^notes\.json/.test(f)) return;
+      if (/^(out|audio|node_modules|\.git)\//.test(f) || /^build\/(render|sheet|frames)-tmp/.test(f)) return;
       pending.add(f);
       clearTimeout(timer);
       timer = setTimeout(settle, 250);

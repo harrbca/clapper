@@ -55,9 +55,12 @@ folders outside the kit, and point `clap` at them (`--project`, or run it from i
 | `clap new <folder> [--template 3d]` | a new project from a starter: 2D, or 3D (Pip, a desk and a label printer) |
 | `clap voice [--voice NAME] [--audition] [--music] [--draft]` | narration (and a voice audition, and the music bed) from ElevenLabs |
 | `clap build [--no-audio]` | `build/timeline.json`, `build/mix.wav`, `build/captions.srt` and `.vtt` |
-| `clap preview [--port 4173] [--open]` | the live player. Space plays, arrows skip (Shift: 1 s), `,` `.` step a frame, `[` `]` jump scenes, D shows cues |
+| `clap preview [--port 4173] [--open]` | the live player. Space plays, arrows skip (Shift: 1 s), `,` `.` step a frame, `[` `]` jump scenes, D shows cues, N writes a note on the frame. Its Stills page shows renders as they're made |
 | `clap still <time>...` | full-size PNGs in `out/stills` |
 | `clap sheet [name] [time...]` | 2x2 contact sheets; by default of the timeline's review list |
+| `clap frames <from> <to> [--every 2] [--crop x,y,w,h] [--tile 6]` | each drawing between two times (cues work), straight from the page, and a strip of them labelled with their times, in `out/frames/` |
+| `clap check [--every 2] [--no-sheets]` | draws every drawing without saving it, so every character check runs; errors stop it, warnings are listed once each; then the review sheets |
+| `clap notes [all \| done <id> [reply] \| reopen <id>]` | the notes written on frames in the preview, from `notes.json` |
 | `clap list [character]` | what a declared character understands: tags, chains, pieces, pose keys, poses, expressions, clips; and the named shots and easings. Without a name, the kit's characters |
 | `clap render [out.mp4] [--draft] [--scale 2] [--from s] [--to s] [--workers 8] [--encoder x264\|nvenc]` | the video. `--draft` is half size and fast; `--scale 2` is 4K when the project is `hidpi` |
 | `clap capture <script.js> [--headed]` | drives a web page as the script says and keeps each state's screenshot, for `screen.js` (below) |
@@ -446,6 +449,23 @@ Don't use it on things animated on twos: blur across a change of drawing shows b
 
 `clap still 0 --entry scenes/lab.js` draws another page instead of the video: a character sheet, a
 prop on its own. The page has the same stage and timeline.
+
+### Checking and reviewing
+
+- `clap check` draws every drawing of the video (every 2nd frame, as drawings change on twos)
+  without saving them, so the declared characters' checks run on all of them, not only on the frames
+  someone looked at. An error stops it, saying what and at what time; warnings (a limb out of reach,
+  a knee bent backwards) are listed once each. Then it makes the review sheets.
+- `clap frames jump-0.2 land+0.4` renders each drawing between two times straight from the page into
+  `out/frames/`, and one strip of them labelled with their times and frame numbers.
+  `--crop 900,380,700,700` looks closely at part of the frame (a hand, a foot on the floor).
+- In `clap preview`, **N** (or Note) writes a note on the frame you're on. The preview keeps notes in
+  `notes.json` in the project, with the scene, time and frame, and `clap notes` lists the open ones
+  for whoever works on the video next. `clap notes done 3 "moved the landing a frame earlier"` closes
+  one with a reply. The preview only takes notes from its own page, so another website open in the
+  same browser can't write into them.
+- The preview's **Stills** page (`/@kit/stills.html`) shows everything in `out/` (stills, sheets,
+  frames), newest first, and adds new renders as they're made.
 
 ## Making a 3D video
 

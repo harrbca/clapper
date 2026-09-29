@@ -85,7 +85,8 @@ export function withContacts(p, t) {
   // the knee: a hand to it
   if (t >= c.knee) {
     const knee = dex.where('legL', p, [8, 150]);                     // the thigh, just above the knee
-    p = mixKeys(p, reachChain(dex, p, 'armL', knee), E.out(inv(c.knee, c.knee + 0.12, t)), ARM_L);
+    // (quiet while he's still bending over: the hand gets there as he does)
+    p = mixKeys(p, reachChain(dex, p, 'armL', knee, { quiet: t < c.knee + 0.12 }), E.out(inv(c.knee, c.knee + 0.12, t)), ARM_L);
   }
   return p;
 }
