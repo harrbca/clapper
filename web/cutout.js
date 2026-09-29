@@ -12,6 +12,7 @@
 // swap drawings: choreo doesn't blend them, they change halfway through the move that keys them.
 import { clamp, E, onTwos } from './core.js';
 import { defineCharacter } from './character.js';
+import { drawSVG, readSVG } from './svgdraw.js';
 import { add, choreo } from './puppet.js';
 import { blink, breath, glance, sway } from './life.js';
 import { loudness, viseme } from './lipsync.js';
@@ -552,4 +553,97 @@ export function defineCutout({ life, keys = {}, sides = [], ...def }) {
   const character = defineCharacter({ ...def, keys: { ...CUTOUT_KEYS, ...keys }, sides: [...CUTOUT_SIDES, ...sides], facing: pose => (bodyAngle(pose) < 0 ? -1 : 1) });
   character.pose = cutoutPose(character, life);
   return character;
+}
+
+// ---------- characters from data ----------
+// The features a face's SVG can have places for (<g data-feature="eye" ...>), drawn by the kit with
+// the pose and the character's face settings. The mouth drops with the jaw, so its place is given as
+// data-x, data-y and data-sx rather than a transform.
+const FEATURES = {
+  eye: (ctx, env, d) => eye(ctx, env.pose, Number(d.side), { ...env.face.eye, look: Number(d.look ?? 0) }),
+  brow: (ctx, env, d) => brow(ctx, env.pose, Number(d.side), env.face.brow),
+  mouth: (ctx, env, d) => {
+    const p = env.pose;
+    ctx.translate(Number(d.x ?? 0), Number(d.y ?? 0) + env.vars.jaw * Number(d.drop ?? 0)); ctx.scale(Number(d.sx ?? 1), 1);
+    mouth(ctx, mouthName(p), { w: env.face.mouth.w, smile: v(p, 'mood.smile'), cornerL: v(p, 'mouth.cornerL'), cornerR: v(p, 'mouth.cornerR'), pal: env.face.mouth.pal });
+  },
+};
+
+// A cut-out character from data: `base` is a folder with character.json and its SVG drawings. The
+// JSON is what defineCutout takes, as plain data:
+//   pieces: { svg: 'neck.svg' }, an SVG drawing; { angles: { 0: 'front.svg', ... }, of: 'body' or
+//     'head', fallback, scale, front: { flip, rotate } }, an angle set; or the kit's own: { kit:
+//     'noodle', a, b, bend: '<the lower bone>', w, w2, round, color, sleeve: { len, w, color } },
+//     { kit: 'hand', side, skin, size }, { kit: 'mouthChart' }
+//   palette: named colours, which colours anywhere in the JSON may use by name
+//   face: { eye: { rx, ry, pupil, lid }, brow: {}, mouth: { w, pal: { mouth, tongue } } }, for the
+//     features the head's SVGs have places for
+//   '.shape' values may be names ('relaxed'); expressions and clips may be 'kit' for the kit's own.
+export async function loadCutout(base) {
+  const at = f => new URL(f, new URL(base, location.href)).href;
+  const get = async (f, as) => {
+    const r = await fetch(at(f), { cache: 'no-store' });
+    if (!r.ok) throw new Error(`${at(f)}: ${r.status === 404 ? 'not found' : `HTTP ${r.status}`}`);
+    return as === 'json' ? r.json() : r.text();
+  };
+  const def = await get('character.json', 'json'), name = def.name ?? def.id;
+  const colour = c => def.palette?.[c] ?? c;
+  const face = {
+    eye: { ...def.face?.eye, lid: colour(def.face?.eye?.lid) },
+    brow: def.face?.brow ?? {},
+    mouth: { w: def.face?.mouth?.w ?? 26, pal: Object.fromEntries(Object.entries(def.face?.mouth?.pal ?? {}).map(([k, c]) => [k, colour(c)])) },
+  };
+  // the SVG drawings, fetched together and read once
+  const files = new Set();
+  for (const p of Object.values(def.pieces || {})) { if (p.svg) files.add(p.svg); for (const f of Object.values(p.angles || {})) files.add(f); }
+  const svgs = Object.fromEntries(await Promise.all([...files].map(async f => [f, readSVG(await get(f), `${name}'s ${f}`)])));
+  for (const [f, d] of Object.entries(svgs)) {
+    for (const x of d.features) if (!FEATURES[x]) throw new Error(`${name}'s ${f} has a place for a ${x}, which the kit doesn't draw (it draws ${Object.keys(FEATURES).join(', ')})`);
+  }
+  const drawing = f => {
+    const d = svgs[f], mouthed = d.features.has('mouth');
+    return (ctx, pose) => drawSVG(ctx, d, { pose, face, features: FEATURES, vars: { jaw: mouthed ? jawDrop(mouthName(pose), face.mouth.w) : 0 } });
+  };
+  const wornBy = pn => def.bones.find(b => b.piece === pn)?.name;
+  const pieces = {};
+  for (const [pn, p] of Object.entries(def.pieces || {})) {
+    if (p.angles) {
+      const around = p.scale !== undefined || p.front ? (ctx, n, draw) => {
+        ctx.save(); ctx.scale(p.scale ?? 1, p.scale ?? 1);
+        if (n === 0 && p.front) { ctx.scale(p.front.flip, 1); ctx.rotate(p.front.rotate); }
+        draw();
+        ctx.restore();
+      } : undefined;
+      pieces[pn] = angleSet(p.of ?? 'body', Object.fromEntries(Object.entries(p.angles).map(([a, f]) => [a, drawing(f)])), { fallback: p.fallback, around });
+    } else if (p.svg) pieces[pn] = { draw: drawing(p.svg) };
+    else if (p.kit === 'noodle') {
+      pieces[pn] = {
+        draw: (ctx, pose) => {
+          noodle(ctx, p.a, p.b, v(pose, `${p.bend}.r`), p.w, colour(p.color), { w2: p.w2 ?? p.w, round: p.round ?? 0.42 });
+          if (p.sleeve) sleeve(ctx, p.sleeve.len, p.sleeve.w, colour(p.sleeve.color));
+        },
+      };
+    } else if (p.kit === 'hand') {
+      if (!wornBy(pn)) throw new Error(`${name}: the hand piece ${pn} isn't on a bone`);
+      pieces[pn] = handPiece(wornBy(pn), p.side, { skin: colour(p.skin), size: p.size });
+    } else if (p.kit === 'mouthChart') pieces[pn] = mouthChart();
+    else throw new Error(`${name}: piece ${pn} needs svg, angles, or kit (noodle, hand or mouthChart)`);
+  }
+  // '.shape' values given as names, as the pieces' drawings are named
+  const shapes = {};
+  for (const pc of Object.values(pieces)) for (const [k, s] of Object.entries(pc.keys || {})) if (s.shape) shapes[k] = s.shape;
+  const named = (pose, where) => Object.fromEntries(Object.entries(pose || {}).map(([k, val]) => {
+    if (typeof val !== 'string' || !shapes[k]) return [k, val];
+    const i = shapes[k].indexOf(val);
+    if (i < 0) throw new Error(`${name}: ${where} sets '${k}' to '${val}', which isn't one of its drawings (${shapes[k].join(', ')})`);
+    return [k, i];
+  }));
+  const group = (g, where) => Object.fromEntries(Object.entries(g || {}).map(([n, pose]) => [n, named(pose, `${where} ${n}`)]));
+  const character = defineCutout({
+    id: def.id, version: def.version, name: def.name, height: def.height, bones: def.bones, tags: def.tags, pieces,
+    limits: def.limits, rest: named(def.rest, 'the rest pose'), poses: group(def.poses, 'pose'),
+    expressions: def.expressions === 'kit' ? EXPR : group(def.expressions, 'expression'),
+    clips: def.clips === 'kit' ? CLIPS : def.clips, life: def.life,
+  });
+  return Object.assign(character, { palette: def.palette || {}, face, source: at('character.json') });
 }

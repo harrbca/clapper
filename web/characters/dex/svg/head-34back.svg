@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 -270 260 300">
+  <title>Dex: head, three-quarter from behind</title>
+  <defs>
+    <clipPath id="c1"><path d="M -30 0 C -40 -30 -84 -50 -88 -104 C -90 -162 -56 -196 4 -196 C 64 -196 92 -160 88 -104 C 86 -60 60 -30 34 -2 Z"/></clipPath>
+    <clipPath id="c2"><path d="M -92 -160 C -96 -222 -58 -250 -4 -250 C 50 -250 98 -222 96 -160 Z"/></clipPath>
+    <clipPath id="c3"><path d="M -95 -180 L 99 -176 Q 105 -162 99 -144 L -95 -148 Q -101 -162 -95 -180"/></clipPath>
+  </defs>
+  <path d="M -30 0 C -40 -30 -84 -50 -88 -104 C -90 -162 -56 -196 4 -196 C 64 -196 92 -160 88 -104 C 86 -60 60 -30 34 -2 Z" fill="#C78A62" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <path d="M 58 -210 C 62 -160 60 -124 48 -96 C 40 -76 30 -60 20 -50 L 10 -44 L 0 -50 L -12 -42 L -22 -50 C -44 -56 -72 -74 -100 -96 L -100 -210 Z" fill="#2A201D" stroke="#1D1A24" stroke-width="2.72"/>
+  </g>
+  <path d="M -30 0 C -40 -30 -84 -50 -88 -104 C -90 -162 -56 -196 4 -196 C 64 -196 92 -160 88 -104 C 86 -60 60 -30 34 -2 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(64 -104) scale(1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#C78A62" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <path d="M -92 -160 C -96 -222 -58 -250 -4 -250 C 50 -250 98 -222 96 -160 Z" fill="#EC7A2E" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c2)">
+    <path d="M -26 -248 C -36 -224 -42 -196 -44 -170" fill="none" stroke="#C9611F" stroke-width="2.2"/>
+    <path d="M 22 -246 C 34 -220 40 -196 42 -170" fill="none" stroke="#C9611F" stroke-width="2.2"/>
+  </g>
+  <path d="M -95 -180 L 99 -176 Q 105 -162 99 -144 L -95 -148 Q -101 -162 -95 -180" fill="#EC7A2E" stroke="none"/>
+  <g clip-path="url(#c3)">
+    <polyline points="-86,-177 -86,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-73,-177 -73,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-60,-177 -60,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-47,-177 -47,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-34,-177 -34,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-21,-177 -21,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-8,-177 -8,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="5,-177 5,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="18,-177 18,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="31,-177 31,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="44,-177 44,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="57,-177 57,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="70,-177 70,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="83,-177 83,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+  </g>
+  <path d="M -95 -180 L 99 -176 Q 105 -162 99 -144 L -95 -148 Q -101 -162 -95 -180" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

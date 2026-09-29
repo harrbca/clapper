@@ -355,9 +355,10 @@ In `choreo`, a move can `anticipate` (wind back before it goes), and `E.snap` la
 
 `/@kit/cutout.js` rigs characters the way TV cut-out animation does (the Toon Boom Harmony look of
 adult animated sitcoms): flat colour and one even ink line, with drawings swapped rather than bent.
-`/@kit/characters/dex.js` is Dex, a warehouse picker in a hi-vis vest, made from it.
+`/@kit/characters/dex.js` is Dex, a warehouse picker in a hi-vis vest, made from it. Dex is data:
+a JSON file and SVG drawings in `web/characters/dex/` (see "Characters as data", below).
 
-**A character is declared as data** (`/@kit/character.js`), so it can be checked:
+**A character is declared as data** (`/@kit/character.js`), so it can be checked. In code:
 
 ```js
 export const dex = defineCutout({
@@ -398,6 +399,44 @@ export const dex = defineCutout({
   `CLIPS` for bipeds: `wave`, `point`, `shrug`, `thumbsUp`, `take` and `turn({ from, to })`.
 - `clap list dex` prints all of it: the tags and chains, the pieces and their drawings, every pose
   key, the poses, expressions and clips, and the named shots and easings.
+
+**Characters as data.** A cut-out character can be a folder, with `character.json` and SVG
+drawings, that `loadCutout` reads: `export const dex = await loadCutout(new URL('./dex/',
+import.meta.url).href)` is all of `characters/dex.js`. The JSON is what `defineCutout` takes, as
+plain data (bones, tags, limits, rest, poses), and its pieces name SVG files or the kit's own
+drawings:
+
+```json
+"pieces": {
+  "head": { "angles": { "0": "svg/head-front.svg", "1": "svg/head-34.svg", "2": "svg/head-side.svg", "3": "svg/head-34back.svg", "4": "svg/head-back.svg" }, "of": "head" },
+  "neck": { "svg": "svg/neck.svg" },
+  "armL": { "kit": "noodle", "a": 150, "b": 138, "bend": "foreL", "w": 27, "w2": 25, "color": "skin", "sleeve": { "len": 60, "w": 42, "color": "shirt" } },
+  "handL": { "kit": "hand", "side": -1, "skin": "skin", "size": 1.05 },
+  "footL": { "angles": { ... }, "fallback": { "3": 2 }, "scale": 1.2, "front": { "flip": -1, "rotate": 0.06 } }
+}
+```
+
+- `palette` names colours that the rest of the JSON can use by name. `.shape` values can be names
+  (`"relaxed"`), and `expressions` and `clips` can be `"kit"` for the kit's own.
+- **SVG drawings** (`/@kit/svgdraw.js`) are read once and replayed as canvas calls, so they stay
+  sharp at any zoom and draw exactly as the kit's own drawings do. Their coordinates are the
+  piece's (for a head, the top of the neck is the origin); the viewBox is only for looking at them
+  in an editor. They can use path, rect, polyline, line, circle, ellipse, g (with a transform and
+  clip-path) and clipPath. Anything else is an error, so a drawing never quietly loses a part.
+  Strokes are round-capped and round-joined, like the kit's ink.
+- **Faces:** a head's SVG marks where the kit's features go, and the kit draws them with the pose:
+  `<g data-feature="eye" data-side="-1" data-look="0.35" transform="translate(-6 -104) scale(0.96
+  1)"/>`, `data-feature="brow"`, and `<g data-feature="mouth" data-x="42" data-y="-44"
+  data-sx="0.84" data-drop="0.35"/>` (the mouth moves down as the jaw drops, so it's placed with
+  data rather than a transform). `face` in the JSON sets the features' look: eye size, lid colour,
+  mouth width.
+- **Shape keys:** `<path d="..." data-morph="jaw" data-morph-at="30" data-morph-d="...">` moves
+  the path's numbers towards the second path as the jaw drops 30 px. That's how Dex's chin
+  stretches when he shouts.
+- What stays code is what bends or changes with the pose: limbs, hands, eyes, brows and the mouth
+  chart. The JSON names them with their sizes and colours.
+- A missing angle or file, an element or feature the kit doesn't draw, a shape name that isn't a
+  drawing, or a morph whose paths don't match fails at load, naming the file.
 
 What the kit draws:
 
