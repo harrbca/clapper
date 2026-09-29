@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
   <title>Walt: head, side</title>
   <defs>
-    <clipPath id="c1"><path d="M -300 -128 L 10 -128 L 10 -82 L -300 -82 Z"/></clipPath>
+    <clipPath id="c1"><path d="M -300 -136 L -40 -136 C -30 -120 -30 -92 -44 -78 L -300 -78 Z"/></clipPath>
   </defs>
   <path d="M -34 -2 C 4 -2 34 0 48 -10 C 60 -20 62 -32 64 -40 C 68 -44 70 -48 70 -54 C 70 -58 71 -60 72 -62 C 96 -60 102 -86 80 -92 C 82 -112 84 -132 82 -150 C 78 -180 44 -196 -4 -196 C -62 -196 -94 -156 -92 -104 C -90 -62 -68 -28 -34 -2 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M -34 16 C 4 28 34 30 48 20 C 60 10 62 -8 64 -25 C 68 -44 70 -48 70 -54 C 70 -58 71 -60 72 -62 C 96 -60 102 -86 80 -92 C 82 -112 84 -132 82 -150 C 78 -180 44 -196 -4 -196 C -62 -196 -94 -156 -92 -104 C -90 -62 -68 -13 -34 16 Z" fill="#E0AC8A" stroke="#1D1A24" stroke-width="3.4"/>
   <g transform="translate(-22 -104) scale(-1.1 1)">

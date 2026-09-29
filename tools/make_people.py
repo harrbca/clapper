@@ -186,12 +186,14 @@ STYLES = {        # volume (scale of the head outline), forehead y, sides down t
 def hair_front(svg, view, style, col):
     st = STYLES[style]
     out = []
-    if style == 'bald':      # a fringe round the back of the head, at ear level
-        region = f'M -300 -128 L 300 -128 L 300 {st["s"]} L -300 {st["s"]} Z' if view != 'side' else f'M -300 -128 L 10 -128 L 10 {st["s"]} L -300 {st["s"]} Z'
-        if view == 'front':
-            region = 'M -300 -128 L -74 -128 L -74 -82 L -300 -82 Z M 74 -128 L 300 -128 L 300 -82 L 74 -82 Z'
-        elif view == '34':
-            region = 'M -300 -128 L -40 -128 L -40 -82 L -300 -82 Z'
+    if style == 'bald':      # a fringe round the back of the head, at ear level, behind the ears
+        region = {
+            'front': 'M -300 -136 L -82 -136 C -74 -120 -74 -94 -84 -80 L -300 -80 Z M 300 -136 L 82 -136 C 74 -120 74 -94 84 -80 L 300 -80 Z',
+            '34': 'M -300 -136 L -76 -136 C -70 -120 -70 -94 -80 -80 L -300 -80 Z',
+            'side': 'M -300 -136 L -40 -136 C -30 -120 -30 -92 -44 -78 L -300 -78 Z',
+            'back': 'M -300 -132 L 300 -132 L 300 -80 C 100 -74 -100 -74 -300 -80 Z',
+            '34back': 'M -300 -132 L 300 -132 L 300 -80 C 100 -74 -100 -74 -300 -80 Z',
+        }[view]
         vol = tf(HEAD_OUTLINE[view], st['vol'], st['vol'], 0, -110)
         out.append(group([ink(vol, col, LW * 0.8)], clip=svg.clip(region)))
         return out
@@ -577,7 +579,7 @@ def make(p):
         'about': p['about'],
         'palette': {'skin': p['skin'], 'hair': p['hairColor'], 'sleeve': sleeve_col, 'legs': leg_col, 'mouth': '#3B1521', 'tongue': '#DE6878'},
         'ink': INK, 'line': LW,
-        'face': {'eye': {'rx': 27, 'ry': 30, 'pupil': 5.4, 'lid': 'skin'}, 'brow': {'color': p.get('browColor', darker(p['hairColor'], 0.8)) if p['hair'] != 'bald' else INK}, 'mouth': {'w': 31, 'pal': {'mouth': 'mouth', 'tongue': 'tongue'}}},
+        'face': {'eye': {'rx': 27, 'ry': 30, 'pupil': 5.4, 'lid': 'skin'}, 'brow': {'color': p.get('browColor', darker(p['hairColor'], 0.8 if p['hair'] != 'bald' else 0.62))}, 'mouth': {'w': 31, 'pal': {'mouth': 'mouth', 'tongue': 'tongue'}}},
         'bones': bones,
         'tags': {'root': 'hips', 'chest': 'torso', 'look': 'head', 'chains': chains,
                  'turn': {'offsets': {'1': {'neck.x': 8}, '2': {'neck.x': 12}, '3': {'neck.x': -4}}}},
