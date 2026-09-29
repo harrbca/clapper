@@ -62,6 +62,7 @@ folders outside the kit, and point `clap` at them (`--project`, or run it from i
 | `clap check [--every 2] [--no-sheets]` | draws every drawing without saving it, so every character check runs; errors stop it, warnings are listed once each; then the review sheets |
 | `clap notes [all \| done <id> [reply] \| reopen <id>]` | the notes written on frames in the preview, from `notes.json` |
 | `clap list [character]` | what a declared character understands: tags, chains, pieces, pose keys, poses, expressions, clips; and the named shots and easings. Without a name, the kit's characters |
+| `clap bake <module#export> [--angles 0,45,90] [--scale 1] [--line px] [--res 2] [--elevation 8] [--args JSON] [--no-shadow]` | a 3D prop drawn from set angles into PNG sprites with transparent backgrounds, for 2D scenes (below) |
 | `clap render [out.mp4] [--draft] [--scale 2] [--from s] [--to s] [--workers 8] [--encoder x264\|nvenc]` | the video. `--draft` is half size and fast; `--scale 2` is 4K when the project is `hidpi` |
 | `clap capture <script.js> [--headed]` | drives a web page as the script says and keeps each state's screenshot, for `screen.js` (below) |
 | `clap upload [file.mp4] [--privacy private\|unlisted\|public] [--title T] [--description D] [--login]` | the video to YouTube, private unless asked (below) |
@@ -476,6 +477,59 @@ What the kit draws:
 `examples/cutout-rig` has Dex's model sheet, face sheet, poses, clips and shots as lab pages, and a
 short acting test in a warehouse: a scanner, a turn to the racking, and a walk off (walk2d). `examples/cutout-jump` is a
 stunt: off a table, a forward flip, and a superhero landing, built from key poses and contacts.
+
+### Shared style
+
+Each kit has its own ink: the toon kit's is heavier and more purple than the cut-out kit's, and the 3D
+kit's is a fixed width on screen. A project can give them one style in `video.json`:
+
+```json
+"style": { "ink": "#1D1A24", "line": 3.4, "line3d": 3 }
+```
+
+- `ink` is the colour of every line, in all three kits (and in a cut-out character's SVG drawings).
+- `line` is the 2D kits' line width (toon.js and cutout.js), in the drawing's own units, so it
+  thickens and thins with the character.
+- `line3d` is the 3D kit's (toon3d.js and rig3d.js), in pixels on screen at any distance. The
+  kit's thinner lines, like a rack's bracing, keep their proportion to it.
+- Each is optional. Without them each kit keeps its own look, so existing videos don't change.
+- For 2D and 3D lines to match on screen, `line3d` is about `line` times the scale the characters
+  are drawn at (Dex at 0.9: 3.4 × 0.9 ≈ 3).
+
+The `-v2` examples (`acting-test-v2`, `dialogue-v2`, `clapper-intro-v2`, `3d-cast-v2`,
+`3d-props-v2`, `hand-rig-v2` and `ray-rig-v2`) are copies of the originals in this style. The
+originals keep their own.
+
+### Baked props: clap bake and sprite.js
+
+A cut-out scene can use the kit's 3D props as pictures. `clap bake` draws a prop from set angles into
+PNG sprites with transparent backgrounds, lit and inked as it is in the 3D scenes. `sprite.js` draws
+them:
+
+    clap bake @kit/printers3d.js#labelPrinter3d --angles 0,45,90 --scale 0.32 --line 2.04 --name printer
+
+```js
+import { loadSprite } from '/@kit/sprite.js';
+const printer = await loadSprite('/assets/baked/printer/');
+printer.draw(ctx, 45, { x: 1620, y: 800 });     // its origin (the footprint's middle, on the floor) at (x, y)
+```
+
+- The prop is a function in a module (the kit's or the project's), called with `--args` (JSON),
+  that returns a three.js object or `{ group }`.
+- The camera is orthographic, so a sprite looks right anywhere on screen. It looks down by
+  `--elevation` degrees (8). Angle 0 shows the prop's front and 90 turns it to face the screen's
+  right. `draw` picks the nearest baked angle, and mirrors the positive one for a negative angle.
+- `--scale` is the sprite's pixels per unit at 1x. It's drawn at `--res` (2) times that, so it
+  stays sharp when a 2D camera zooms in, up to 2x.
+- `--line` is its ink at 1x, in pixels. To match a cut-out character, it's the character's line
+  times the scale it's drawn at: Dex at 0.6 has 3.4 × 0.6 = 2.04 px lines. A bitmap's lines thicken
+  as the camera zooms in, as a vector character's do, so the two match at any zoom.
+- The soft shadow under the prop is baked in (`--no-shadow` leaves it out).
+- Out go `assets/baked/<name>/0.png`, `45.png` and so on, and `sprite.json`, which records the
+  scale, resolution, ink and each angle's size and origin.
+
+`examples/cutout-rig/scenes/lab-props.js` puts Dex beside baked racking, a desk and the label
+printer at three angles, at 1x and at `?zoom=1.75`.
 
 ### Motion blur
 

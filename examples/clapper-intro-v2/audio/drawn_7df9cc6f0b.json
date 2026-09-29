@@ -1,0 +1,89 @@
+{
+ "request": {
+  "text": "Everything you're watching right now was drawn by code, one frame at a time.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Hi! I'm Pip.",
+  "next_text": "It starts with a script: just the words I'm going to say.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Everything",
+   "start": 0,
+   "end": 0.406
+  },
+  {
+   "w": "you're",
+   "start": 0.441,
+   "end": 0.627
+  },
+  {
+   "w": "watching",
+   "start": 0.662,
+   "end": 0.964
+  },
+  {
+   "w": "right",
+   "start": 1.022,
+   "end": 1.184
+  },
+  {
+   "w": "now",
+   "start": 1.231,
+   "end": 1.37
+  },
+  {
+   "w": "was",
+   "start": 1.428,
+   "end": 1.533
+  },
+  {
+   "w": "drawn",
+   "start": 1.579,
+   "end": 1.846
+  },
+  {
+   "w": "by",
+   "start": 1.892,
+   "end": 2.02
+  },
+  {
+   "w": "code,",
+   "start": 2.101,
+   "end": 2.508
+  },
+  {
+   "w": "one",
+   "start": 2.543,
+   "end": 2.763
+  },
+  {
+   "w": "frame",
+   "start": 2.833,
+   "end": 3.111
+  },
+  {
+   "w": "at",
+   "start": 3.146,
+   "end": 3.204
+  },
+  {
+   "w": "a",
+   "start": 3.239,
+   "end": 3.274
+  },
+  {
+   "w": "time.",
+   "start": 3.332,
+   "end": 4.133
+  }
+ ]
+}

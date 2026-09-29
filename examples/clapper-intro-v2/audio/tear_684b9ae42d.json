@@ -1,0 +1,74 @@
+{
+ "request": {
+  "text": "I tear it off, and there's the label, ready to read.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Every click and every keystroke lands right on cue. Hit print, and it comes out in 3D.",
+  "next_text": "Then I walk it over, on my own two feet.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "I",
+   "start": 0,
+   "end": 0.07
+  },
+  {
+   "w": "tear",
+   "start": 0.186,
+   "end": 0.406
+  },
+  {
+   "w": "it",
+   "start": 0.464,
+   "end": 0.534
+  },
+  {
+   "w": "off,",
+   "start": 0.58,
+   "end": 0.836
+  },
+  {
+   "w": "and",
+   "start": 0.859,
+   "end": 0.94
+  },
+  {
+   "w": "there's",
+   "start": 0.987,
+   "end": 1.219
+  },
+  {
+   "w": "the",
+   "start": 1.265,
+   "end": 1.335
+  },
+  {
+   "w": "label,",
+   "start": 1.393,
+   "end": 1.95
+  },
+  {
+   "w": "ready",
+   "start": 2.067,
+   "end": 2.299
+  },
+  {
+   "w": "to",
+   "start": 2.345,
+   "end": 2.392
+  },
+  {
+   "w": "read.",
+   "start": 2.473,
+   "end": 3.344
+  }
+ ]
+}

@@ -11,6 +11,7 @@
 //
 // Bones hang down their -y at rest, as in toon3d.js. Units are the model's own; scale the group.
 import { THREE } from './scene3d.js';
+import { INK3D } from './style.js';
 import { INK } from './toon.js';
 
 // ---------- the skeleton ----------
@@ -305,7 +306,7 @@ export function skinnedInk(width = 2.6, color = INK) {
   const key = `${width}|${color}`;
   if (inks.has(key)) return inks.get(key);
   const m = new THREE.ShaderMaterial({
-    uniforms: { ink: { value: new THREE.Color(color) }, push: { value: width * PER_PX } },
+    uniforms: { ink: { value: new THREE.Color(color) }, push: { value: width * INK3D * PER_PX } },
     vertexShader: /* glsl */ `
       #include <common>
       #include <skinning_pars_vertex>

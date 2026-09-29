@@ -6,7 +6,7 @@ import { clamp, TAU } from '../core.js';
 import { Puppet } from '../puppet.js';
 import { lag } from '../spring.js';
 import {
-  brow, expressions, eye, hand, headTurn, inked, limb, line, LW, mouth, NEUTRAL, toonPose, turningShoe, turningTorso, v, within,
+  brow, expressions, eye, hand, headTurn, inked, INK, limb, line, LW, mouth, NEUTRAL, toonPose, turningShoe, turningTorso, v, within,
 } from '../toon.js';
 
 export const PAL = {
@@ -32,7 +32,7 @@ function drawTorso(ctx, pose) {
   // the ribbed neckline, round the front of the neck
   ctx.save(); ctx.translate(T.s * 30, 0); ctx.scale(0.75 + 0.25 * T.c, 1); ctx.lineCap = 'round';
   ctx.beginPath(); ctx.moveTo(-42, -246); ctx.quadraticCurveTo(0, -212, 42, -246);
-  ctx.strokeStyle = '#2A1C33'; ctx.lineWidth = 12 + LW * 2; ctx.stroke();
+  ctx.strokeStyle = INK; ctx.lineWidth = 12 + LW * 2; ctx.stroke();
   ctx.strokeStyle = PAL.cuff; ctx.lineWidth = 12; ctx.stroke();
   ctx.restore();
   // a Clapper pin on the chest, which comes round with the body, and foreshortens

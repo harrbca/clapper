@@ -1,0 +1,51 @@
+{
+  "title": "Clapper: words in, video out (shared style)",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "background": "#FFF3E4",
+  "style": {
+    "ink": "#1D1A24",
+    "line": 3.4,
+    "line3d": 3
+  },
+  "entry": "scenes/index.js",
+  "capture": "canvas",
+  "hidpi": true,
+  "motionBlur": {
+    "samples": 8,
+    "shutter": 0.5
+  },
+  "fonts": [
+    {
+      "family": "Roboto",
+      "weight": 400,
+      "src": "@kit/fonts/Roboto-Regular.ttf"
+    },
+    {
+      "family": "Roboto",
+      "weight": 500,
+      "src": "@kit/fonts/Roboto-Medium.ttf"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "src": "@kit/fonts/Roboto-Bold.ttf"
+    }
+  ],
+  "chapters": {
+    "hi": "Hello",
+    "script": "The script",
+    "voice": "The voice",
+    "change": "Changing a line",
+    "look": "The look",
+    "web": "Web pages",
+    "dock": "In 3D",
+    "walk": "Walking",
+    "pick": "Scanners and Tilly",
+    "share": "Sharing",
+    "outro": "Clapper",
+    "end": null
+  },
+  "loudness": -16
+}

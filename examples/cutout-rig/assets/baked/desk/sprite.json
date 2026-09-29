@@ -1,0 +1,23 @@
+{
+  "name": "desk",
+  "prop": "@kit/printers3d.js#desk3d",
+  "args": {
+    "w": 1500
+  },
+  "scale": 0.32,
+  "res": 2,
+  "line": 2.04,
+  "elevation": 8,
+  "shadow": true,
+  "angles": {
+    "0": {
+      "file": "0.png",
+      "w": 985,
+      "h": 537,
+      "anchor": [
+        492.5,
+        505
+      ]
+    }
+  }
+}

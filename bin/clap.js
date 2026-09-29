@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
+import { bake } from '../lib/bake.js';
 import { build } from '../lib/build.js';
 import { chromePath } from '../lib/browser.js';
 import { capture } from '../lib/capture.js';
@@ -42,6 +43,12 @@ const HELP = `clap <command> [options]
                                notes written on frames in the preview (press N), from notes.json
   list [character]             what a declared character understands: tags, chains, pieces, pose keys,
                                poses, expressions, clips; and the named shots and easings
+  bake <module#export> [--angles 0,45,90] [--scale 1] [--line px] [--res 2] [--elevation 8]
+       [--args JSON] [--name n] [--out dir] [--no-shadow]
+                               a 3D prop drawn from set angles into PNG sprites for 2D scenes, with
+                               transparent backgrounds and sprite.json (sprite.js draws them), into
+                               assets/baked/<name>/. --scale: pixels per unit at 1x; --line: the ink
+                               at 1x; --res: drawn that many times bigger, to stay sharp when zoomed
   render [out.mp4] [--workers 8] [--from s] [--to s] [--scale 0.5|2] [--draft] [--encoder nvenc|x264]
                                the video, with the mix and chapters. --draft: half size, fast.
                                x264 by default; --encoder nvenc uses an NVIDIA GPU
@@ -54,7 +61,7 @@ const HELP = `clap <command> [options]
   doctor                       check ffmpeg, Chrome, the ElevenLabs key and the YouTube sign-in
 `;
 
-const FLAGS = new Set(['audition', 'music', 'open', 'draft', 'no-audio', 'no-sheets', 'login', 'headed', 'help']);
+const FLAGS = new Set(['audition', 'music', 'open', 'draft', 'no-audio', 'no-sheets', 'no-shadow', 'login', 'headed', 'help']);
 const args = process.argv.slice(2), pos = [], opt = {};
 for (let i = 0; i < args.length; i++) {
   const a = args[i];
@@ -83,6 +90,10 @@ const commands = {
   still: () => stills(project(), pos.length ? pos : fail('clap still <time>...'), { scale: num(opt.scale, 1), entry: opt.entry }),
   sheet: () => sheets(project(), pos.shift() || 'review', pos, { entry: opt.entry }),
   list: () => list(pos[0] ? project() : null, pos[0]),
+  bake: () => bake(project(), pos[0] || fail('clap bake <module#export>, like @kit/printers3d.js#labelPrinter3d'), {
+    angles: opt.angles, scale: num(opt.scale, 1), res: num(opt.res, 2), line: opt.line === undefined ? undefined : Number(opt.line),
+    elevation: num(opt.elevation, 8), shadow: !opt['no-shadow'], args: opt.args, name: opt.name, out: opt.out,
+  }),
   frames: () => frames(project(), pos[0] ?? fail('clap frames <from> <to>'), pos[1] ?? fail('clap frames <from> <to>'), {
     every: num(opt.every, 2), tile: num(opt.tile, 6), entry: opt.entry, crop: opt.crop ? String(opt.crop).split(',').map(Number) : undefined,
   }),

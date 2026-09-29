@@ -1,0 +1,79 @@
+{
+ "request": {
+  "text": "It starts with a script: just the words I'm going to say.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Hi! I'm Pip. Everything you're watching right now was drawn by code, one frame at a time.",
+  "next_text": "A voice reads it out, and we get the exact moment of every single word.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "It",
+   "start": 0,
+   "end": 0.151
+  },
+  {
+   "w": "starts",
+   "start": 0.209,
+   "end": 0.476
+  },
+  {
+   "w": "with",
+   "start": 0.511,
+   "end": 0.627
+  },
+  {
+   "w": "a",
+   "start": 0.662,
+   "end": 0.685
+  },
+  {
+   "w": "script:",
+   "start": 0.755,
+   "end": 1.324
+  },
+  {
+   "w": "just",
+   "start": 1.649,
+   "end": 1.846
+  },
+  {
+   "w": "the",
+   "start": 1.881,
+   "end": 1.95
+  },
+  {
+   "w": "words",
+   "start": 1.997,
+   "end": 2.276
+  },
+  {
+   "w": "I'm",
+   "start": 2.31,
+   "end": 2.403
+  },
+  {
+   "w": "going",
+   "start": 2.45,
+   "end": 2.635
+  },
+  {
+   "w": "to",
+   "start": 2.67,
+   "end": 2.717
+  },
+  {
+   "w": "say.",
+   "start": 2.775,
+   "end": 3.808
+  }
+ ]
+}

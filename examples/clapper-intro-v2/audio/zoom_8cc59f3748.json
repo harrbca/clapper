@@ -1,0 +1,59 @@
+{
+ "request": {
+  "text": "And when I say zoom, Bolt can zoom.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "A voice reads it out, and we get the exact moment of every single word. So when I say pop, something pops.",
+  "next_text": "Change a line, and everything keyed to it moves right along with it.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "And",
+   "start": 0,
+   "end": 0.139
+  },
+  {
+   "w": "when",
+   "start": 0.174,
+   "end": 0.29
+  },
+  {
+   "w": "I",
+   "start": 0.337,
+   "end": 0.36
+  },
+  {
+   "w": "say",
+   "start": 0.441,
+   "end": 0.615
+  },
+  {
+   "w": "zoom,",
+   "start": 0.697,
+   "end": 1.242
+  },
+  {
+   "w": "Bolt",
+   "start": 1.393,
+   "end": 1.683
+  },
+  {
+   "w": "can",
+   "start": 1.741,
+   "end": 1.892
+  },
+  {
+   "w": "zoom.",
+   "start": 1.962,
+   "end": 2.74
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "request": {
+  "text": "Okay. That's actually... kind of amazing.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Wait. It draws every single frame... by itself? No keyframes? No timeline? Nothing?",
+  "next_text": "Not that I needed the help. Obviously.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Okay.",
+   "start": 0,
+   "end": 0.418
+  },
+  {
+   "w": "That's",
+   "start": 0.441,
+   "end": 0.673
+  },
+  {
+   "w": "actually...",
+   "start": 0.72,
+   "end": 1.382
+  },
+  {
+   "w": "kind",
+   "start": 1.823,
+   "end": 2.055
+  },
+  {
+   "w": "of",
+   "start": 2.101,
+   "end": 2.159
+  },
+  {
+   "w": "amazing.",
+   "start": 2.206,
+   "end": 3.251
+  }
+ ]
+}

@@ -19,6 +19,8 @@
 //                                  value named (here the jaw drop, in px) goes from 0 to data-morph-at.
 //                                  Both d strings need the same commands.
 // Strokes are round-capped and round-joined unless the SVG says otherwise, as the kit's ink is.
+// readSVG's restyle option redraws the ink in another style: { ink: the colour the SVG's ink lines
+// are, as: the colour to draw them in, scale: for every stroke's width }.
 
 const SVGNS = 'http://www.w3.org/2000/svg';
 const IGNORE = new Set(['defs', 'title', 'desc', 'metadata', 'style']);
@@ -40,14 +42,15 @@ function transformOps(s, where) {
   return ops;
 }
 
-function paint(el, kind) {
+function paint(el, kind, restyle) {
   const attr = (a, d) => el.getAttribute(a) ?? d;
   const fill = attr('fill', kind === 'path' || kind === 'rect' ? '#000000' : 'none');
-  const stroke = attr('stroke', 'none');
+  let stroke = attr('stroke', 'none');
+  if (restyle && stroke.toLowerCase() === restyle.ink.toLowerCase()) stroke = restyle.as;
   return {
     fill: fill === 'none' ? null : fill,
     stroke: stroke === 'none' ? null : stroke,
-    width: Number(attr('stroke-width', 1)),
+    width: Number(attr('stroke-width', 1)) * (restyle?.scale ?? 1),
     cap: attr('stroke-linecap', 'round'),
     join: attr('stroke-linejoin', 'round'),
   };
@@ -65,7 +68,7 @@ function shapePath(el, where) {
   }
 }
 
-function readNode(el, clips, where) {
+function readNode(el, clips, where, restyle) {
   const kind = el.localName, at = `${where} <${kind}${el.id ? ` id="${el.id}"` : ''}>`;
   if (el.namespaceURI !== SVGNS || IGNORE.has(kind)) return null;
   if (kind === 'clipPath') {
@@ -79,10 +82,10 @@ function readNode(el, clips, where) {
     const data = {};
     for (const a of el.attributes) if (a.name.startsWith('data-')) data[a.name.slice(5)] = a.value;
     const clip = /url\(#([^)]+)\)/.exec(el.getAttribute('clip-path') || '')?.[1];
-    return { kind: 'g', ops: kind === 'g' ? transformOps(el.getAttribute('transform'), at) : [], clip, feature: data.feature, data, children: readChildren(el, clips, where) };
+    return { kind: 'g', ops: kind === 'g' ? transformOps(el.getAttribute('transform'), at) : [], clip, feature: data.feature, data, children: readChildren(el, clips, where, restyle) };
   }
   if (kind === 'path') {
-    const d = el.getAttribute('d') || '', node = { kind, ...paint(el, kind), path: new Path2D(d) };
+    const d = el.getAttribute('d') || '', node = { kind, ...paint(el, kind, restyle), path: new Path2D(d) };
     const key = el.getAttribute('data-morph');
     if (key) {
       const a = tokens(d), b = tokens(el.getAttribute('data-morph-d') || ''), span = Number(el.getAttribute('data-morph-at') || 1);
@@ -93,7 +96,7 @@ function readNode(el, clips, where) {
     return node;
   }
   if (kind === 'rect') {
-    const n = a => Number(el.getAttribute(a) || 0), p = paint(el, kind);
+    const n = a => Number(el.getAttribute(a) || 0), p = paint(el, kind, restyle);
     if (p.stroke) return { kind: 'path', ...p, path: shapePath(el, at) };
     return { kind, fill: p.fill, x: n('x'), y: n('y'), w: n('width'), h: n('height') };
   }
@@ -102,18 +105,18 @@ function readNode(el, clips, where) {
       : (el.getAttribute('points') || '').trim().split(/\s+/).map(pr => pr.split(',').map(Number));
     const path = new Path2D();
     pts.forEach(([x, y], i) => (i ? path.lineTo(x, y) : path.moveTo(x, y)));
-    return { kind: 'path', ...paint(el, kind), path };
+    return { kind: 'path', ...paint(el, kind, restyle), path };
   }
-  if (kind === 'circle' || kind === 'ellipse') return { kind: 'path', ...paint(el, 'path'), path: shapePath(el, at) };
+  if (kind === 'circle' || kind === 'ellipse') return { kind: 'path', ...paint(el, 'path', restyle), path: shapePath(el, at) };
   throw new Error(`${at} isn't something the kit draws yet (it draws path, rect, polyline, line, circle, ellipse, g and clipPath)`);
 }
 
-function readChildren(el, clips, where) {
-  return [...el.children].map(c => readNode(c, clips, where)).filter(Boolean);
+function readChildren(el, clips, where, restyle) {
+  return [...el.children].map(c => readNode(c, clips, where, restyle)).filter(Boolean);
 }
 
-// Reads an SVG's text into a drawing. `where` names it (a file), for errors.
-export function readSVG(text, where = 'an SVG') {
+// Reads an SVG's text into a drawing. `where` names it (a file), for errors; restyle, see above.
+export function readSVG(text, where = 'an SVG', restyle = null) {
   const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
   const bad = doc.querySelector('parsererror');
   if (bad) throw new Error(`${where} isn't valid SVG: ${bad.textContent.split('\n')[0]}`);
@@ -122,7 +125,7 @@ export function readSVG(text, where = 'an SVG') {
   const clips = {};
   // clip paths first, wherever they are, so a group can refer to one defined after it
   for (const c of root.getElementsByTagNameNS(SVGNS, 'clipPath')) readNode(c, clips, where);
-  const children = readChildren(root, clips, where);
+  const children = readChildren(root, clips, where, restyle);
   const missing = [];
   const walk = ns => ns.forEach(n => { if (n.clip && !clips[n.clip]) missing.push(n.clip); if (n.children) walk(n.children); });
   walk(children);

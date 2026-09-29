@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pick</title>
+<!-- A made-up handheld picking app for the intro, the scanner's screen: scan an order, tap its pick,
+     scan the bin and the forklift, Done. Scans arrive through scan(code). Everything is fixed. -->
+<style>
+  :root { --navy: #1C2A44; --blue: #2F6FD0; --ink: #1D2733; --muted: #667383; --line: #E1E5EB; --ok: #1E8E3E; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { font: 15px/1.3 "Segoe UI", system-ui, sans-serif; color: var(--ink); background: #F3F5F8; display: flex; flex-direction: column; overflow: hidden; }
+  .status { height: 22px; background: #111B2E; color: #C3CCDD; font-size: 12px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; flex: none; }
+  .bar { height: 52px; background: var(--navy); color: #fff; display: flex; align-items: center; gap: 10px; padding: 0 14px; flex: none; }
+  .bar h1 { font-size: 19px; margin: 0; font-weight: 600; flex: 1; }
+  .bar .back { font-size: 22px; width: 20px; color: #C3CCDD; }
+  .bar .tag { font-size: 12px; border: 1px solid #3B4D72; border-radius: 10px; padding: 2px 8px; color: #C3CCDD; }
+  main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .home { margin: auto; text-align: center; padding: 0 30px; }
+  .home b { display: block; font-size: 24px; margin: 18px 0 6px; }
+  .home span { color: var(--muted); }
+  .sub { padding: 10px 14px 4px; color: var(--muted); font-size: 13px; }
+  .card { margin: 6px 12px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: flex; gap: 12px; align-items: center; box-shadow: 0 1px 3px rgba(20,30,50,.08); }
+  .card .loc { background: var(--navy); color: #fff; border-radius: 8px; padding: 8px; font-weight: 700; font-size: 16px; text-align: center; min-width: 88px; }
+  .card .loc small { display: block; font-weight: 400; font-size: 11px; color: #C3CCDD; }
+  .card .what { flex: 1; } .card .what b { font-size: 17px; } .card .what div { color: var(--muted); font-size: 13px; }
+  .card .qty { font-size: 22px; font-weight: 700; } .card .chev { color: var(--muted); font-size: 22px; }
+  .info { background: #fff; border-bottom: 1px solid var(--line); padding: 12px 14px; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 15px; }
+  .info small { color: var(--muted); }
+  .steps { padding: 10px 12px 0; display: flex; flex-direction: column; gap: 7px; }
+  .step { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; font-size: 15px; }
+  .step i { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 700; font-size: 13px; background: #E4E8EE; color: var(--muted); }
+  .step .v { margin-left: auto; font-weight: 600; font-size: 14px; color: var(--ok); }
+  .step.done i { background: var(--ok); color: #fff; }
+  .step.now { border: 2px solid var(--blue); padding: 8px 9px; } .step.now i { background: var(--blue); color: #fff; }
+  .prompt { margin-top: auto; background: var(--blue); color: #fff; padding: 14px; font-size: 18px; font-weight: 600; }
+  .prompt small { display: block; font-weight: 400; font-size: 13px; color: #D5E3F8; }
+  .done { margin-top: auto; padding: 10px 12px 12px; }
+  .done button { width: 100%; height: 56px; border: 0; border-radius: 10px; background: var(--ok); color: #fff; font: inherit; font-size: 20px; font-weight: 700; }
+  .complete { margin: auto; text-align: center; padding: 0 24px; }
+  .complete .tick { width: 90px; height: 90px; border-radius: 50%; background: var(--ok); color: #fff; font-size: 54px; display: grid; place-items: center; margin: 0 auto 14px; }
+  .complete b { display: block; font-size: 26px; margin-bottom: 8px; }
+  .complete div { color: var(--muted); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="status"><span>Main warehouse</span><span>Pip · 9:41 · ▮▮▮▯</span></div>
+<header class="bar" id="bar"></header>
+<main id="main"></main>
+<script>
+  const P = { order: '4821', item: 'BOLT-7', desc: 'Robot bolts, 12 pack', bin: 'A-01-03', qty: '24 BX', to: 'TL-01' };
+  const STEPS = [['Scan the bin', P.bin], ['Scan the forklift', `${P.to} · Tilly`]];
+  let view = 'home', step = 0;
+  const $ = id => document.getElementById(id);
+  const bar = (title, tag, back) => { $('bar').innerHTML = `${back ? '<span class="back">‹</span>' : ''}<h1>${title}</h1>${tag ? `<span class="tag">${tag}</span>` : ''}`; };
+  const BARCODE = '<svg width="120" height="80" viewBox="0 0 60 40"><g fill="#1C2A44">' +
+    [0, 3, 5, 9, 11, 14, 18, 20, 23, 27, 29, 33, 36, 38, 42, 45, 47, 51, 54, 56].map((x, i) => `<rect x="${x + 2}" y="2" width="${i % 3 ? 1.4 : 2.4}" height="30"/>`).join('') +
+    '</g><rect x="0" y="16" width="60" height="1.6" fill="#E53935"/></svg>';
+  function render() {
+    const m = $('main');
+    if (view === 'home') { bar('Pick', 'Scan to start'); m.innerHTML = `<div class="home">${BARCODE}<b>Scan an order</b><span>The order barcode on the label</span></div>`; }
+    else if (view === 'list') {
+      bar(`Order ${P.order}`, '1 pick', true);
+      m.innerHTML = `<div class="sub">MAPLE STREET HARDWARE · due Tuesday</div>
+        <div class="card" id="pick"><div class="loc"><small>Bin</small>${P.bin}</div><div class="what"><b>${P.item}</b><div>${P.desc}</div></div><div class="qty">24<small style="font-size:13px"> BX</small></div><span class="chev">›</span></div>`;
+      $('pick').onclick = () => { view = 'pick'; render(); };
+    } else if (view === 'pick') {
+      bar(`${P.item} · Order ${P.order}`, null, true);
+      const rows = STEPS.map(([n, v], i) => `<div class="step ${i < step ? 'done' : i === step ? 'now' : ''}"><i>${i < step ? '✓' : i + 1}</i>${n}${i < step ? `<span class="v">${v}</span>` : ''}</div>`).join('');
+      const bottom = step >= STEPS.length ? `<div class="done"><button id="done">Done</button></div>`
+        : `<div class="prompt">${STEPS[step][0]}<small>${step ? 'The forklift taking it' : `Bin ${P.bin}`}</small></div>`;
+      m.innerHTML = `<div class="info"><small>Item</small><b>${P.item}</b><small></small><span>${P.desc}</span><small>Bin</small><b>${P.bin}</b><small>Pick</small><b>${P.qty}</b></div><div class="steps">${rows}</div>${bottom}`;
+      if ($('done')) $('done').onclick = () => { view = 'complete'; render(); };
+    } else { bar('Pick', 'Done'); m.innerHTML = `<div class="complete"><div class="tick">✓</div><b>Pick complete</b><div>Order ${P.order}<br>${P.qty} on ${P.to} (Tilly)</div></div>`; }
+  }
+  window.scan = code => {
+    if (view === 'home' && code === P.order) view = 'list';
+    else if (view === 'pick' && step < STEPS.length && code === [P.bin, P.to][step]) step++;
+    render();
+  };
+  render();
+</script>
+</body>
+</html>

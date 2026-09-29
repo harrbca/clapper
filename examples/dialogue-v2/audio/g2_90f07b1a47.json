@@ -1,0 +1,49 @@
+{
+ "request": {
+  "text": "Oh yeah? And who draws Clapper?",
+  "voice": "pqHfZKP75CvOlQylNhV4",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.35,
+   "similarity_boost": 0.75,
+   "style": 0.5,
+   "use_speaker_boost": true,
+   "speed": 0.95
+  },
+  "previous_text": "Back in my day, we drew every frame by hand. Now Clapper draws them for us!",
+  "next_text": "Um... a robot, mostly.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Oh",
+   "start": 0,
+   "end": 0.221
+  },
+  {
+   "w": "yeah?",
+   "start": 0.279,
+   "end": 0.801
+  },
+  {
+   "w": "And",
+   "start": 1.44,
+   "end": 1.614
+  },
+  {
+   "w": "who",
+   "start": 1.66,
+   "end": 1.811
+  },
+  {
+   "w": "draws",
+   "start": 1.869,
+   "end": 2.183
+  },
+  {
+   "w": "Clapper?",
+   "start": 2.241,
+   "end": 3.437
+  }
+ ]
+}

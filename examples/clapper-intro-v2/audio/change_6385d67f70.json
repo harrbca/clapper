@@ -1,0 +1,84 @@
+{
+ "request": {
+  "text": "Change a line, and everything keyed to it moves right along with it.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "So when I say pop, something pops. And when I say zoom, Bolt can zoom.",
+  "next_text": "No dragging keyframes around by hand.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Change",
+   "start": 0,
+   "end": 0.36
+  },
+  {
+   "w": "a",
+   "start": 0.395,
+   "end": 0.418
+  },
+  {
+   "w": "line,",
+   "start": 0.488,
+   "end": 0.824
+  },
+  {
+   "w": "and",
+   "start": 0.848,
+   "end": 0.929
+  },
+  {
+   "w": "everything",
+   "start": 1.01,
+   "end": 1.382
+  },
+  {
+   "w": "keyed",
+   "start": 1.451,
+   "end": 1.718
+  },
+  {
+   "w": "to",
+   "start": 1.765,
+   "end": 1.858
+  },
+  {
+   "w": "it",
+   "start": 1.939,
+   "end": 2.009
+  },
+  {
+   "w": "moves",
+   "start": 2.078,
+   "end": 2.357
+  },
+  {
+   "w": "right",
+   "start": 2.45,
+   "end": 2.67
+  },
+  {
+   "w": "along",
+   "start": 2.705,
+   "end": 2.949
+  },
+  {
+   "w": "with",
+   "start": 3.007,
+   "end": 3.17
+  },
+  {
+   "w": "it.",
+   "start": 3.216,
+   "end": 4.087
+  }
+ ]
+}

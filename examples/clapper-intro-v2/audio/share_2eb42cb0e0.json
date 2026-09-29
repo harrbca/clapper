@@ -1,0 +1,74 @@
+{
+ "request": {
+  "text": "And when the video's done, one command puts it on YouTube.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Scan the bin. Tilly pulls up: scan her, tap Done, and she takes it from here.",
+  "next_text": "That's Clapper.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "And",
+   "start": 0,
+   "end": 0.174
+  },
+  {
+   "w": "when",
+   "start": 0.209,
+   "end": 0.325
+  },
+  {
+   "w": "the",
+   "start": 0.348,
+   "end": 0.418
+  },
+  {
+   "w": "video's",
+   "start": 0.453,
+   "end": 0.848
+  },
+  {
+   "w": "done,",
+   "start": 0.906,
+   "end": 1.312
+  },
+  {
+   "w": "one",
+   "start": 1.556,
+   "end": 1.788
+  },
+  {
+   "w": "command",
+   "start": 1.834,
+   "end": 2.252
+  },
+  {
+   "w": "puts",
+   "start": 2.322,
+   "end": 2.519
+  },
+  {
+   "w": "it",
+   "start": 2.554,
+   "end": 2.612
+  },
+  {
+   "w": "on",
+   "start": 2.659,
+   "end": 2.728
+  },
+  {
+   "w": "YouTube.",
+   "start": 2.798,
+   "end": 3.622
+  }
+ ]
+}

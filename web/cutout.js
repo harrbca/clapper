@@ -17,8 +17,10 @@ import { add, choreo } from './puppet.js';
 import { blink, breath, glance, sway } from './life.js';
 import { loudness, viseme } from './lipsync.js';
 import { springs } from './spring.js';
+import { STYLE } from './style.js';
 
-export const INK = '#1D1A24', LW = 3.4;
+// The ink: the video's style (style.js) if it has one, else the cut-out kit's own.
+export const INK = STYLE.ink ?? '#1D1A24', LW = STYLE.line ?? 3.4;
 export const v = (pose, k, d = 0) => pose[k] ?? d;
 export const P = s => new Path2D(s);
 
@@ -578,6 +580,9 @@ const FEATURES = {
 //   palette: named colours, which colours anywhere in the JSON may use by name
 //   face: { eye: { rx, ry, pupil, lid }, brow: {}, mouth: { w, pal: { mouth, tongue } } }, for the
 //     features the head's SVGs have places for
+//   ink, line: the ink colour and line width the SVGs are drawn with (the kit's own if not given), so
+//     that with a video's style (style.js) their lines are redrawn in its ink, and thicker or thinner
+//     in proportion
 //   '.shape' values may be names ('relaxed'); expressions and clips may be 'kit' for the kit's own.
 export async function loadCutout(base) {
   const at = f => new URL(f, new URL(base, location.href)).href;
@@ -596,7 +601,8 @@ export async function loadCutout(base) {
   // the SVG drawings, fetched together and read once
   const files = new Set();
   for (const p of Object.values(def.pieces || {})) { if (p.svg) files.add(p.svg); for (const f of Object.values(p.angles || {})) files.add(f); }
-  const svgs = Object.fromEntries(await Promise.all([...files].map(async f => [f, readSVG(await get(f), `${name}'s ${f}`)])));
+  const restyle = { ink: def.ink ?? '#1D1A24', as: INK, scale: LW / (def.line ?? 3.4) };
+  const svgs = Object.fromEntries(await Promise.all([...files].map(async f => [f, readSVG(await get(f), `${name}'s ${f}`, restyle)])));
   for (const [f, d] of Object.entries(svgs)) {
     for (const x of d.features) if (!FEATURES[x]) throw new Error(`${name}'s ${f} has a place for a ${x}, which the kit doesn't draw (it draws ${Object.keys(FEATURES).join(', ')})`);
   }

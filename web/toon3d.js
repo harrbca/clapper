@@ -3,6 +3,7 @@
 // Units are the 2D scene's pixels, y up (see scene3d.js). characters/tilly3d.js and pip3d.js use it.
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { THREE } from './scene3d.js';
+import { INK3D } from './style.js';
 import { INK } from './toon.js';
 
 // ---------- shading ----------
@@ -18,14 +19,15 @@ const gradient = () => {
 export const toon = (color, o = {}) => new THREE.MeshToonMaterial({ color, gradientMap: gradient(), ...o });
 
 // The ink: each inked mesh gets a copy of itself pushed out along its normals and drawn from the
-// inside, in ink. The push grows with distance, so the line is `width` pixels wide at any depth.
+// inside, in ink. The push grows with distance, so the line is `width` pixels wide at any depth
+// (scaled by the video's style.line3d, if it has one: see style.js).
 const PER_PX = (2 * Math.tan((18 * Math.PI) / 360)) / 1080;   // world units per pixel, per unit of depth, at the layer's fov
 const inks = new Map();
 export function inkMaterial(width = 2.6, color = INK) {
   const key = `${width}|${color}`;
   if (inks.has(key)) return inks.get(key);
   const m = new THREE.ShaderMaterial({
-    uniforms: { ink: { value: new THREE.Color(color) }, push: { value: width * PER_PX } },
+    uniforms: { ink: { value: new THREE.Color(color) }, push: { value: width * INK3D * PER_PX } },
     vertexShader: /* glsl */ `
       uniform float push;
       void main() {

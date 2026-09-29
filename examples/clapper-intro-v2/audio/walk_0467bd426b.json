@@ -1,0 +1,69 @@
+{
+ "request": {
+  "text": "Then I walk it over, on my own two feet.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Hit print, and it comes out in 3D. I tear it off, and there's the label, ready to read.",
+  "next_text": "I stick it on, and my scanner keeps up with every scan and every tap.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Then",
+   "start": 0,
+   "end": 0.197
+  },
+  {
+   "w": "I",
+   "start": 0.244,
+   "end": 0.279
+  },
+  {
+   "w": "walk",
+   "start": 0.36,
+   "end": 0.534
+  },
+  {
+   "w": "it",
+   "start": 0.592,
+   "end": 0.65
+  },
+  {
+   "w": "over,",
+   "start": 0.697,
+   "end": 0.998
+  },
+  {
+   "w": "on",
+   "start": 1.045,
+   "end": 1.184
+  },
+  {
+   "w": "my",
+   "start": 1.231,
+   "end": 1.312
+  },
+  {
+   "w": "own",
+   "start": 1.382,
+   "end": 1.498
+  },
+  {
+   "w": "two",
+   "start": 1.533,
+   "end": 1.672
+  },
+  {
+   "w": "feet.",
+   "start": 1.741,
+   "end": 2.043
+  }
+ ]
+}

@@ -23,6 +23,8 @@
     "mouth": "#3B1521",
     "tongue": "#DE6878"
   },
+  "ink": "#1D1A24",
+  "line": 3.4,
   "face": {
     "eye": {
       "rx": 27,
