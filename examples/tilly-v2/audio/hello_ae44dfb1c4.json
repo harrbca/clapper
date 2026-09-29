@@ -1,0 +1,44 @@
+{
+ "request": {
+  "text": "Morning! I'm the new Tilly.",
+  "voice": "cgSgspJ2msm6clMCkdW9",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.4,
+   "similarity_boost": 0.75,
+   "style": 0.35,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": null,
+  "next_text": "Real size, and my forks go all the way up.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Morning!",
+   "start": 0,
+   "end": 0.534
+  },
+  {
+   "w": "I'm",
+   "start": 0.65,
+   "end": 0.836
+  },
+  {
+   "w": "the",
+   "start": 0.871,
+   "end": 0.94
+  },
+  {
+   "w": "new",
+   "start": 0.975,
+   "end": 1.068
+  },
+  {
+   "w": "Tilly.",
+   "start": 1.115,
+   "end": 1.765
+  }
+ ]
+}

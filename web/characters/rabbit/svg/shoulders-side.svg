@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -90 280 170">
+  <title>Clover: the body over the near front leg's top, profile (body-side.svg, clipped; the fur has a hole for the patch, so no colour lies over another at the edge)</title>
+  <defs>
+    <clipPath id="c1"><path d="M -60 -62 C -20 -64 30 -52 64 -38 C 94 -26 104 -2 100 20 C 96 44 78 58 56 60 C 32 62 12 50 -18 52 C -48 54 -82 66 -106 50 C -128 34 -132 0 -124 -24 C -114 -50 -90 -60 -60 -62 Z"/></clipPath>
+    <clipPath id="c2"><ellipse cx="62" cy="30" rx="44" ry="36"/></clipPath>
+  </defs>
+  <g clip-path="url(#c2)">
+    <g clip-path="url(#c1)">
+      <path d="M -60 -62 C -20 -64 30 -52 64 -38 C 94 -26 104 -2 100 20 C 96 44 78 58 56 60 C 32 62 12 50 -18 52 C -48 54 -82 66 -106 50 C -128 34 -132 0 -124 -24 C -114 -50 -90 -60 -60 -62 Z M 114 22 A 28 40 0 1 0 58 22 A 28 40 0 1 0 114 22 Z" fill="#C9A27E"/>
+      <ellipse cx="86" cy="22" rx="28" ry="40" fill="#F6EBDD"/>
+    </g>
+    <path d="M -60 -62 C -20 -64 30 -52 64 -38 C 94 -26 104 -2 100 20 C 96 44 78 58 56 60 C 32 62 12 50 -18 52 C -48 54 -82 66 -106 50 C -128 34 -132 0 -124 -24 C -114 -50 -90 -60 -60 -62 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+</svg>

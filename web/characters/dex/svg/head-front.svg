@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 -270 260 300">
+  <title>Dex: head, front</title>
+  <defs>
+    <clipPath id="c1"><path d="M -94 -160 C -98 -222 -54 -250 0 -250 C 54 -250 98 -222 94 -160 Z"/></clipPath>
+    <clipPath id="c2"><path d="M -97 -178 L 97 -178 Q 103 -162 97 -146 L -97 -146 Q -103 -162 -97 -178"/></clipPath>
+  </defs>
+  <g transform="translate(-84 -104) scale(-1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#C78A62" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <g transform="translate(84 -104) scale(1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#C78A62" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <path d="M 0 -4 C 48 -4 82 -40 86 -104 C 90 -160 60 -196 0 -196 C -60 -196 -90 -160 -86 -104 C -82 -40 -48 -4 0 -4 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M 0 26 C 48 26 82 -25 86 -104 C 90 -160 60 -196 0 -196 C -60 -196 -90 -160 -86 -104 C -82 -25 -48 26 0 26 Z" fill="#C78A62" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(0 0) scale(-1 1)">
+    <path d="M 72 -148 L 86 -148 L 85 -120 C 81 -117 76 -119 74 -126 Z" fill="#2A201D" stroke="#1D1A24" stroke-width="2.72"/>
+  </g>
+  <g transform="translate(0 0) scale(1 1)">
+    <path d="M 72 -148 L 86 -148 L 85 -120 C 81 -117 76 -119 74 -126 Z" fill="#2A201D" stroke="#1D1A24" stroke-width="2.72"/>
+  </g>
+  <g transform="translate(-30 -104) scale(1 1)" data-feature="eye" data-side="-1"/>
+  <g transform="translate(-30 -140) scale(1 1)" data-feature="brow" data-side="-1"/>
+  <g transform="translate(30 -104) scale(1 1)" data-feature="eye" data-side="1"/>
+  <g transform="translate(30 -140) scale(1 1)" data-feature="brow" data-side="1"/>
+  <path d="M -5 -86 C -15 -70 -11 -62 -1 -62 C 7 -62 12 -66 12 -72" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g data-feature="mouth" data-x="0" data-y="-44" data-sx="1" data-drop="0.35"/>
+  <path d="M -94 -160 C -98 -222 -54 -250 0 -250 C 54 -250 98 -222 94 -160 Z" fill="#EC7A2E" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <path d="M 0 -250 L 0 -170" fill="none" stroke="#C9611F" stroke-width="2.2"/>
+    <path d="M -40 -244 C -54 -220 -60 -196 -62 -170" fill="none" stroke="#C9611F" stroke-width="2.2"/>
+    <path d="M 40 -244 C 54 -220 60 -196 62 -170" fill="none" stroke="#C9611F" stroke-width="2.2"/>
+  </g>
+  <path d="M -97 -178 L 97 -178 Q 103 -162 97 -146 L -97 -146 Q -103 -162 -97 -178" fill="#EC7A2E" stroke="none"/>
+  <g clip-path="url(#c2)">
+    <polyline points="-88,-177 -88,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-75,-177 -75,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-62,-177 -62,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-49,-177 -49,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-36,-177 -36,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-23,-177 -23,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="-10,-177 -10,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="3,-177 3,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="16,-177 16,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="29,-177 29,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="42,-177 42,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="55,-177 55,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="68,-177 68,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+    <polyline points="81,-177 81,-149" fill="none" stroke="#C9611F" stroke-width="2"/>
+  </g>
+  <path d="M -97 -178 L 97 -178 Q 103 -162 97 -146 L -97 -146 Q -103 -162 -97 -178" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

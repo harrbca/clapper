@@ -92,6 +92,15 @@ export function loudness(t) {
   return a + (b - a) * (f - i);
 }
 
+// The mouth shape being said at t, as one of SHAPES' names ('rest' between words), for mouth charts
+// that swap drawings instead of blending (cutout.js).
+export function viseme(t, { speaker, lines } = {}) {
+  const segs = segments(lines || TL.lines.filter(l => !speaker || l.speaker === speaker));
+  let lo = 0, hi = segs.length - 1, i = -1;
+  while (lo <= hi) { const m = (lo + hi) >> 1; if (segs[m].t0 <= t) { i = m; lo = m + 1; } else hi = m - 1; }
+  return i >= 0 && t <= segs[i].t1 ? segs[i].s : 'rest';
+}
+
 const mixShape = (a, b, k) => Object.fromEntries(KEYS.map(n => [n, lerp(a[n], b[n], k)]));
 
 // The mouth at t, for the lines a character says (all of them by default, or those with a matching

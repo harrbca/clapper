@@ -1,0 +1,59 @@
+{
+ "request": {
+  "text": "Scan the bin. Tilly pulls up: scan her,",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Then I walk it over, on my own two feet. I stick it on, and my scanner keeps up with every scan and every tap.",
+  "next_text": "tap Done, and she takes it from here.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Scan",
+   "start": 0,
+   "end": 0.325
+  },
+  {
+   "w": "the",
+   "start": 0.383,
+   "end": 0.453
+  },
+  {
+   "w": "bin.",
+   "start": 0.488,
+   "end": 0.882
+  },
+  {
+   "w": "Tilly",
+   "start": 1.207,
+   "end": 1.509
+  },
+  {
+   "w": "pulls",
+   "start": 1.556,
+   "end": 1.823
+  },
+  {
+   "w": "up:",
+   "start": 1.881,
+   "end": 2.159
+  },
+  {
+   "w": "scan",
+   "start": 2.368,
+   "end": 2.647
+  },
+  {
+   "w": "her,",
+   "start": 2.717,
+   "end": 2.972
+  }
+ ]
+}

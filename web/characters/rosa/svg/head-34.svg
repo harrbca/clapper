@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Rosa: head, 34</title>
+  <defs>
+    <clipPath id="c1"><path d="M -300 -600 L 300 -600 L 300 -120 L 96 -120 C 82 -150 60 -148 24 -158 C -8 -154 -26 -150 -32 -126 C -40 -100 -50 -26 -70 -40 L -300 -40 Z"/></clipPath>
+    <clipPath id="c2"><path d="M -98 -150 C -102 -228 -54 -266 4 -266 C 62 -266 110 -228 106 -150 Z"/></clipPath>
+  </defs>
+  <path d="M 20 -4 C 62 -6 86 -44 88 -104 C 90 -162 56 -196 -4 -196 C -64 -196 -92 -160 -88 -104 C -84 -46 -34 -4 20 -4 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M 20 26 C 62 24 86 -29 88 -104 C 90 -162 56 -196 -4 -196 C -64 -196 -92 -160 -88 -104 C -84 -31 -34 26 20 26 Z" fill="#B77A55" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(-64 -104) scale(-1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#B77A55" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <circle cx="-66" cy="-88" r="6" fill="#E9C24A" stroke="#1D1A24" stroke-width="2.04"/>
+  <g transform="translate(50 -104) scale(0.74 1)" data-feature="eye" data-side="1" data-look="0.35"/>
+  <g transform="translate(-6 -104) scale(0.96 1)" data-feature="eye" data-side="-1" data-look="0.35"/>
+  <g transform="translate(50 -140) scale(0.72 1)" data-feature="brow" data-side="1"/>
+  <g transform="translate(-6 -140) scale(0.95 1)" data-feature="brow" data-side="-1"/>
+  <path d="M 70 -90 C 92 -80 98 -66 82 -61 C 76 -60 71 -62 68 -65 L 66 -80 Z" fill="#B77A55" stroke="none"/>
+  <path d="M 70 -90 C 92 -80 98 -66 82 -61 C 76 -60 71 -62 68 -65" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g data-feature="mouth" data-x="42" data-y="-44" data-sx="0.84" data-drop="0.35"/>
+  <g clip-path="url(#c1)">
+    <path d="M 22.8 10.84 C 70.68 8.56 98.04 -34.76 100.32 -103.16 C 102.6 -169.28 63.84 -208.04 -4.56 -208.04 C -72.96 -208.04 -104.88 -167 -100.32 -103.16 C -95.76 -37.04 -38.76 10.84 22.8 10.84 Z" fill="#3A2418" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+  <path d="M -98 -150 C -102 -228 -54 -266 4 -266 C 62 -266 110 -228 106 -150 Z" fill="#F4F3EE" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c2)">
+    <path d="M 24 -264 C 30 -230 32 -190 30 -156" fill="none" stroke="#DBDAD6" stroke-width="10"/>
+    <path d="M 24 -264 C 30 -230 32 -190 30 -156" fill="none" stroke="#1D1A24" stroke-width="2.04"/>
+  </g>
+  <path d="M -116 -154 L 124 -150 Q 132 -138 118 -134 L -110 -138 Q -122 -142 -116 -154 Z" fill="#E0DFDA" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

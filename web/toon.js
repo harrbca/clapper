@@ -8,8 +8,10 @@ import { add, choreo } from './puppet.js';
 import { blink, breath, glance, sway } from './life.js';
 import { loudness, mouth as lipsync } from './lipsync.js';
 import { lag, springs } from './spring.js';
+import { STYLE } from './style.js';
 
-export const INK = '#2A1C33', LW = 4.4;
+// The ink: the video's style (style.js) if it has one, else the toon kit's own.
+export const INK = STYLE.ink ?? '#2A1C33', LW = STYLE.line ?? 4.4;
 export const v = (pose, k, d = 0) => pose[k] ?? d;
 
 // ---------- ink ----------

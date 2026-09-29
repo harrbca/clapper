@@ -1,0 +1,54 @@
+{
+ "request": {
+  "text": "Clapper can drive a web page, too.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "No dragging keyframes around by hand. And because it's all code, the camera can move, things can bounce, and my hair can do this.",
+  "next_text": "Every click and every keystroke lands right on cue.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Clapper",
+   "start": 0,
+   "end": 0.406
+  },
+  {
+   "w": "can",
+   "start": 0.464,
+   "end": 0.569
+  },
+  {
+   "w": "drive",
+   "start": 0.615,
+   "end": 0.848
+  },
+  {
+   "w": "a",
+   "start": 0.882,
+   "end": 0.906
+  },
+  {
+   "w": "web",
+   "start": 0.975,
+   "end": 1.149
+  },
+  {
+   "w": "page,",
+   "start": 1.207,
+   "end": 1.544
+  },
+  {
+   "w": "too.",
+   "start": 1.567,
+   "end": 2.415
+  }
+ ]
+}

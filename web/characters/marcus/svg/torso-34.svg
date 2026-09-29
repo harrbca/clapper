@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -300 300 340">
+  <title>Marcus: torso, 34</title>
+  <defs>
+    <clipPath id="c1"><path d="M -58.24 -6 L 15.68 -6 C 13.44 -100 8.96 -190 4.48 -258 L -22.4 -260 C -29.12 -236 -51.52 -222 -75.04 -214 C -69.44 -160 -62.72 -70 -58.24 -6 Z"/></clipPath>
+    <clipPath id="c2"><path d="M 42.56 -6 L 67.2 -6 C 78.4 -70 82.88 -170 85.12 -214 C 78.4 -222 69.44 -236 62.72 -256 L 49.28 -256 C 47.04 -190 44.8 -100 42.56 -6 Z"/></clipPath>
+  </defs>
+  <path d="M -58.24 4 C -64.96 -70 -73.92 -180 -78.4 -228 C -78.4 -250 -58.24 -260 -24.64 -260 Q 22.4 -246 49.28 -258 C 78.4 -256 89.6 -240 87.36 -222 C 85.12 -180 80.64 -70 67.2 4 Z" fill="#2E3A5C" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -58.24 -12 L 67.2 -12 L 67.2 6 L -58.24 6 Z" fill="#2A2A30" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M -6.72 -258 Q 22.4 -240 47.04 -256" fill="none" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M -58.24 -6 L 15.68 -6 C 13.44 -100 8.96 -190 4.48 -258 L -22.4 -260 C -29.12 -236 -51.52 -222 -75.04 -214 C -69.44 -160 -62.72 -70 -58.24 -6 Z" fill="#D3E64B" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 42.56 -6 L 67.2 -6 C 78.4 -70 82.88 -170 85.12 -214 C 78.4 -222 69.44 -236 62.72 -256 L 49.28 -256 C 47.04 -190 44.8 -100 42.56 -6 Z" fill="#D3E64B" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <rect x="-150" y="-66" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-66 150,-66" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-52 150,-52" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <rect x="-150" y="-108" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-108 150,-108" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-94 150,-94" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+  </g>
+  <path d="M -58.24 -6 L 15.68 -6 C 13.44 -100 8.96 -190 4.48 -258 L -22.4 -260 C -29.12 -236 -51.52 -222 -75.04 -214 C -69.44 -160 -62.72 -70 -58.24 -6 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c2)">
+    <rect x="-150" y="-66" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-66 150,-66" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-52 150,-52" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <rect x="-150" y="-108" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-108 150,-108" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-94 150,-94" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+  </g>
+  <path d="M 42.56 -6 L 67.2 -6 C 78.4 -70 82.88 -170 85.12 -214 C 78.4 -222 69.44 -236 62.72 -256 L 49.28 -256 C 47.04 -190 44.8 -100 42.56 -6 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

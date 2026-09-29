@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Linda: head, front</title>
+  <defs>
+    <clipPath id="c1"><path d="M -300 -600 L 300 -600 L 300 -112 L 92 -112 C 88 -130 60 -158 0 -170 C -60 -158 -88 -130 -92 -112 L -300 -112 Z"/></clipPath>
+  </defs>
+  <g transform="translate(-84 -104) scale(-1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#F0C7A4" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <g transform="translate(84 -104) scale(1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#F0C7A4" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <path d="M 0 -4 C 48 -4 82 -40 86 -104 C 90 -160 60 -196 0 -196 C -60 -196 -90 -160 -86 -104 C -82 -40 -48 -4 0 -4 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M 0 26 C 48 26 82 -25 86 -104 C 90 -160 60 -196 0 -196 C -60 -196 -90 -160 -86 -104 C -82 -25 -48 26 0 26 Z" fill="#F0C7A4" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(-30 -104) scale(1 1)" data-feature="eye" data-side="-1"/>
+  <g transform="translate(-30 -140) scale(1 1)" data-feature="brow" data-side="-1"/>
+  <g transform="translate(30 -104) scale(1 1)" data-feature="eye" data-side="1"/>
+  <g transform="translate(30 -140) scale(1 1)" data-feature="brow" data-side="1"/>
+  <path d="M -5 -86 C -15 -70 -11 -62 -1 -62 C 7 -62 12 -66 12 -72" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g data-feature="mouth" data-x="0" data-y="-44" data-sx="1" data-drop="0.35"/>
+  <g clip-path="url(#c1)">
+    <path d="M 0 0.24 C 49.92 0.24 85.28 -37.2 89.44 -103.76 C 93.6 -162 62.4 -199.44 0 -199.44 C -62.4 -199.44 -93.6 -162 -89.44 -103.76 C -85.28 -37.2 -49.92 0.24 0 0.24 Z" fill="#C9C4BC" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+  <g transform="translate(-30 -104) scale(1 1)">
+    <path d="M -31 0 C -31 -42 31 -42 31 0 C 31 42 -31 42 -31 0 Z" fill="none" stroke="#2B2B35" stroke-width="3.06"/>
+  </g>
+  <g transform="translate(30 -104) scale(1 1)">
+    <path d="M -31 0 C -31 -42 31 -42 31 0 C 31 42 -31 42 -31 0 Z" fill="none" stroke="#2B2B35" stroke-width="3.06"/>
+  </g>
+  <path d="M -1 -106 Q 0 -112 1 -106" fill="none" stroke="#2B2B35" stroke-width="3.06"/>
+  <path d="M -12 -110 Q 0 -118 12 -110" fill="none" stroke="#2B2B35" stroke-width="2.72"/>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -300 300 340">
+  <title>Marcus: torso, side</title>
+  <defs>
+    <clipPath id="c1"><path d="M -44.8 -6 L 44.8 -6 C 53.76 -90 56 -170 51.52 -222 C 44.8 -248 31.36 -258 8.96 -262 L -8.96 -262 C -33.6 -258 -49.28 -246 -51.52 -230 C -53.76 -180 -51.52 -80 -44.8 -6 Z"/></clipPath>
+  </defs>
+  <path d="M -44.8 4 C -51.52 -80 -56 -190 -51.52 -236 C -47.04 -256 -22.4 -262 4.48 -262 C 33.6 -262 51.52 -250 56 -224 C 62.72 -180 60.48 -90 51.52 4 Z" fill="#2E3A5C" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -44.8 -12 L 53.76 -12 L 53.76 6 L -44.8 6 Z" fill="#2A2A30" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M 0 -260 Q 22.4 -250 40.32 -254" fill="none" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M -44.8 -6 L 44.8 -6 C 53.76 -90 56 -170 51.52 -222 C 44.8 -248 31.36 -258 8.96 -262 L -8.96 -262 C -33.6 -258 -49.28 -246 -51.52 -230 C -53.76 -180 -51.52 -80 -44.8 -6 Z" fill="#D3E64B" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <rect x="-150" y="-66" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-66 150,-66" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-52 150,-52" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <rect x="-150" y="-108" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-108 150,-108" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-94 150,-94" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+  </g>
+  <path d="M -44.8 -6 L 44.8 -6 C 53.76 -90 56 -170 51.52 -222 C 44.8 -248 31.36 -258 8.96 -262 L -8.96 -262 C -33.6 -258 -49.28 -246 -51.52 -230 C -53.76 -180 -51.52 -80 -44.8 -6 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

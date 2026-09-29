@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Rosa: head, 34back</title>
+  <defs>
+    <clipPath id="c1"><path d="M -300 -600 L 300 -600 L 300 -150 L 84 -150 C 74 -110 52 20 20 8 L -300 0 Z"/></clipPath>
+    <clipPath id="c2"><path d="M -106 -150 C -110 -228 -62 -266 -4 -266 C 54 -266 102 -228 98 -150 Z"/></clipPath>
+  </defs>
+  <path d="M -30 0 C -40 -30 -84 -50 -88 -104 C -90 -162 -56 -196 4 -196 C 64 -196 92 -160 88 -104 C 86 -60 60 -30 34 -2 Z" fill="#B77A55" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(64 -104) scale(1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#B77A55" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <g clip-path="url(#c1)">
+    <path d="M -34.2 15.4 C -45.6 -18.8 -95.76 -41.6 -100.32 -103.16 C -102.6 -169.28 -63.84 -208.04 4.56 -208.04 C 72.96 -208.04 104.88 -167 100.32 -103.16 C 98.04 -53 68.4 -18.8 38.76 13.12 Z" fill="#3A2418" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+  <path d="M -106 -150 C -110 -228 -62 -266 -4 -266 C 54 -266 102 -228 98 -150 Z" fill="#F4F3EE" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c2)">
+    <path d="M -20 -264 C -26 -230 -28 -190 -26 -156" fill="none" stroke="#DBDAD6" stroke-width="10"/>
+    <path d="M -20 -264 C -26 -230 -28 -190 -26 -156" fill="none" stroke="#1D1A24" stroke-width="2.04"/>
+  </g>
+  <path d="M -122 -150 L 116 -154 Q 124 -142 110 -138 L -116 -134 Q -130 -138 -122 -150 Z" fill="#E0DFDA" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

@@ -1,0 +1,538 @@
+{
+  "id": "dex",
+  "version": 1,
+  "name": "Dex",
+  "height": 950,
+  "about": "A warehouse picker in a hi-vis vest and an orange beanie, drawn cut-out style. Origin on the floor between his feet.",
+  "palette": {
+    "skin": "#C78A62",
+    "hair": "#2A201D",
+    "beanie": "#EC7A2E",
+    "beanieRib": "#C9611F",
+    "shirt": "#56698A",
+    "vest": "#D3E64B",
+    "stripe": "#D8DCE0",
+    "pants": "#484C55",
+    "boot": "#83532F",
+    "sole": "#2B2320",
+    "toe": "#6E4426",
+    "belt": "#372A22",
+    "buckle": "#C8C2B4",
+    "badge": "#F4F3EE",
+    "badgeTop": "#2F7DD3",
+    "mouth": "#3B1521",
+    "tongue": "#DE6878"
+  },
+  "ink": "#1D1A24",
+  "line": 3.4,
+  "face": {
+    "eye": {
+      "rx": 27,
+      "ry": 30,
+      "pupil": 5.4,
+      "lid": "skin"
+    },
+    "brow": {},
+    "mouth": {
+      "w": 31,
+      "pal": {
+        "mouth": "mouth",
+        "tongue": "tongue"
+      }
+    }
+  },
+  "bones": [
+    {
+      "name": "hips",
+      "at": [
+        0,
+        -424
+      ]
+    },
+    {
+      "name": "legL",
+      "parent": "hips",
+      "at": [
+        -34,
+        -4
+      ],
+      "len": 196,
+      "z": 0,
+      "piece": "legL"
+    },
+    {
+      "name": "shinL",
+      "parent": "legL",
+      "at": [
+        0,
+        196
+      ],
+      "len": 190,
+      "z": 0
+    },
+    {
+      "name": "footL",
+      "parent": "shinL",
+      "at": [
+        0,
+        190
+      ],
+      "z": 0.1,
+      "piece": "footL"
+    },
+    {
+      "name": "legR",
+      "parent": "hips",
+      "at": [
+        34,
+        -4
+      ],
+      "len": 196,
+      "z": 0,
+      "piece": "legR"
+    },
+    {
+      "name": "shinR",
+      "parent": "legR",
+      "at": [
+        0,
+        196
+      ],
+      "len": 190,
+      "z": 0
+    },
+    {
+      "name": "footR",
+      "parent": "shinR",
+      "at": [
+        0,
+        190
+      ],
+      "z": 0.1,
+      "piece": "footR"
+    },
+    {
+      "name": "pelvis",
+      "parent": "hips",
+      "at": [
+        0,
+        0
+      ],
+      "z": 1,
+      "piece": "pelvis"
+    },
+    {
+      "name": "torso",
+      "parent": "hips",
+      "at": [
+        0,
+        0
+      ],
+      "z": 2,
+      "piece": "torso"
+    },
+    {
+      "name": "neck",
+      "parent": "torso",
+      "at": [
+        0,
+        -250
+      ],
+      "z": 1.5,
+      "piece": "neck"
+    },
+    {
+      "name": "head",
+      "parent": "neck",
+      "at": [
+        0,
+        -22
+      ],
+      "z": 4,
+      "piece": "head"
+    },
+    {
+      "name": "armL",
+      "parent": "torso",
+      "at": [
+        -72,
+        -236
+      ],
+      "len": 150,
+      "z": 5.5,
+      "piece": "armL"
+    },
+    {
+      "name": "foreL",
+      "parent": "armL",
+      "at": [
+        0,
+        150
+      ],
+      "len": 138,
+      "z": 5.5
+    },
+    {
+      "name": "handL",
+      "parent": "foreL",
+      "at": [
+        0,
+        136
+      ],
+      "z": 6,
+      "piece": "handL"
+    },
+    {
+      "name": "armR",
+      "parent": "torso",
+      "at": [
+        72,
+        -236
+      ],
+      "len": 150,
+      "z": 5.5,
+      "piece": "armR"
+    },
+    {
+      "name": "foreR",
+      "parent": "armR",
+      "at": [
+        0,
+        150
+      ],
+      "len": 138,
+      "z": 5.5
+    },
+    {
+      "name": "handR",
+      "parent": "foreR",
+      "at": [
+        0,
+        136
+      ],
+      "z": 6,
+      "piece": "handR"
+    }
+  ],
+  "tags": {
+    "root": "hips",
+    "chest": "torso",
+    "look": "head",
+    "chains": {
+      "armL": {
+        "bones": [
+          "armL",
+          "foreL",
+          "handL"
+        ],
+        "side": "L",
+        "kind": "arm",
+        "bend": "back"
+      },
+      "armR": {
+        "bones": [
+          "armR",
+          "foreR",
+          "handR"
+        ],
+        "side": "R",
+        "kind": "arm",
+        "bend": "back"
+      },
+      "legL": {
+        "bones": [
+          "legL",
+          "shinL",
+          "footL"
+        ],
+        "side": "L",
+        "kind": "leg",
+        "bend": "forward"
+      },
+      "legR": {
+        "bones": [
+          "legR",
+          "shinR",
+          "footR"
+        ],
+        "side": "R",
+        "kind": "leg",
+        "bend": "forward"
+      }
+    },
+    "turn": {
+      "offsets": {
+        "1": {
+          "neck.x": 8
+        },
+        "2": {
+          "neck.x": 12
+        },
+        "3": {
+          "neck.x": -4
+        }
+      }
+    }
+  },
+  "pieces": {
+    "head": {
+      "angles": {
+        "0": "svg/head-front.svg",
+        "1": "svg/head-34.svg",
+        "2": "svg/head-side.svg",
+        "3": "svg/head-34back.svg",
+        "4": "svg/head-back.svg"
+      },
+      "of": "head"
+    },
+    "mouth": {
+      "kit": "mouthChart"
+    },
+    "neck": {
+      "svg": "svg/neck.svg"
+    },
+    "torso": {
+      "angles": {
+        "0": "svg/torso-front.svg",
+        "1": "svg/torso-34.svg",
+        "2": "svg/torso-side.svg",
+        "3": "svg/torso-34back.svg",
+        "4": "svg/torso-back.svg"
+      },
+      "of": "body"
+    },
+    "pelvis": {
+      "angles": {
+        "0": "svg/pelvis-front.svg",
+        "1": "svg/pelvis-34.svg",
+        "2": "svg/pelvis-side.svg"
+      },
+      "of": "body",
+      "fallback": {
+        "3": 1,
+        "4": 0
+      }
+    },
+    "armL": {
+      "kit": "noodle",
+      "a": 150,
+      "b": 138,
+      "bend": "foreL",
+      "w": 27,
+      "w2": 25,
+      "color": "skin",
+      "sleeve": {
+        "len": 60,
+        "w": 42,
+        "color": "shirt"
+      }
+    },
+    "armR": {
+      "kit": "noodle",
+      "a": 150,
+      "b": 138,
+      "bend": "foreR",
+      "w": 27,
+      "w2": 25,
+      "color": "skin",
+      "sleeve": {
+        "len": 60,
+        "w": 42,
+        "color": "shirt"
+      }
+    },
+    "handL": {
+      "kit": "hand",
+      "side": -1,
+      "skin": "skin",
+      "size": 1.05
+    },
+    "handR": {
+      "kit": "hand",
+      "side": 1,
+      "skin": "skin",
+      "size": 1.05
+    },
+    "legL": {
+      "kit": "noodle",
+      "a": 196,
+      "b": 190,
+      "bend": "shinL",
+      "w": 46,
+      "w2": 42,
+      "round": 0.3,
+      "color": "pants"
+    },
+    "legR": {
+      "kit": "noodle",
+      "a": 196,
+      "b": 190,
+      "bend": "shinR",
+      "w": 46,
+      "w2": 42,
+      "round": 0.3,
+      "color": "pants"
+    },
+    "footL": {
+      "angles": {
+        "0": "svg/boot-front.svg",
+        "1": "svg/boot-34.svg",
+        "2": "svg/boot-side.svg",
+        "4": "svg/boot-back.svg"
+      },
+      "of": "body",
+      "fallback": {
+        "3": 2
+      },
+      "scale": 1.2,
+      "front": {
+        "flip": -1,
+        "rotate": 0.06
+      }
+    },
+    "footR": {
+      "angles": {
+        "0": "svg/boot-front.svg",
+        "1": "svg/boot-34.svg",
+        "2": "svg/boot-side.svg",
+        "4": "svg/boot-back.svg"
+      },
+      "of": "body",
+      "fallback": {
+        "3": 2
+      },
+      "scale": 1.2,
+      "front": {
+        "flip": 1,
+        "rotate": 0.06
+      }
+    }
+  },
+  "limits": {
+    "shinL": [
+      -0.15,
+      2.9
+    ],
+    "shinR": [
+      -0.15,
+      2.9
+    ]
+  },
+  "rest": {
+    "armL.r": 0.1,
+    "foreL.r": -0.1,
+    "armR.r": -0.1,
+    "foreR.r": 0.1,
+    "handL.shape": "relaxed",
+    "handR.shape": "relaxed",
+    "legL.r": 0.02,
+    "legR.r": -0.02,
+    "shinL.r": 0,
+    "shinR.r": 0,
+    "eyes.open": 1,
+    "eyes.squint": 0,
+    "eyes.pupil": 1,
+    "lids.drop": 0,
+    "lids.slant": 0,
+    "lidL.drop": 0,
+    "lidR.drop": 0,
+    "lidL.slant": 0,
+    "lidR.slant": 0,
+    "brows.up": 0,
+    "brows.in": 0,
+    "browL.up": 0,
+    "browR.up": 0,
+    "browL.slant": 0,
+    "browR.slant": 0,
+    "mood.smile": 0,
+    "mouth.cornerL": 0,
+    "mouth.cornerR": 0,
+    "mouth.shape": "rest"
+  },
+  "poses": {
+    "rest": {
+      "armL.r": 0.1,
+      "foreL.r": -0.1,
+      "armR.r": -0.1,
+      "foreR.r": 0.1,
+      "handL.shape": "relaxed",
+      "handR.shape": "relaxed",
+      "handL.r": 0,
+      "handR.r": 0,
+      "handL.flip": 0,
+      "handR.flip": 0
+    },
+    "wave": {
+      "armR.r": -2.5,
+      "foreR.r": -0.45,
+      "handR.shape": "palm",
+      "handR.r": 0
+    },
+    "point": {
+      "armR.r": -1.5,
+      "foreR.r": -0.05,
+      "handR.shape": "point",
+      "handR.r": 0.1
+    },
+    "shrug": {
+      "armL.r": 0.55,
+      "foreL.r": 1.3,
+      "armR.r": -0.55,
+      "foreR.r": -1.3,
+      "handL.shape": "open",
+      "handR.shape": "open",
+      "handL.r": 0.9,
+      "handR.r": -0.9
+    },
+    "thumbsUp": {
+      "armR.r": -0.25,
+      "foreR.r": -1.35,
+      "handR.shape": "thumb",
+      "handR.flip": 1,
+      "handR.r": 0.1
+    },
+    "stop": {
+      "armR.r": -0.75,
+      "foreR.r": -2.1,
+      "handR.shape": "palm",
+      "handR.r": 0.3
+    },
+    "hips": {
+      "armL.r": 0.75,
+      "foreL.r": -1.6,
+      "armR.r": -0.75,
+      "foreR.r": 1.6,
+      "handL.shape": "fist",
+      "handR.shape": "fist",
+      "handL.r": 0.5,
+      "handR.r": -0.5
+    },
+    "cheer": {
+      "armL.r": 2.7,
+      "foreL.r": 0.25,
+      "armR.r": -2.7,
+      "foreR.r": -0.25,
+      "handL.shape": "fist",
+      "handR.shape": "fist"
+    },
+    "ok": {
+      "armR.r": -0.35,
+      "foreR.r": -2.0,
+      "handR.shape": "ok",
+      "handR.flip": 1,
+      "handR.r": -0.2
+    },
+    "peace": {
+      "armR.r": -0.35,
+      "foreR.r": -2.2,
+      "handR.shape": "peace",
+      "handR.flip": 1,
+      "handR.r": 0.1
+    }
+  },
+  "expressions": "kit",
+  "clips": "kit",
+  "life": {
+    "seed": 7
+  }
+}

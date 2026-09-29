@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -300 300 340">
+  <title>Amara: torso, side</title>
+  <path d="M -40 4 C -46 -80 -50 -190 -46 -236 C -42 -256 -20 -262 4 -262 C 30 -262 46 -250 50 -224 C 56 -180 54 -90 46 4 Z" fill="#F4F1EA" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -40 -12 L 48 -12 L 48 6 L -40 6 Z" fill="#2A2A30" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M -40 -6 L 40 -6 C 48 -90 50 -170 46 -222 C 40 -248 28 -258 8 -262 L -8 -262 C -30 -258 -44 -246 -46 -230 C -48 -180 -46 -80 -40 -6 Z" fill="#D9A43A" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

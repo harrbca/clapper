@@ -1,0 +1,59 @@
+{
+ "request": {
+  "text": "Hit print, and it comes out in 3D.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Clapper can drive a web page, too. Every click and every keystroke lands right on cue.",
+  "next_text": "I tear it off, and there's the label, ready to read.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Hit",
+   "start": 0,
+   "end": 0.244
+  },
+  {
+   "w": "print,",
+   "start": 0.313,
+   "end": 0.65
+  },
+  {
+   "w": "and",
+   "start": 0.673,
+   "end": 0.743
+  },
+  {
+   "w": "it",
+   "start": 0.789,
+   "end": 0.836
+  },
+  {
+   "w": "comes",
+   "start": 0.882,
+   "end": 1.068
+  },
+  {
+   "w": "out",
+   "start": 1.115,
+   "end": 1.231
+  },
+  {
+   "w": "in",
+   "start": 1.277,
+   "end": 1.335
+  },
+  {
+   "w": "3D.",
+   "start": 1.428,
+   "end": 2.368
+  }
+ ]
+}

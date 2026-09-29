@@ -9,11 +9,13 @@ import { H, W } from './timeline.js';
 
 export { THREE };
 
-export function layer3d(stage, { shadows = true, exposure = 1, fov = 18, environment = 0.9 } = {}) {
+// width and height are the layer's size (the video's, unless given), and pixelRatio its pixels per
+// unit of that (the stage's).
+export function layer3d(stage, { shadows = true, exposure = 1, fov = 18, environment = 0.9, width = W, height = H, pixelRatio = stage.dpr } = {}) {
   const canvas = document.createElement('canvas');
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(stage.dpr);
-  renderer.setSize(W, H, false);
+  renderer.setPixelRatio(pixelRatio);
+  renderer.setSize(width, height, false);
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.NeutralToneMapping;          // keeps the 2D palette's colours honest
@@ -27,7 +29,7 @@ export function layer3d(stage, { shadows = true, exposure = 1, fov = 18, environ
     scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture;
     scene.environmentIntensity = environment;
   }
-  const camera = new THREE.PerspectiveCamera(fov, W / H, 10, 50000);
+  const camera = new THREE.PerspectiveCamera(fov, width / height, 10, 50000);
 
   return {
     THREE, renderer, scene, camera, canvas,

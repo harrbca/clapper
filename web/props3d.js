@@ -181,7 +181,7 @@ export function rack3d({ bays = 3, bayW = 440, levels = [560, 1080], depth = 300
       const u = solid(roundBox(30, height, 30, 4), up, { ink: 2 }); u.position.set(x, height / 2, z); group.add(u);
       const plate = solid(roundBox(46, 8, 46, 2), up, { ink: 1.6 }); plate.position.set(x, 4, z); group.add(plate);
     }
-    for (let y = 200; y < height - 100; y += 330) {           // zig-zag bracing between the uprights
+    for (let y = 200; y + 330 < height - 60; y += 330) {      // zig-zag bracing between the uprights, ending below their tops
       const b = solid(new THREE.CylinderGeometry(5, 5, Math.hypot(depth, 330), 8), brace, { ink: 1.2 });
       b.position.set(x, y + 165, -depth / 2); b.rotation.x = Math.atan2(depth, 330) * ((y / 330) % 2 < 1 ? 1 : -1); group.add(b);
     }

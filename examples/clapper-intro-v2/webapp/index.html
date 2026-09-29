@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Orders · Parts Desk</title>
+<!-- A made-up order desk for the intro, driven by capture/print.js: find order 4821, open it, print
+     its label. Everything is fixed, so every capture comes out the same. -->
+<style>
+  :root { --navy: #1C2A44; --blue: #2F6FD0; --blue2: #245CB0; --bg: #F3F5F8; --line: #E1E5EB; --ink: #1D2733; --muted: #667383; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { font: 14px/1.4 "Segoe UI", system-ui, sans-serif; color: var(--ink); background: var(--bg); display: flex; flex-direction: column; overflow: hidden; }
+  .bar { height: 56px; background: var(--navy); color: #fff; display: flex; align-items: center; padding: 0 22px; gap: 34px; flex: none; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; }
+  .brand i { width: 26px; height: 26px; border-radius: 6px; background: #FF8A1F; display: grid; place-items: center; font-style: normal; color: #fff; font-weight: 800; font-size: 13px; }
+  nav { display: flex; gap: 4px; height: 100%; }
+  nav a { display: flex; align-items: center; padding: 0 14px; color: #C3CCDD; border-bottom: 3px solid transparent; }
+  nav a.on { color: #fff; border-bottom-color: #FF8A1F; font-weight: 600; }
+  .right { margin-left: auto; display: flex; align-items: center; gap: 18px; color: #C3CCDD; }
+  .wh { border: 1px solid #3B4D72; border-radius: 16px; padding: 4px 12px; }
+  .me { width: 32px; height: 32px; border-radius: 50%; background: #FF8A1F; color: #fff; display: grid; place-items: center; font-weight: 700; }
+  main { flex: 1; display: grid; grid-template-columns: 610px 1fr; gap: 18px; padding: 18px 22px; min-height: 0; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 1px 2px rgba(20,30,50,.05); min-height: 0; }
+  .list { display: flex; flex-direction: column; }
+  .head { display: flex; align-items: center; gap: 10px; padding: 16px 18px 10px; }
+  h2 { font-size: 17px; margin: 0; font-weight: 600; }
+  .count { background: #E8EEF8; color: var(--blue); border-radius: 10px; padding: 1px 9px; font-weight: 600; font-size: 12px; }
+  .search { margin: 4px 18px 12px; display: flex; align-items: center; gap: 8px; border: 1px solid #C9D1DC; border-radius: 8px; padding: 0 12px; height: 40px; cursor: text; }
+  .search:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(47,111,208,.15); }
+  .search input { border: 0; outline: 0; font: inherit; font-size: 15px; flex: 1; color: var(--ink); background: transparent; }
+  table { border-collapse: collapse; width: 100%; }
+  th { text-align: left; font-weight: 600; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  td { padding: 13px 10px; border-bottom: 1px solid #EEF1F5; white-space: nowrap; }
+  th:first-child, td:first-child { padding-left: 18px; }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover { background: #F5F8FC; }
+  tbody tr.sel { background: #EAF1FC; box-shadow: inset 3px 0 0 var(--blue); }
+  .num { font-weight: 600; color: var(--blue); }
+  .cust { max-width: 250px; overflow: hidden; text-overflow: ellipsis; }
+  .chip { display: inline-block; border-radius: 12px; padding: 2px 10px; font-size: 12px; font-weight: 600; }
+  .ready { background: #E4F4E9; color: #1E7B34; } .packing { background: #FFF1D9; color: #9A5B00; } .new { background: #EAEFF5; color: #4A5A70; }
+  .empty { padding: 26px 18px; color: var(--muted); }
+  .detail { padding: 22px 26px; display: flex; flex-direction: column; gap: 18px; overflow: hidden; }
+  .none { margin: auto; text-align: center; color: var(--muted); }
+  .none b { display: block; font-size: 16px; color: var(--ink); margin: 10px 0 4px; font-weight: 600; }
+  .title { display: flex; align-items: center; gap: 14px; }
+  h1 { font-size: 24px; margin: 0; font-weight: 600; }
+  .title .meta { margin-left: auto; color: var(--muted); }
+  .grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 16px; }
+  .field small { display: block; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 3px; }
+  .field div { font-size: 15px; }
+  .lines { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .lines th:first-child, .lines td:first-child { padding-left: 12px; }
+  .lines td { font-size: 15px; }
+  .qty { font-weight: 700; }
+  .print { margin-top: auto; border-top: 1px solid var(--line); padding-top: 18px; display: flex; align-items: flex-end; gap: 28px; }
+  .preview { margin: 0; flex: none; }
+  .preview img { display: block; height: 300px; border: 1px solid #D5DBE3; border-radius: 4px; box-shadow: 0 2px 8px rgba(20,30,50,.12); }
+  .preview figcaption { color: var(--muted); font-size: 12px; margin-top: 8px; text-transform: uppercase; letter-spacing: .4px; }
+  .controls { flex: 1; display: flex; align-items: flex-end; gap: 16px; }
+  .select { border: 1px solid #C9D1DC; border-radius: 8px; height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 14px; width: 300px; font-size: 15px; }
+  .select .caret { margin-left: auto; color: var(--muted); }
+  button { font: inherit; font-size: 15px; font-weight: 600; height: 44px; padding: 0 22px; border-radius: 8px; border: 0; background: var(--blue); color: #fff; cursor: pointer; display: flex; align-items: center; gap: 10px; margin-left: auto; }
+  button:hover { background: var(--blue2); }
+  button.sent { background: #1E7B34; }
+  .toast { position: fixed; right: 30px; top: 74px; pointer-events: none; background: var(--ink); color: #fff; border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; gap: 12px; font-size: 15px; box-shadow: 0 8px 24px rgba(0,0,0,.25); opacity: 0; transform: translateY(-12px); transition: .25s; }
+  .toast.on { opacity: 1; transform: none; }
+  .toast i { width: 24px; height: 24px; border-radius: 50%; background: #34A853; display: grid; place-items: center; font-style: normal; font-weight: 700; }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="brand"><i>PD</i>Parts Desk</div>
+  <nav><a class="on">Orders</a><a>Picking</a><a>Shipments</a><a>Printers</a></nav>
+  <div class="right"><span class="wh">Pip's Parts Co. · Main warehouse</span><span class="me">P</span></div>
+</header>
+<main>
+  <section class="card list">
+    <div class="head"><h2>Ready to ship</h2><span class="count" id="count">6</span></div>
+    <label class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667383" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+      <input id="search" placeholder="Search orders or customers" autocomplete="off">
+    </label>
+    <table>
+      <thead><tr><th>Order</th><th>Customer</th><th>Due</th><th>Lines</th><th>Status</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+  <section class="card detail" id="detail">
+    <div class="none">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#B5C0CE" stroke-width="1.4" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></svg>
+      <b>No order selected</b>Choose an order to see its lines and print its label.
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast"><i>✓</i><span>Label for order 4821 sent to Label printer 1</span></div>
+<script>
+  const D = [
+    { id: '4818', cust: 'Oak Lane Plumbing', due: 'Mon', lines: 3, status: ['Packing', 'packing'] },
+    { id: '4819', cust: 'Riverbend Garage', due: 'Mon', lines: 1, status: ['Ready', 'ready'] },
+    { id: '4820', cust: 'Hilltop Robotics Club', due: 'Tue', lines: 5, status: ['Ready', 'ready'] },
+    { id: '4821', cust: 'Maple Street Hardware', due: 'Tue', lines: 1, status: ['Ready', 'ready'] },
+    { id: '4822', cust: 'Seaside Bike Shop', due: 'Wed', lines: 2, status: ['Ready', 'ready'] },
+    { id: '4823', cust: 'Northstar Workshop', due: 'Thu', lines: 4, status: ['New', 'new'] },
+  ];
+  const $ = id => document.getElementById(id);
+  let sel = null;
+  function rows() {
+    const q = $('search').value.trim().toLowerCase();
+    const list = D.filter(d => !q || d.id.includes(q) || d.cust.toLowerCase().includes(q));
+    $('count').textContent = list.length;
+    $('rows').innerHTML = list.map(d => `<tr data-id="${d.id}" class="${d.id === sel ? 'sel' : ''}"><td class="num">${d.id}</td><td class="cust">${d.cust}</td><td>${d.due}</td><td>${d.lines}</td><td><span class="chip ${d.status[1]}">${d.status[0]}</span></td></tr>`).join('')
+      || '<tr><td colspan="5" class="empty">No orders match.</td></tr>';
+  }
+  function detail() {
+    $('detail').innerHTML = `
+      <div class="title"><h1>Order 4821</h1><span class="chip ready">Ready to ship</span><span class="meta">Due Tuesday · Courier</span></div>
+      <div class="grid">
+        <div class="field"><small>Ship to</small><div><b>MAPLE STREET HARDWARE</b><br>12 Maple Street, Springfield</div></div>
+        <div class="field"><small>Customer</small><div>C-1047</div></div>
+        <div class="field"><small>Their PO</small><div>SPRING RESTOCK</div></div>
+      </div>
+      <table class="lines">
+        <thead><tr><th>Line</th><th>Item</th><th>Description</th><th>Bin</th><th>Qty</th></tr></thead>
+        <tbody><tr><td>1</td><td class="num">BOLT-7</td><td>Robot bolts, 12 pack</td><td>A-01-03</td><td class="qty">24 BX</td></tr></tbody>
+      </table>
+      <div class="print">
+        <figure class="preview"><img src="../capture/label/00-label.png" alt=""><figcaption>Pick ticket · 4 × 6 in</figcaption></figure>
+        <div class="controls">
+          <div class="field"><small>Printer</small><div class="select">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D2733" stroke-width="1.8" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>
+            Label printer 1<span class="caret">▾</span></div></div>
+          <button id="print"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg><span>Print label</span></button>
+        </div>
+      </div>`;
+    $('print').onclick = () => { $('print').classList.add('sent'); $('print').querySelector('span').textContent = 'Sent to printer'; $('toast').classList.add('on'); };
+  }
+  $('search').oninput = rows;
+  $('rows').onclick = e => { const tr = e.target.closest('tr[data-id]'); if (!tr) return; sel = tr.dataset.id; rows(); if (sel === '4821') detail(); };
+  rows();
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Kenji: head, front</title>
+  <defs>
+    <clipPath id="c1"><path d="M -300 -600 L 300 -600 L 300 -112 L 92 -112 C 88 -130 60 -148 0 -160 C -60 -148 -88 -130 -92 -112 L -300 -112 Z"/></clipPath>
+  </defs>
+  <g transform="translate(-84 -104) scale(-1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#E8B98E" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <g transform="translate(84 -104) scale(1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#E8B98E" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <path d="M 0 -4 C 48 -4 82 -40 86 -104 C 90 -160 60 -196 0 -196 C -60 -196 -90 -160 -86 -104 C -82 -40 -48 -4 0 -4 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M 0 26 C 48 26 82 -25 86 -104 C 90 -160 60 -196 0 -196 C -60 -196 -90 -160 -86 -104 C -82 -25 -48 26 0 26 Z" fill="#E8B98E" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(-30 -104) scale(1 1)" data-feature="eye" data-side="-1"/>
+  <g transform="translate(-30 -140) scale(1 1)" data-feature="brow" data-side="-1"/>
+  <g transform="translate(30 -104) scale(1 1)" data-feature="eye" data-side="1"/>
+  <g transform="translate(30 -140) scale(1 1)" data-feature="brow" data-side="1"/>
+  <path d="M -5 -86 C -15 -70 -11 -62 -1 -62 C 7 -62 12 -66 12 -72" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g data-feature="mouth" data-x="0" data-y="-44" data-sx="1" data-drop="0.35"/>
+  <g clip-path="url(#c1)">
+    <path d="M 0 4.48 C 51.84 4.48 88.56 -34.4 92.88 -103.52 C 97.2 -164 64.8 -202.88 0 -202.88 C -64.8 -202.88 -97.2 -164 -92.88 -103.52 C -88.56 -34.4 -51.84 4.48 0 4.48 Z" fill="#16161C" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+  <path d="M -34 -199.68 C -38 -186 -40 -178 -44 -154" fill="none" stroke="#0D0D10" stroke-width="2.38"/>
+  <g transform="translate(-30 -104) scale(1 1)">
+    <path d="M -30 -18 C -30 -34 30 -34 30 -18 L 30 14 C 30 30 -30 30 -30 14 Z" fill="none" stroke="#2B2B35" stroke-width="3.06"/>
+  </g>
+  <g transform="translate(30 -104) scale(1 1)">
+    <path d="M -30 -18 C -30 -34 30 -34 30 -18 L 30 14 C 30 30 -30 30 -30 14 Z" fill="none" stroke="#2B2B35" stroke-width="3.06"/>
+  </g>
+  <path d="M -1 -106 Q 0 -112 1 -106" fill="none" stroke="#2B2B35" stroke-width="3.06"/>
+  <path d="M -12 -110 Q 0 -118 12 -110" fill="none" stroke="#2B2B35" stroke-width="2.72"/>
+</svg>

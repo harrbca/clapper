@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-180 -110 360 210">
+  <title>Biscuit: body, three-quarter from behind</title>
+  <path d="M -104 -64 C -58 -76 20 -80 82 -74 C 128 -70 154 -40 150 4 C 146 48 120 82 82 82 C 52 82 34 62 -8 60 C -40 58 -72 80 -106 78 C -144 76 -162 44 -160 4 C -156 -32 -138 -56 -104 -64 Z" fill="#E2A654" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -102 -44 C -70 -34 -58 6 -66 44 C -70 60 -82 72 -96 78" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 84 -72 C 104 -80 126 -76 140 -62 L 134 -50 C 120 -60 104 -62 90 -58 Z" fill="#D8443F" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

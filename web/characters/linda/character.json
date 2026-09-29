@@ -1,0 +1,513 @@
+{
+  "id": "linda",
+  "version": 1,
+  "name": "Linda",
+  "height": 923,
+  "about": "the receptionist",
+  "palette": {
+    "skin": "#F0C7A4",
+    "hair": "#C9C4BC",
+    "sleeve": "#C46F82",
+    "legs": "#E8C4A8",
+    "mouth": "#3B1521",
+    "tongue": "#DE6878"
+  },
+  "ink": "#1D1A24",
+  "line": 3.4,
+  "face": {
+    "eye": {
+      "rx": 27,
+      "ry": 30,
+      "pupil": 5.4,
+      "lid": "skin"
+    },
+    "brow": {
+      "color": "#A09C96"
+    },
+    "mouth": {
+      "w": 31,
+      "pal": {
+        "mouth": "mouth",
+        "tongue": "tongue"
+      }
+    }
+  },
+  "bones": [
+    {
+      "name": "hips",
+      "at": [
+        0,
+        -400.8
+      ]
+    },
+    {
+      "name": "legL",
+      "parent": "hips",
+      "at": [
+        -33.3,
+        -4
+      ],
+      "len": 184.23999999999998,
+      "z": 0,
+      "piece": "legL"
+    },
+    {
+      "name": "shinL",
+      "parent": "legL",
+      "at": [
+        0,
+        184.23999999999998
+      ],
+      "len": 178.6,
+      "z": 0
+    },
+    {
+      "name": "footL",
+      "parent": "shinL",
+      "at": [
+        0,
+        178.6
+      ],
+      "z": 0.1,
+      "piece": "footL"
+    },
+    {
+      "name": "legR",
+      "parent": "hips",
+      "at": [
+        33.3,
+        -4
+      ],
+      "len": 184.23999999999998,
+      "z": 0,
+      "piece": "legR"
+    },
+    {
+      "name": "shinR",
+      "parent": "legR",
+      "at": [
+        0,
+        184.23999999999998
+      ],
+      "len": 178.6,
+      "z": 0
+    },
+    {
+      "name": "footR",
+      "parent": "shinR",
+      "at": [
+        0,
+        178.6
+      ],
+      "z": 0.1,
+      "piece": "footR"
+    },
+    {
+      "name": "pelvis",
+      "parent": "hips",
+      "at": [
+        0,
+        0
+      ],
+      "z": 1,
+      "piece": "pelvis"
+    },
+    {
+      "name": "torso",
+      "parent": "hips",
+      "at": [
+        0,
+        0
+      ],
+      "z": 2,
+      "piece": "torso"
+    },
+    {
+      "name": "neck",
+      "parent": "torso",
+      "at": [
+        0,
+        -250
+      ],
+      "z": 1.5,
+      "piece": "neck"
+    },
+    {
+      "name": "hairBack",
+      "parent": "neck",
+      "at": [
+        0,
+        -22
+      ],
+      "z": 0.5,
+      "piece": "hairBack"
+    },
+    {
+      "name": "head",
+      "parent": "neck",
+      "at": [
+        0,
+        -22
+      ],
+      "z": 4,
+      "piece": "head"
+    },
+    {
+      "name": "armL",
+      "parent": "torso",
+      "at": [
+        -70.6,
+        -236
+      ],
+      "len": 141.0,
+      "z": 5.5,
+      "piece": "armL"
+    },
+    {
+      "name": "foreL",
+      "parent": "armL",
+      "at": [
+        0,
+        141.0
+      ],
+      "len": 129.72,
+      "z": 5.5
+    },
+    {
+      "name": "handL",
+      "parent": "foreL",
+      "at": [
+        0,
+        127.72
+      ],
+      "z": 6,
+      "piece": "handL"
+    },
+    {
+      "name": "armR",
+      "parent": "torso",
+      "at": [
+        70.6,
+        -236
+      ],
+      "len": 141.0,
+      "z": 5.5,
+      "piece": "armR"
+    },
+    {
+      "name": "foreR",
+      "parent": "armR",
+      "at": [
+        0,
+        141.0
+      ],
+      "len": 129.72,
+      "z": 5.5
+    },
+    {
+      "name": "handR",
+      "parent": "foreR",
+      "at": [
+        0,
+        127.72
+      ],
+      "z": 6,
+      "piece": "handR"
+    }
+  ],
+  "tags": {
+    "root": "hips",
+    "chest": "torso",
+    "look": "head",
+    "chains": {
+      "armL": {
+        "bones": [
+          "armL",
+          "foreL",
+          "handL"
+        ],
+        "side": "L",
+        "kind": "arm",
+        "bend": "back"
+      },
+      "armR": {
+        "bones": [
+          "armR",
+          "foreR",
+          "handR"
+        ],
+        "side": "R",
+        "kind": "arm",
+        "bend": "back"
+      },
+      "legL": {
+        "bones": [
+          "legL",
+          "shinL",
+          "footL"
+        ],
+        "side": "L",
+        "kind": "leg",
+        "bend": "forward"
+      },
+      "legR": {
+        "bones": [
+          "legR",
+          "shinR",
+          "footR"
+        ],
+        "side": "R",
+        "kind": "leg",
+        "bend": "forward"
+      },
+      "hair": {
+        "bones": [
+          "hairBack"
+        ],
+        "kind": "hair"
+      }
+    },
+    "turn": {
+      "offsets": {
+        "1": {
+          "neck.x": 8
+        },
+        "2": {
+          "neck.x": 12
+        },
+        "3": {
+          "neck.x": -4
+        }
+      }
+    }
+  },
+  "pieces": {
+    "head": {
+      "angles": {
+        "0": "svg/head-front.svg",
+        "1": "svg/head-34.svg",
+        "2": "svg/head-side.svg",
+        "3": "svg/head-34back.svg",
+        "4": "svg/head-back.svg"
+      },
+      "of": "head"
+    },
+    "mouth": {
+      "kit": "mouthChart"
+    },
+    "neck": {
+      "svg": "svg/neck.svg"
+    },
+    "torso": {
+      "angles": {
+        "0": "svg/torso-front.svg",
+        "1": "svg/torso-34.svg",
+        "2": "svg/torso-side.svg",
+        "3": "svg/torso-34back.svg",
+        "4": "svg/torso-back.svg"
+      },
+      "of": "body"
+    },
+    "pelvis": {
+      "angles": {
+        "0": "svg/seat-front.svg",
+        "1": "svg/seat-34.svg",
+        "2": "svg/seat-side.svg"
+      },
+      "of": "body",
+      "fallback": {
+        "3": 1,
+        "4": 0
+      }
+    },
+    "armL": {
+      "kit": "noodle",
+      "a": 141.0,
+      "b": 129.72,
+      "bend": "foreL",
+      "w": 26.46,
+      "w2": 24.5,
+      "color": "sleeve"
+    },
+    "armR": {
+      "kit": "noodle",
+      "a": 141.0,
+      "b": 129.72,
+      "bend": "foreR",
+      "w": 26.46,
+      "w2": 24.5,
+      "color": "sleeve"
+    },
+    "handL": {
+      "kit": "hand",
+      "side": -1,
+      "skin": "skin",
+      "size": 1.02
+    },
+    "handR": {
+      "kit": "hand",
+      "side": 1,
+      "skin": "skin",
+      "size": 1.02
+    },
+    "legL": {
+      "kit": "noodle",
+      "a": 184.23999999999998,
+      "b": 178.6,
+      "bend": "shinL",
+      "w": 43.12,
+      "w2": 39.2,
+      "round": 0.3,
+      "color": "legs"
+    },
+    "legR": {
+      "kit": "noodle",
+      "a": 184.23999999999998,
+      "b": 178.6,
+      "bend": "shinR",
+      "w": 43.12,
+      "w2": 39.2,
+      "round": 0.3,
+      "color": "legs"
+    },
+    "footL": {
+      "angles": {
+        "0": "svg/shoe-front.svg",
+        "1": "svg/shoe-34.svg",
+        "2": "svg/shoe-side.svg",
+        "4": "svg/shoe-back.svg"
+      },
+      "of": "body",
+      "fallback": {
+        "3": 2
+      },
+      "scale": 1.2,
+      "front": {
+        "flip": -1,
+        "rotate": 0.06
+      }
+    },
+    "footR": {
+      "angles": {
+        "0": "svg/shoe-front.svg",
+        "1": "svg/shoe-34.svg",
+        "2": "svg/shoe-side.svg",
+        "4": "svg/shoe-back.svg"
+      },
+      "of": "body",
+      "fallback": {
+        "3": 2
+      },
+      "scale": 1.2,
+      "front": {
+        "flip": 1,
+        "rotate": 0.06
+      }
+    },
+    "hairBack": {
+      "angles": {
+        "0": "svg/hairback-front.svg",
+        "1": "svg/hairback-34.svg",
+        "2": "svg/hairback-side.svg",
+        "3": "svg/hairback-34back.svg",
+        "4": "svg/hairback-back.svg"
+      },
+      "of": "head"
+    }
+  },
+  "limits": {
+    "shinL": [
+      -0.15,
+      2.9
+    ],
+    "shinR": [
+      -0.15,
+      2.9
+    ]
+  },
+  "rest": {
+    "armL.r": 0.1,
+    "foreL.r": -0.1,
+    "armR.r": -0.1,
+    "foreR.r": 0.1,
+    "handL.shape": "relaxed",
+    "handR.shape": "relaxed",
+    "legL.r": 0.02,
+    "legR.r": -0.02,
+    "shinL.r": 0,
+    "shinR.r": 0,
+    "eyes.open": 1,
+    "eyes.squint": 0,
+    "eyes.pupil": 1,
+    "lids.drop": 0,
+    "lids.slant": 0,
+    "lidL.drop": 0,
+    "lidR.drop": 0,
+    "lidL.slant": 0,
+    "lidR.slant": 0,
+    "brows.up": 0,
+    "brows.in": 0,
+    "browL.up": 0,
+    "browR.up": 0,
+    "browL.slant": 0,
+    "browR.slant": 0,
+    "mood.smile": 0,
+    "mouth.cornerL": 0,
+    "mouth.cornerR": 0,
+    "mouth.shape": "rest"
+  },
+  "poses": {
+    "wave": {
+      "armR.r": -2.5,
+      "foreR.r": -0.45,
+      "handR.shape": "palm",
+      "handR.r": 0
+    },
+    "point": {
+      "armR.r": -1.5,
+      "foreR.r": -0.05,
+      "handR.shape": "point",
+      "handR.r": 0.1
+    },
+    "shrug": {
+      "armL.r": 0.55,
+      "foreL.r": 1.3,
+      "armR.r": -0.55,
+      "foreR.r": -1.3,
+      "handL.shape": "open",
+      "handR.shape": "open",
+      "handL.r": 0.9,
+      "handR.r": -0.9
+    },
+    "thumbsUp": {
+      "armR.r": -0.25,
+      "foreR.r": -1.35,
+      "handR.shape": "thumb",
+      "handR.flip": 1,
+      "handR.r": 0.1
+    },
+    "hips": {
+      "armL.r": 0.75,
+      "foreL.r": -1.6,
+      "armR.r": -0.75,
+      "foreR.r": 1.6,
+      "handL.shape": "fist",
+      "handR.shape": "fist",
+      "handL.r": 0.5,
+      "handR.r": -0.5
+    },
+    "cheer": {
+      "armL.r": 2.7,
+      "foreL.r": 0.25,
+      "armR.r": -2.7,
+      "foreR.r": -0.25,
+      "handL.shape": "fist",
+      "handR.shape": "fist"
+    }
+  },
+  "expressions": "kit",
+  "clips": "kit",
+  "life": {
+    "seed": 23
+  }
+}

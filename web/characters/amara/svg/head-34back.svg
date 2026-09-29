@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Amara: head, 34back</title>
+  <defs>
+    <clipPath id="c1"><path d="M -300 -600 L 300 -600 L 300 -150 L 84 -150 C 74 -110 52 -30 20 -42 L -300 -50 Z"/></clipPath>
+  </defs>
+  <path d="M -30 0 C -40 -30 -84 -50 -88 -104 C -90 -162 -56 -196 4 -196 C 64 -196 92 -160 88 -104 C 86 -60 60 -30 34 -2 Z" fill="#5A3A28" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(64 -104) scale(1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#5A3A28" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <g clip-path="url(#c1)">
+    <path d="M -33 11 C -44 -22 -92.4 -44 -96.8 -103.4 C -99 -167.2 -61.6 -204.6 4.4 -204.6 C 70.4 -204.6 101.2 -165 96.8 -103.4 C 94.6 -55 66 -22 37.4 8.8 Z" fill="#17120F" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+</svg>

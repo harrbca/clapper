@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-170 -90 340 170">
+  <title>Miso: the body over the near front leg's top, three-quarter from behind (body-34back.svg, clipped)</title>
+  <defs>
+    <clipPath id="c2"><ellipse cx="105" cy="40" rx="44" ry="36"/></clipPath>
+  </defs>
+  <g clip-path="url(#c2)">
+    <path d="M -96 -48 C -56 -60 20 -64 80 -60 C 122 -56 146 -32 144 2 C 142 38 118 62 86 62 C 58 62 40 46 0 44 C -34 42 -66 62 -100 60 C -138 58 -156 32 -154 2 C -150 -28 -128 -44 -96 -48 Z" fill="#8C95A6" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+</svg>

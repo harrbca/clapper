@@ -1,0 +1,39 @@
+{
+ "request": {
+  "text": "Words in, video out.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "And when the video's done, one command puts it on YouTube. That's Clapper.",
+  "next_text": null,
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Words",
+   "start": 0,
+   "end": 0.348
+  },
+  {
+   "w": "in,",
+   "start": 0.406,
+   "end": 0.685
+  },
+  {
+   "w": "video",
+   "start": 0.859,
+   "end": 1.219
+  },
+  {
+   "w": "out.",
+   "start": 1.289,
+   "end": 1.858
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Walt: head, back</title>
+  <defs>
+    <clipPath id="c1"><path d="M -300 -132 L 300 -132 L 300 -80 C 100 -74 -100 -74 -300 -80 Z"/></clipPath>
+  </defs>
+  <g transform="translate(-84 -104) scale(-1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#E0AC8A" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <g transform="translate(84 -104) scale(1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#E0AC8A" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <path d="M -30 0 C -36 -30 -82 -52 -86 -104 C -90 -160 -60 -196 0 -196 C 60 -196 90 -160 86 -104 C 82 -52 36 -30 30 0 Z" fill="#E0AC8A" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <path d="M -30.9 3.3 C -37.08 -27.6 -84.46 -50.26 -88.58 -103.82 C -92.7 -161.5 -61.8 -198.58 0 -198.58 C 61.8 -198.58 92.7 -161.5 88.58 -103.82 C 84.46 -50.26 37.08 -27.6 30.9 3.3 Z" fill="#C9C4BC" stroke="#1D1A24" stroke-width="2.72"/>
+  </g>
+</svg>

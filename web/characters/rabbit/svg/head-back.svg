@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-120 -290 240 310">
+  <title>Clover: head, back</title>
+  <path d="M -46 -108 C -68 -168 -66 -246 -44 -270 C -26 -288 -8 -266 -10 -212 C -12 -170 -18 -130 -24 -110 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 46 -108 C 68 -168 66 -246 44 -270 C 26 -288 8 -266 10 -212 C 12 -170 18 -130 24 -110 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 72 -34 L 92 -36" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M -72 -34 L -92 -36" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M 0 -4 C 52 -4 80 -30 78 -70 C 76 -110 44 -134 0 -134 C -44 -134 -76 -110 -78 -70 C -80 -30 -52 -4 0 -4 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

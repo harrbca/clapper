@@ -1,0 +1,17 @@
+{
+  "voice": { "name": "Bella", "id": "hpp4J3VqNfWAUOO0d1Us" },
+  "model": "eleven_multilingual_v2",
+  "settings": { "stability": 0.3, "similarity_boost": 0.75, "style": 0.55, "use_speaker_boost": true, "speed": 1 },
+  "cast": {
+    "gus": { "name": "Bill", "id": "pqHfZKP75CvOlQylNhV4", "settings": { "stability": 0.35, "style": 0.5, "speed": 0.95 } }
+  },
+  "scenes": [
+    { "id": "talk", "lines": [
+      { "id": "g1", "voice": "gus", "text": "Back in my day, we drew every frame by hand." },
+      { "id": "p1", "speaker": "pip", "text": "Now Clapper draws them for us!" },
+      { "id": "g2", "voice": "gus", "text": "Oh yeah? And who draws Clapper?" },
+      { "id": "p2", "speaker": "pip", "text": "Um... a robot, mostly." },
+      { "id": "g3", "voice": "gus", "text": "Hmph. Kids these days." }
+    ]}
+  ]
+}

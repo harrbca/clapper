@@ -1,0 +1,49 @@
+{
+ "request": {
+  "text": "So, what have we got today?",
+  "voice": "cgSgspJ2msm6clMCkdW9",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.4,
+   "similarity_boost": 0.75,
+   "style": 0.35,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Morning! I'm the new Tilly. Real size, and my forks go all the way up.",
+  "next_text": "Oh, I like it here.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "So,",
+   "start": 0,
+   "end": 0.372
+  },
+  {
+   "w": "what",
+   "start": 0.546,
+   "end": 0.697
+  },
+  {
+   "w": "have",
+   "start": 0.72,
+   "end": 0.824
+  },
+  {
+   "w": "we",
+   "start": 0.848,
+   "end": 0.906
+  },
+  {
+   "w": "got",
+   "start": 0.952,
+   "end": 1.103
+  },
+  {
+   "w": "today?",
+   "start": 1.149,
+   "end": 2.461
+  }
+ ]
+}

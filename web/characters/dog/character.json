@@ -1,0 +1,756 @@
+{
+  "id": "dog",
+  "version": 1,
+  "name": "Biscuit",
+  "height": 430,
+  "about": "A golden puppy with floppy ears, a cream muzzle and a red collar, drawn cut-out style. Origin on the floor under the middle of his body. His poses are keyed side on, facing right (for 3/4 and profile); play them with mirror: true to face left.",
+  "palette": {
+    "fur": "#E2A654",
+    "cream": "#F8E9CE",
+    "ear": "#8C5A34",
+    "nose": "#2A2022",
+    "shine": "#F4F1EC",
+    "collar": "#D8443F",
+    "tag": "#F3C443",
+    "brow": "#7B4B2C",
+    "mouth": "#4A1C26",
+    "tongue": "#EE7A8A"
+  },
+  "ink": "#1D1A24",
+  "line": 3.4,
+  "face": {
+    "eye": {
+      "rx": 22,
+      "ry": 26,
+      "pupil": 5.6,
+      "lid": "fur"
+    },
+    "brow": {
+      "len": 15,
+      "w": 7,
+      "color": "brow",
+      "rise": 10
+    },
+    "mouth": {
+      "w": 22,
+      "pal": {
+        "mouth": "mouth",
+        "tongue": "tongue"
+      }
+    }
+  },
+  "bones": [
+    {
+      "name": "hips",
+      "at": [
+        0,
+        -172
+      ]
+    },
+    {
+      "name": "body",
+      "parent": "hips",
+      "at": [
+        0,
+        0
+      ],
+      "z": 2,
+      "piece": "body"
+    },
+    {
+      "name": "shoulders",
+      "parent": "body",
+      "at": [
+        0,
+        0
+      ],
+      "z": 5.5,
+      "piece": "shoulders"
+    },
+    {
+      "name": "neck",
+      "parent": "body",
+      "at": [
+        0,
+        -54
+      ],
+      "z": 1.5,
+      "piece": "neck"
+    },
+    {
+      "name": "head",
+      "parent": "neck",
+      "at": [
+        0,
+        -14
+      ],
+      "z": 6,
+      "piece": "head"
+    },
+    {
+      "name": "legFL",
+      "parent": "hips",
+      "at": [
+        -30,
+        50
+      ],
+      "len": 52,
+      "z": 0,
+      "piece": "legFL"
+    },
+    {
+      "name": "shinFL",
+      "parent": "legFL",
+      "at": [
+        0,
+        52
+      ],
+      "len": 48,
+      "z": 0
+    },
+    {
+      "name": "pawFL",
+      "parent": "shinFL",
+      "at": [
+        0,
+        48
+      ],
+      "z": 0.1,
+      "piece": "paw"
+    },
+    {
+      "name": "legFR",
+      "parent": "hips",
+      "at": [
+        30,
+        50
+      ],
+      "len": 52,
+      "z": 0,
+      "piece": "legFR"
+    },
+    {
+      "name": "shinFR",
+      "parent": "legFR",
+      "at": [
+        0,
+        52
+      ],
+      "len": 48,
+      "z": 0
+    },
+    {
+      "name": "pawFR",
+      "parent": "shinFR",
+      "at": [
+        0,
+        48
+      ],
+      "z": 0.1,
+      "piece": "paw"
+    },
+    {
+      "name": "legBL",
+      "parent": "hips",
+      "at": [
+        -46,
+        50
+      ],
+      "len": 52,
+      "z": 0,
+      "piece": "legBL"
+    },
+    {
+      "name": "shinBL",
+      "parent": "legBL",
+      "at": [
+        0,
+        52
+      ],
+      "len": 48,
+      "z": 0
+    },
+    {
+      "name": "pawBL",
+      "parent": "shinBL",
+      "at": [
+        0,
+        48
+      ],
+      "z": 0.1,
+      "piece": "paw"
+    },
+    {
+      "name": "legBR",
+      "parent": "hips",
+      "at": [
+        46,
+        50
+      ],
+      "len": 52,
+      "z": 0,
+      "piece": "legBR"
+    },
+    {
+      "name": "shinBR",
+      "parent": "legBR",
+      "at": [
+        0,
+        52
+      ],
+      "len": 48,
+      "z": 0
+    },
+    {
+      "name": "pawBR",
+      "parent": "shinBR",
+      "at": [
+        0,
+        48
+      ],
+      "z": 0.1,
+      "piece": "paw"
+    },
+    {
+      "name": "tailbase",
+      "parent": "body",
+      "at": [
+        0,
+        -46
+      ],
+      "z": -2,
+      "piece": "tailroot"
+    },
+    {
+      "name": "tail1",
+      "parent": "tailbase",
+      "at": [
+        0,
+        0
+      ],
+      "len": 30,
+      "z": -2,
+      "piece": "tail"
+    },
+    {
+      "name": "tail2",
+      "parent": "tail1",
+      "at": [
+        0,
+        30
+      ],
+      "len": 28,
+      "z": -2
+    },
+    {
+      "name": "tail3",
+      "parent": "tail2",
+      "at": [
+        0,
+        28
+      ],
+      "len": 26,
+      "z": -2
+    },
+    {
+      "name": "tail4",
+      "parent": "tail3",
+      "at": [
+        0,
+        26
+      ],
+      "len": 22,
+      "z": -2
+    }
+  ],
+  "tags": {
+    "root": "hips",
+    "chest": "body",
+    "look": "head",
+    "chains": {
+      "legFL": {
+        "bones": [
+          "legFL",
+          "shinFL",
+          "pawFL"
+        ],
+        "side": "L",
+        "kind": "leg",
+        "bend": "back",
+        "layers": {
+          "near": 5,
+          "far": -1,
+          "front": 1,
+          "back": -1,
+          "end": 0.1
+        }
+      },
+      "legFR": {
+        "bones": [
+          "legFR",
+          "shinFR",
+          "pawFR"
+        ],
+        "side": "R",
+        "kind": "leg",
+        "bend": "back",
+        "layers": {
+          "near": 5,
+          "far": -1,
+          "front": 1,
+          "back": -1,
+          "end": 0.1
+        }
+      },
+      "legBL": {
+        "bones": [
+          "legBL",
+          "shinBL",
+          "pawBL"
+        ],
+        "side": "L",
+        "kind": "leg",
+        "bend": "forward",
+        "layers": {
+          "near": 1,
+          "far": -1,
+          "front": -1,
+          "back": 1,
+          "end": 0.1
+        }
+      },
+      "legBR": {
+        "bones": [
+          "legBR",
+          "shinBR",
+          "pawBR"
+        ],
+        "side": "R",
+        "kind": "leg",
+        "bend": "forward",
+        "layers": {
+          "near": 1,
+          "far": -1,
+          "front": -1,
+          "back": 1,
+          "end": 0.1
+        }
+      },
+      "tail": {
+        "bones": [
+          "tail1",
+          "tail2",
+          "tail3",
+          "tail4"
+        ],
+        "kind": "tail",
+        "layers": {
+          "front": -2,
+          "back": 7
+        }
+      }
+    },
+    "turn": {
+      "offsets": {
+        "1": {
+          "legFL.x": 82,
+          "legFR.x": 82,
+          "legBL.x": -88,
+          "legBR.x": -88,
+          "neck.x": 100,
+          "tailbase.x": -132
+        },
+        "2": {
+          "legFL.x": 82,
+          "legFR.x": 82,
+          "legBL.x": -88,
+          "legBR.x": -88,
+          "neck.x": 100,
+          "tailbase.x": -132
+        },
+        "3": {
+          "legFL.x": 82,
+          "legFR.x": 82,
+          "legBL.x": -88,
+          "legBR.x": -88,
+          "neck.x": 100,
+          "tailbase.x": -132,
+          "neck.z": 0.7,
+          "head.z": 0.8,
+          "tailbase.z": 7.5
+        },
+        "4": {
+          "neck.z": 0.7,
+          "head.z": 0.8,
+          "tailbase.z": 7.5
+        }
+      }
+    }
+  },
+  "pieces": {
+    "body": {
+      "angles": {
+        "0": "svg/body-front.svg",
+        "1": "svg/body-34.svg",
+        "2": "svg/body-side.svg",
+        "3": "svg/body-34back.svg",
+        "4": "svg/body-back.svg"
+      },
+      "of": "body"
+    },
+    "shoulders": {
+      "angles": {
+        "0": "svg/empty.svg",
+        "1": "svg/shoulders-34.svg",
+        "2": "svg/shoulders-side.svg",
+        "3": "svg/shoulders-34back.svg",
+        "4": "svg/empty.svg"
+      },
+      "of": "body"
+    },
+    "neck": {
+      "svg": "svg/neck.svg"
+    },
+    "head": {
+      "angles": {
+        "0": "svg/head-front.svg",
+        "1": "svg/head-34.svg",
+        "2": "svg/head-side.svg",
+        "3": "svg/head-34back.svg",
+        "4": "svg/head-back.svg"
+      },
+      "of": "head"
+    },
+    "mouth": {
+      "kit": "mouthChart"
+    },
+    "legFL": {
+      "kit": "noodle",
+      "a": 52,
+      "b": 48,
+      "bend": "shinFL",
+      "w": 30,
+      "w2": 28,
+      "round": 0.35,
+      "color": "fur"
+    },
+    "legFR": {
+      "kit": "noodle",
+      "a": 52,
+      "b": 48,
+      "bend": "shinFR",
+      "w": 30,
+      "w2": 28,
+      "round": 0.35,
+      "color": "fur"
+    },
+    "legBL": {
+      "kit": "noodle",
+      "a": 52,
+      "b": 48,
+      "bend": "shinBL",
+      "w": 30,
+      "w2": 28,
+      "round": 0.35,
+      "color": "fur"
+    },
+    "legBR": {
+      "kit": "noodle",
+      "a": 52,
+      "b": 48,
+      "bend": "shinBR",
+      "w": 30,
+      "w2": 28,
+      "round": 0.35,
+      "color": "fur"
+    },
+    "paw": {
+      "angles": {
+        "0": "svg/paw-front.svg",
+        "1": "svg/paw-34.svg",
+        "2": "svg/paw-side.svg",
+        "4": "svg/paw-back.svg"
+      },
+      "of": "body",
+      "fallback": {
+        "3": 2
+      }
+    },
+    "tail": {
+      "kit": "ribbon",
+      "bones": [
+        "tail1",
+        "tail2",
+        "tail3",
+        "tail4"
+      ],
+      "w": [
+        30,
+        27,
+        23,
+        17,
+        10
+      ],
+      "color": "fur",
+      "edge": 1
+    },
+    "tailroot": {
+      "angles": {
+        "0": "svg/empty.svg",
+        "1": "svg/empty.svg",
+        "2": "svg/empty.svg",
+        "3": "svg/tailroot.svg",
+        "4": "svg/tailroot.svg"
+      },
+      "of": "body"
+    }
+  },
+  "rest": {
+    "tailbase.r": 3.141592653589793,
+    "eyes.open": 1,
+    "eyes.squint": 0,
+    "eyes.pupil": 1,
+    "lids.drop": 0,
+    "lids.slant": 0,
+    "lidL.drop": 0,
+    "lidR.drop": 0,
+    "lidL.slant": 0,
+    "lidR.slant": 0,
+    "brows.up": 0,
+    "brows.in": 0,
+    "browL.up": 0,
+    "browR.up": 0,
+    "browL.slant": 0,
+    "browR.slant": 0,
+    "mood.smile": 0,
+    "mouth.cornerL": 0,
+    "mouth.cornerR": 0,
+    "mouth.shape": "rest"
+  },
+  "poses": {
+    "stand": {
+      "hips.x": 0,
+      "hips.y": 0,
+      "body.r": 0,
+      "neck.r": 0,
+      "head.r": 0,
+      "legFL.x": 0,
+      "legFL.y": 0,
+      "legFL.r": 0,
+      "shinFL.r": 0,
+      "pawFL.r": 0,
+      "legFR.x": 0,
+      "legFR.y": 0,
+      "legFR.r": 0,
+      "shinFR.r": 0,
+      "pawFR.r": 0,
+      "legBL.x": 0,
+      "legBL.y": 0,
+      "legBL.r": 0,
+      "shinBL.r": 0,
+      "pawBL.r": 0,
+      "legBR.x": 0,
+      "legBR.y": 0,
+      "legBR.r": 0,
+      "shinBR.r": 0,
+      "pawBR.r": 0,
+      "tail1.r": -0.3516,
+      "tail2.r": 0.12,
+      "tail3.r": 0.18,
+      "tail4.r": 0.22
+    },
+    "sit": {
+      "hips.x": -13.9802,
+      "hips.y": 46.5652,
+      "body.r": -0.5118,
+      "neck.r": 0,
+      "head.r": 0.4606,
+      "legFL.x": 13.9802,
+      "legFL.y": -46.5652,
+      "legFL.r": 0,
+      "shinFL.r": 0,
+      "pawFL.r": 0,
+      "legFR.x": 13.9802,
+      "legFR.y": -46.5652,
+      "legFR.r": 0,
+      "shinFR.r": 0,
+      "pawFR.r": 0,
+      "legBL.x": 35.7625,
+      "legBL.y": 36.6905,
+      "legBL.r": -2.2123,
+      "shinBL.r": 2.2887,
+      "pawBL.r": -0.0764,
+      "legBR.x": 35.7625,
+      "legBR.y": 36.6905,
+      "legBR.r": -2.2123,
+      "shinBR.r": 2.2887,
+      "pawBR.r": -0.0764,
+      "tail1.r": -1.4298,
+      "tail2.r": 0.7,
+      "tail3.r": 0.6,
+      "tail4.r": 0.45
+    },
+    "pawUp": {
+      "hips.x": -13.9802,
+      "hips.y": 46.5652,
+      "body.r": -0.5118,
+      "neck.r": 0,
+      "head.r": 0.5806,
+      "legFL.x": 13.9802,
+      "legFL.y": -46.5652,
+      "legFL.r": -2.1,
+      "shinFL.r": 2,
+      "pawFL.r": 0.4,
+      "legFR.x": 13.9802,
+      "legFR.y": -46.5652,
+      "legFR.r": 0,
+      "shinFR.r": 0,
+      "pawFR.r": 0,
+      "legBL.x": 35.7625,
+      "legBL.y": 36.6905,
+      "legBL.r": -2.2123,
+      "shinBL.r": 2.2887,
+      "pawBL.r": -0.0764,
+      "legBR.x": 35.7625,
+      "legBR.y": 36.6905,
+      "legBR.r": -2.2123,
+      "shinBR.r": 2.2887,
+      "pawBR.r": -0.0764,
+      "tail1.r": -1.4298,
+      "tail2.r": 0.7,
+      "tail3.r": 0.6,
+      "tail4.r": 0.45
+    },
+    "lie": {
+      "hips.x": 0,
+      "hips.y": 88.7997,
+      "body.r": -0.05,
+      "neck.r": 0,
+      "head.r": 0.05,
+      "legFL.x": 2.3965,
+      "legFL.y": -4.1608,
+      "legFL.r": -1.1976,
+      "shinFL.r": -0.4483,
+      "pawFL.r": 1.6459,
+      "legFR.x": 2.3965,
+      "legFR.y": -4.1608,
+      "legFR.r": -1.1976,
+      "shinFR.r": -0.4483,
+      "pawFR.r": 1.6459,
+      "legBL.x": 2.6089,
+      "legBL.y": 4.3357,
+      "legBL.r": -2.3455,
+      "shinBL.r": 1.8964,
+      "pawBL.r": 0.4491,
+      "legBR.x": 2.6089,
+      "legBR.y": 4.3357,
+      "legBR.r": -2.3455,
+      "shinBR.r": 1.8964,
+      "pawBR.r": 0.4491,
+      "tail1.r": -2.0916,
+      "tail2.r": -0.2,
+      "tail3.r": 0.1,
+      "tail4.r": 0.4
+    },
+    "beg": {
+      "hips.x": -26,
+      "hips.y": 20.4555,
+      "body.r": -0.98,
+      "neck.r": 0,
+      "head.r": 0.86,
+      "legFL.x": 5.2007,
+      "legFL.y": -90.2497,
+      "legFL.r": -1.2,
+      "shinFL.r": 1.5,
+      "pawFL.r": 0.25,
+      "legFR.x": 5.2007,
+      "legFR.y": -90.2497,
+      "legFR.r": -1.32,
+      "shinFR.r": 1.54,
+      "pawFR.r": 0.33,
+      "legBL.x": 80.5069,
+      "legBL.y": 50.9349,
+      "legBL.r": -1.9489,
+      "shinBL.r": 2.0392,
+      "pawBL.r": -0.0903,
+      "legBR.x": 80.5069,
+      "legBR.y": 50.9349,
+      "legBR.r": -1.9489,
+      "shinBR.r": 2.0392,
+      "pawBR.r": -0.0903,
+      "tail1.r": -1.6616,
+      "tail2.r": 0.6,
+      "tail3.r": 0.5,
+      "tail4.r": 0.5
+    },
+    "bow": {
+      "hips.x": 13.0893,
+      "hips.y": 45.0054,
+      "body.r": 0.4673,
+      "neck.r": 0,
+      "head.r": -0.6673,
+      "legFL.x": -31.3175,
+      "legFL.y": 31.5799,
+      "legFL.r": -1.0245,
+      "shinFL.r": -0.6214,
+      "pawFL.r": 1.6459,
+      "legFR.x": -31.3175,
+      "legFR.y": 31.5799,
+      "legFR.r": -1.0245,
+      "shinFR.r": -0.6214,
+      "pawFR.r": 1.6459,
+      "legBL.x": -13.0893,
+      "legBL.y": -45.0054,
+      "legBL.r": 0,
+      "shinBL.r": 0,
+      "pawBL.r": 0,
+      "legBR.x": -13.0893,
+      "legBR.y": -45.0054,
+      "legBR.r": 0,
+      "shinBR.r": 0,
+      "pawBR.r": 0,
+      "tail1.r": -0.6589,
+      "tail2.r": 0.25,
+      "tail3.r": 0.25,
+      "tail4.r": 0.25
+    },
+    "wag": {
+      "hips.x": 0,
+      "hips.y": 0,
+      "body.r": 0,
+      "neck.r": 0,
+      "head.r": 0,
+      "legFL.x": 0,
+      "legFL.y": 0,
+      "legFL.r": 0,
+      "shinFL.r": 0,
+      "pawFL.r": 0,
+      "legFR.x": 0,
+      "legFR.y": 0,
+      "legFR.r": 0,
+      "shinFR.r": 0,
+      "pawFR.r": 0,
+      "legBL.x": 0,
+      "legBL.y": 0,
+      "legBL.r": 0,
+      "shinBL.r": 0,
+      "pawBL.r": 0,
+      "legBR.x": 0,
+      "legBR.y": 0,
+      "legBR.r": 0,
+      "shinBR.r": 0,
+      "pawBR.r": 0,
+      "tail1.r": -0.1416,
+      "tail2.r": 0.3,
+      "tail3.r": 0.3,
+      "tail4.r": 0.25
+    },
+    "tilt": {
+      "head.r": 0.32
+    }
+  },
+  "expressions": "kit",
+  "life": {
+    "seed": 11
+  }
+}

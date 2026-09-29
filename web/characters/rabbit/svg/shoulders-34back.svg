@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -90 280 170">
+  <title>Clover: the body over the near front leg's top, three-quarter from behind (body-34back.svg, clipped)</title>
+  <defs>
+    <clipPath id="c2"><ellipse cx="78" cy="30" rx="40" ry="34"/></clipPath>
+  </defs>
+  <g clip-path="url(#c2)">
+    <path d="M -60 -62 C -20 -64 30 -52 64 -38 C 92 -26 100 -4 96 18 C 92 42 76 56 56 58 C 32 60 12 50 -18 52 C -48 54 -82 66 -106 50 C -130 34 -136 0 -128 -24 C -118 -50 -92 -60 -60 -62 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+</svg>

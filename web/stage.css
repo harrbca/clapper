@@ -11,6 +11,17 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0f14; col
 #ui label { display: flex; gap: 5px; align-items: center; white-space: nowrap; cursor: pointer; }
 #seek { flex: 1; min-width: 120px; accent-color: #FF8A1F; }
 #clock { font-variant-numeric: tabular-nums; min-width: 150px; text-align: right; color: #B8C4D0; }
+#ui button.quiet, #notebox button.quiet { background: #1E2833; color: inherit; border: 1px solid #334456; min-width: 0; padding: 6px 12px; }
+#stills { color: #B8C4D0; text-decoration: none; border: 1px solid #334456; border-radius: 6px; padding: 5px 10px; }
+#stills:hover, #ui button.quiet:hover { border-color: #FF8A1F; color: #fff; }
+
+#notebox { position: fixed; left: 50%; bottom: 72px; transform: translateX(-50%); width: min(720px, 92vw); display: flex; gap: 10px;
+           align-items: center; padding: 10px 12px; border-radius: 10px; background: #141c26; border: 1px solid #FF8A1F; z-index: 6; }
+#notebox[hidden] { display: none; }
+#notewhere { font: 12px ui-monospace, Consolas, monospace; color: #B8C4D0; white-space: nowrap; }
+#notetext { flex: 1; min-width: 0; font: inherit; background: #0b0f14; color: inherit; border: 1px solid #334456; border-radius: 6px; padding: 7px 9px; }
+#notetext:focus { outline: 2px solid #FF8A1F; outline-offset: 1px; }
+#notebox button { font: inherit; font-weight: 700; background: #FF8A1F; color: #1B2330; border: 0; border-radius: 8px; padding: 7px 14px; cursor: pointer; }
 
 #hud { position: fixed; left: 12px; top: 12px; max-width: 460px; padding: 10px 12px; border-radius: 10px; background: rgba(10, 14, 20, 0.86);
        font: 12px/1.5 ui-monospace, Consolas, monospace; white-space: pre; pointer-events: none; }
@@ -21,4 +32,4 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0f14; col
 body.render { background: transparent; }
 body.render #wrap { inset: 0; display: block; }
 body.render #stage { transform: none !important; box-shadow: none; }
-body.render #ui, body.render #hud { display: none; }
+body.render #ui, body.render #hud, body.render #notebox { display: none; }

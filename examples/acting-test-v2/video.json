@@ -1,0 +1,32 @@
+{
+  "title": "Pip: acting test (shared style)",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "background": "#8FC3D4",
+  "style": {
+    "ink": "#1D1A24",
+    "line": 3.4,
+    "line3d": 3
+  },
+  "entry": "scenes/index.js",
+  "capture": "canvas",
+  "hidpi": true,
+  "fonts": [
+    {
+      "family": "Roboto",
+      "weight": 500,
+      "src": "@kit/fonts/Roboto-Medium.ttf"
+    },
+    {
+      "family": "Roboto",
+      "weight": 700,
+      "src": "@kit/fonts/Roboto-Bold.ttf"
+    }
+  ],
+  "chapters": {
+    "test": "Acting test",
+    "end": null
+  },
+  "loudness": -16
+}

@@ -1,0 +1,59 @@
+{
+ "request": {
+  "text": "Biscuit would very much like to be friends.",
+  "voice": "JBFqnCBsd6RMkjVDRZzb",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "This is Biscuit. And this is Miso.",
+  "next_text": "Miso is not so sure.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Biscuit",
+   "start": 0,
+   "end": 0.453
+  },
+  {
+   "w": "would",
+   "start": 0.488,
+   "end": 0.639
+  },
+  {
+   "w": "very",
+   "start": 0.685,
+   "end": 0.882
+  },
+  {
+   "w": "much",
+   "start": 0.94,
+   "end": 1.126
+  },
+  {
+   "w": "like",
+   "start": 1.184,
+   "end": 1.358
+  },
+  {
+   "w": "to",
+   "start": 1.393,
+   "end": 1.44
+  },
+  {
+   "w": "be",
+   "start": 1.498,
+   "end": 1.579
+  },
+  {
+   "w": "friends.",
+   "start": 1.625,
+   "end": 2.879
+  }
+ ]
+}

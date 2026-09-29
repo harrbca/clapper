@@ -1,0 +1,54 @@
+{
+ "request": {
+  "text": "Not that I needed the help. Obviously.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "No keyframes? No timeline? Nothing? Okay. That's actually... kind of amazing.",
+  "next_text": null,
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Not",
+   "start": 0,
+   "end": 0.174
+  },
+  {
+   "w": "that",
+   "start": 0.209,
+   "end": 0.313
+  },
+  {
+   "w": "I",
+   "start": 0.36,
+   "end": 0.383
+  },
+  {
+   "w": "needed",
+   "start": 0.441,
+   "end": 0.685
+  },
+  {
+   "w": "the",
+   "start": 0.708,
+   "end": 0.778
+  },
+  {
+   "w": "help.",
+   "start": 0.836,
+   "end": 1.231
+  },
+  {
+   "w": "Obviously.",
+   "start": 1.358,
+   "end": 2.229
+  }
+ ]
+}

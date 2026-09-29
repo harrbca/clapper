@@ -17,7 +17,15 @@
   <select id="rate" aria-label="Speed"><option value="0.5">0.5x</option><option value="1" selected>1x</option></select>
   <label title="Loop the current scene"><input id="loop" type="checkbox"> Loop</label>
   <label title="Show cues and the current line (D)"><input id="debug" type="checkbox"> Cues</label>
+  <button id="note" class="quiet" type="button" title="Write a note on this frame (N)">Note</button>
+  <a id="stills" href="/@kit/stills.html" target="_blank" title="The renders in out/: stills, sheets and frames, as they're made">Stills</a>
 </div>
+<form id="notebox" hidden>
+  <span id="notewhere"></span>
+  <input id="notetext" autocomplete="off" placeholder="What should change here?" aria-label="The note">
+  <button type="submit">Save</button>
+  <button id="notecancel" class="quiet" type="button">Cancel</button>
+</form>
 <div id="hud" hidden></div>
 <div id="banner" hidden></div>
 <audio id="audio" preload="auto"></audio>

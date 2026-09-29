@@ -1,0 +1,29 @@
+{
+ "request": {
+  "text": "That's Clapper.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "tap Done, and she takes it from here. And when the video's done, one command puts it on YouTube.",
+  "next_text": "Words in, video out.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "That's",
+   "start": 0,
+   "end": 0.255
+  },
+  {
+   "w": "Clapper.",
+   "start": 0.302,
+   "end": 1.115
+  }
+ ]
+}

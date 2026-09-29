@@ -1,0 +1,86 @@
+{
+ "viewport": {
+  "width": 360,
+  "height": 518
+ },
+ "scale": 2,
+ "address": "scanapp/index.html",
+ "steps": [
+  {
+   "id": "home",
+   "kind": "shot",
+   "img": "00-home.png",
+   "title": "Pick"
+  },
+  {
+   "id": "scanOrder",
+   "kind": "act",
+   "at": [
+    223,
+    404
+   ],
+   "img": "01-scanOrder.png",
+   "title": "Pick"
+  },
+  {
+   "id": "tapPick",
+   "kind": "click",
+   "at": [
+    180,
+    149.4375
+   ],
+   "box": [
+    12,
+    110.890625,
+    336,
+    77.09375
+   ],
+   "cursor": "default",
+   "hover": "02-tapPick-hover.png",
+   "img": "03-tapPick.png",
+   "title": "Pick"
+  },
+  {
+   "id": "scanBin",
+   "kind": "act",
+   "at": [
+    180,
+    149.4375
+   ],
+   "img": "04-scanBin.png",
+   "title": "Pick"
+  },
+  {
+   "id": "scanTo",
+   "kind": "act",
+   "at": [
+    180,
+    149.4375
+   ],
+   "img": "05-scanTo.png",
+   "title": "Pick"
+  },
+  {
+   "id": "tapDone",
+   "kind": "click",
+   "at": [
+    180,
+    478
+   ],
+   "box": [
+    12,
+    450,
+    336,
+    56
+   ],
+   "cursor": "default",
+   "hover": "06-tapDone-hover.png",
+   "img": "07-tapDone.png",
+   "title": "Pick"
+  }
+ ],
+ "pointer": [
+  223,
+  404
+ ]
+}

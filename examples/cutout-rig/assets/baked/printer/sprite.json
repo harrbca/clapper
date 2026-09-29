@@ -1,0 +1,39 @@
+{
+  "name": "printer",
+  "prop": "@kit/printers3d.js#labelPrinter3d",
+  "args": {},
+  "scale": 0.32,
+  "res": 2,
+  "line": 2.04,
+  "elevation": 8,
+  "shadow": true,
+  "angles": {
+    "0": {
+      "file": "0.png",
+      "w": 196,
+      "h": 257,
+      "anchor": [
+        97.65,
+        232.35
+      ]
+    },
+    "45": {
+      "file": "45.png",
+      "w": 362,
+      "h": 260,
+      "anchor": [
+        180,
+        234.67
+      ]
+    },
+    "90": {
+      "file": "90.png",
+      "w": 346,
+      "h": 237,
+      "anchor": [
+        170.7,
+        222.72
+      ]
+    }
+  }
+}

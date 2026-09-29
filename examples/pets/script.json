@@ -1,0 +1,15 @@
+{
+  "voice": { "name": "George", "id": "JBFqnCBsd6RMkjVDRZzb" },
+  "model": "eleven_multilingual_v2",
+  "settings": { "stability": 0.3, "similarity_boost": 0.75, "style": 0.55, "use_speaker_boost": true, "speed": 1 },
+  "scenes": [
+    { "id": "meet", "lines": [
+      { "id": "biscuit", "text": "This is Biscuit." },
+      { "id": "miso", "text": "And this is Miso." },
+      { "id": "friends", "text": "Biscuit would very much like to be friends." },
+      { "id": "sure", "text": "Miso is not so sure." },
+      { "id": "blink", "text": "Then Miso blinks, very slowly." },
+      { "id": "yes", "text": "In cat, that means yes." }
+    ]}
+  ]
+}

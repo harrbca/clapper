@@ -117,14 +117,51 @@ function player() {
   scenes.onchange = () => go(+scenes.value);
   $('rate').onchange = e => (audio.playbackRate = +e.target.value);
   $('debug').onchange = e => (hud.hidden = !e.target.checked);
+
+  // Notes: N (or the Note button) writes a note on this frame. The preview keeps them in notes.json
+  // in the project, and clap notes lists them for whoever works on the video next.
+  const box = $('notebox'), text = $('notetext');
+  let notes = [];
+  const loadNotes = () => fetch('/@notes', { cache: 'no-store' }).then(r => (r.ok ? r.json() : [])).then(n => (notes = n)).catch(() => {});
+  loadNotes();
+  const openNote = () => {
+    audio.pause();
+    const s = sceneAt(t);
+    Object.assign(box.dataset, { t, scene: s.id });
+    $('notewhere').textContent = `${s.id} · ${fmt(t)} · frame ${Math.round(t * FPS)}`;
+    box.hidden = false; text.value = ''; text.focus();
+  };
+  const closeNote = () => { box.hidden = true; text.blur(); };
+  $('note').onclick = openNote;
+  $('notecancel').onclick = closeNote;
+  text.onkeydown = e => { if (e.key === 'Escape') { e.preventDefault(); closeNote(); } };
+  box.onsubmit = async e => {
+    e.preventDefault();
+    const words = text.value.trim();
+    if (!words) return;
+    const at = Number(box.dataset.t);
+    try {
+      const r = await fetch('/@notes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scene: box.dataset.scene, t: at, frame: Math.round(at * FPS), text: words }) });
+      const saved = await r.json();
+      if (!r.ok) throw new Error(saved.error || `HTTP ${r.status}`);
+      closeNote();
+      banner(`Note ${saved.id} saved at ${fmt(at)}: clap notes lists it`, 'info');
+      setTimeout(() => banner(''), 2500);
+      loadNotes();
+    } catch (err) {
+      banner(`The note wasn't saved: ${err.message}${/404/.test(err.message) ? ' (notes need clap preview)' : ''}`);
+    }
+  };
+
   addEventListener('keydown', e => {
-    if (e.target.tagName === 'SELECT') return;
+    if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
     const step = { ArrowRight: e.shiftKey ? 1 : 5, ArrowLeft: e.shiftKey ? -1 : -5, '.': 1 / FPS, ',': -1 / FPS }[e.key];
     if (e.code === 'Space') { e.preventDefault(); play.click(); }
     else if (step) { e.preventDefault(); go(t + step); }
     else if (e.key === 'Home') go(0);
     else if (e.key === 'End') go(TL.dur - 0.01);
     else if (e.key === 'd' || e.key === 'D') { const d = $('debug'); d.checked = !d.checked; d.onchange({ target: d }); }
+    else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); openNote(); }
     else if (e.key === '[' || e.key === ']') {
       const i = TL.scenes.indexOf(sceneAt(t)) + (e.key === ']' ? 1 : -1);
       if (TL.scenes[i]) go(TL.scenes[i].start);
@@ -135,7 +172,8 @@ function player() {
   const hudText = () => {
     const s = sceneAt(t), ln = TL.lines.find(l => t >= l.start - 0.15 && t < l.end + 0.5);
     const near = cueNames.filter(([, v]) => Math.abs(v - t) < 3).map(([k, v]) => `${v < t ? '  ' : '> '}${k.padEnd(14)} ${fmt(v)}  ${(v - t >= 0 ? '+' : '') + (v - t).toFixed(2)}`);
-    return `t ${t.toFixed(3)}   frame ${Math.round(t * FPS)}   scene ${s.id}\n${ln ? `line ${ln.id}: ${ln.text}\n` : ''}${near.join('\n')}`;
+    const noted = notes.filter(n => n.status === 'open' && Math.abs(n.t - t) < 3).map(n => `  note ${n.id} at ${fmt(n.t)}: ${n.text.length > 44 ? n.text.slice(0, 43) + '…' : n.text}`);
+    return `t ${t.toFixed(3)}   frame ${Math.round(t * FPS)}   scene ${s.id}\n${ln ? `line ${ln.id}: ${ln.text}\n` : ''}${[...near, ...noted].join('\n')}`;
   };
 
   const loop = async () => {

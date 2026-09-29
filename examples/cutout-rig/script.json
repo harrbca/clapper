@@ -1,0 +1,13 @@
+{
+  "voice": { "name": "Callum", "id": "N2lVS1w4EtoT3dr4eOWO" },
+  "model": "eleven_multilingual_v2",
+  "settings": { "stability": 0.3, "similarity_boost": 0.75, "style": 0.55, "use_speaker_boost": true, "speed": 1 },
+  "scenes": [
+    { "id": "test", "lines": [
+      { "id": "hi", "text": "Morning! I'm Dex. I pick orders on the night shift." },
+      { "id": "scan", "text": "See this? Scan the bin, scan the item. Done." },
+      { "id": "beep", "text": "Wrong bin? It beeps at you. Loudly." },
+      { "id": "go", "text": "Anyway. Aisle twelve isn't going to pick itself." }
+    ]}
+  ]
+}

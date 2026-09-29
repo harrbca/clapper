@@ -1,0 +1,44 @@
+{
+ "request": {
+  "text": "Then Miso blinks, very slowly.",
+  "voice": "JBFqnCBsd6RMkjVDRZzb",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Biscuit would very much like to be friends. Miso is not so sure.",
+  "next_text": "In cat, that means yes.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Then",
+   "start": 0,
+   "end": 0.232
+  },
+  {
+   "w": "Miso",
+   "start": 0.302,
+   "end": 0.592
+  },
+  {
+   "w": "blinks,",
+   "start": 0.65,
+   "end": 1.161
+  },
+  {
+   "w": "very",
+   "start": 1.219,
+   "end": 1.44
+  },
+  {
+   "w": "slowly.",
+   "start": 1.498,
+   "end": 2.368
+  }
+ ]
+}

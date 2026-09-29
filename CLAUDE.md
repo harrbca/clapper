@@ -4,7 +4,9 @@ Clapper is a kit for narrated, animated videos: frames drawn in headless Chrome 
 three.js), narration from ElevenLabs, one ffmpeg encode. The README is the manual; read it first
 (for 3D, its "Making a 3D video"). Generic features go into the kit (`web/`, `lib/`, `bin/`),
 per-video art and scripts into the video's own project. `examples/` holds projects that show the kit
-off; `templates/` holds the starters `clap new` copies.
+off; `templates/` holds the starters `clap new` copies. Stock characters are in `web/characters/`: the
+cut-out ones are data (a folder with `character.json` and SVG drawings, loaded by `loadCutout`; see
+the README's "Characters as data"), and `tools/make_people.py` makes the cast of people.
 
 These rules are for everyone. The user's own (their commit identity, where their projects and assets
 live, work they have paused) are in `CLAUDE.local.md` next to this file, if there is one. Git ignores
@@ -34,11 +36,16 @@ it; offer to start one when a user states a preference that belongs there.
 
 Look at frames, don't assume them. The user will notice glitches, so find them first.
 
+- Start from the director's notes: `clap notes` lists what they wrote on frames in the preview. When
+  one is dealt with, close it with a reply saying what changed (`clap notes done <id> "..."`).
+- `clap check` draws every drawing and runs the declared characters' checks on all of them. Run it
+  before rendering, and treat its warnings as glitches to fix, or make the contact `quiet` when a
+  scene lets go of it on purpose.
 - `clap still <t> --entry scenes/lab-*.js` renders lab pages (turnarounds, expression charts, prop
   close-ups); `clap sheet` makes contact sheets of the timeline's review moments, and `clap sheet
   <name> <time>...` of any others.
-- Also check in-between frames from the rendered video (`ffmpeg -ss <t> -i out/video.mp4 -frames:v 1`):
-  transitions are where things break.
+- Also check in-between frames: `clap frames <from> <to>` renders each drawing between two times with
+  a labelled strip (`--crop` to look closely). Transitions are where things break.
 - 3D geometry: render close-ups of every contact (feet on the floor, a hand round a handle, a pallet
   on its beams, a label on a beam), from more than one side. When something is off, log positions
   (`console.warn` shows up in clap's output) instead of guessing.
@@ -47,6 +54,9 @@ Look at frames, don't assume them. The user will notice glitches, so find them f
 - 2D characters: after changing a rig, check the drawing order (arms in front of the head, near and
   far limbs when turned) and transitions between poses (hands mustn't sweep through the face).
 - Animation on twos and motion blur don't mix (blur shows both drawings).
+- After changing a stock character (its JSON, SVGs or the kit code it uses), run `clap check
+  --affected <id>` and look at the diffs before committing; approve only what was meant. Bump its
+  `version` for changes that break scenes, and update the scenes' `requires`.
 
 ## Gotchas
 

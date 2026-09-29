@@ -1,0 +1,44 @@
+{
+ "request": {
+  "text": "In cat, that means yes.",
+  "voice": "JBFqnCBsd6RMkjVDRZzb",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Miso is not so sure. Then Miso blinks, very slowly.",
+  "next_text": null,
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "In",
+   "start": 0,
+   "end": 0.174
+  },
+  {
+   "w": "cat,",
+   "start": 0.255,
+   "end": 0.685
+  },
+  {
+   "w": "that",
+   "start": 0.743,
+   "end": 0.906
+  },
+  {
+   "w": "means",
+   "start": 0.952,
+   "end": 1.173
+  },
+  {
+   "w": "yes.",
+   "start": 1.219,
+   "end": 1.95
+  }
+ ]
+}

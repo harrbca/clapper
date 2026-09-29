@@ -21,6 +21,15 @@ number of Chrome processes at once.
   when the timeline does.
 - **Render:** MP4 with the soundtrack and chapter markers, plus SRT and VTT captions. The whole
   3-minute 1080p video renders in about 30 s on an i9.
+- **Characters:** stock characters in three styles: toon puppets (Pip and Gus), cut-out characters
+  made as data, JSON and SVG drawings (Dex, a cast of ten office and warehouse people, and three
+  pets), and 3D (Pip, Tilly, Tilly v2 and Ray). Declared characters are checked as they're drawn: a
+  pose key that doesn't exist, a knee bent backwards, a hand that can't reach.
+- **2D and 3D together:** one ink style for all of it, 3D props baked into sprites for cut-out
+  scenes, and cut-out characters laid out in a 3D set, at the right size and in the right order.
+- **Checking:** `clap check` draws every frame and runs the characters' checks; `clap frames`
+  shows each drawing between two times; notes written on frames in the preview; and `clap check
+  --affected` shows what a change to a character does to every video that uses it.
 
 ## Setup
 
@@ -55,9 +64,15 @@ folders outside the kit, and point `clap` at them (`--project`, or run it from i
 | `clap new <folder> [--template 3d]` | a new project from a starter: 2D, or 3D (Pip, a desk and a label printer) |
 | `clap voice [--voice NAME] [--audition] [--music] [--draft]` | narration (and a voice audition, and the music bed) from ElevenLabs |
 | `clap build [--no-audio]` | `build/timeline.json`, `build/mix.wav`, `build/captions.srt` and `.vtt` |
-| `clap preview [--port 4173] [--open]` | the live player. Space plays, arrows skip (Shift: 1 s), `,` `.` step a frame, `[` `]` jump scenes, D shows cues |
+| `clap preview [--port 4173] [--open]` | the live player. Space plays, arrows skip (Shift: 1 s), `,` `.` step a frame, `[` `]` jump scenes, D shows cues, N writes a note on the frame. Its Stills page shows renders as they're made |
 | `clap still <time>...` | full-size PNGs in `out/stills` |
 | `clap sheet [name] [time...]` | 2x2 contact sheets; by default of the timeline's review list |
+| `clap frames <from> <to> [--every 2] [--crop x,y,w,h] [--tile 6]` | each drawing between two times (cues work), straight from the page, and a strip of them labelled with their times, in `out/frames/` |
+| `clap check [--every 2] [--no-sheets]` | draws every drawing without saving it, so every character check runs; errors stop it, warnings are listed once each; then the review sheets |
+| `clap check --affected <character> [folder...] [--approve]` | what a change to a character does to the videos that use it: their review frames and lab pages, drawn in software and compared with the approved ones (below) |
+| `clap notes [all \| done <id> [reply] \| reopen <id>]` | the notes written on frames in the preview, from `notes.json` |
+| `clap list [character]` | what a declared character understands: tags, chains, pieces, pose keys, poses, expressions, clips; and the named shots and easings. Without a name, the kit's characters |
+| `clap bake <module#export> [--angles 0,45,90] [--scale 1] [--line px] [--res 2] [--elevation 8] [--args JSON] [--no-shadow]` | a 3D prop drawn from set angles into PNG sprites with transparent backgrounds, for 2D scenes (below) |
 | `clap render [out.mp4] [--draft] [--scale 2] [--from s] [--to s] [--workers 8] [--encoder x264\|nvenc]` | the video. `--draft` is half size and fast; `--scale 2` is 4K when the project is `hidpi` |
 | `clap capture <script.js> [--headed]` | drives a web page as the script says and keeps each state's screenshot, for `screen.js` (below) |
 | `clap upload [file.mp4] [--privacy private\|unlisted\|public] [--title T] [--description D] [--login]` | the video to YouTube, private unless asked (below) |
@@ -174,6 +189,15 @@ pole)` two-bone IK for arms and legs. Two 3D stock characters are made from it:
   spins and flashes, a telescoping mast, and forks she can lift, tilt, spread and wave one at a time.
   `tillyPose(t, moves, { path })` rolls her wheels along a path and pitches her on her springs as
   she speeds up and brakes. `forkTop()` says where a load on her forks goes.
+- `/@kit/characters/tilly3d-v2.js`: Tilly v2, a real 2.5 t counterbalance forklift, to scale in
+  millimetres, with her face in her: big eyes in the windscreen of her overhead guard (lids for blinks
+  and five moods, a look direction) and a mouth on the front of her body that follows lip-sync. A
+  three-stage mast that stands under her eyes when lowered (raised, its rails cross them, so bring the
+  forks down to act), a tilting mast, steer wheels that turn, a beacon and work lights. She takes the
+  first Tilly's pose keys, so `tillyPose` drives her too (it's re-exported), plus a few of her own
+  (`steer`, lids, `eyes.squint`); `driveAlong(path, t)` drives her round curves. The module's header
+  lists them all. `examples/tilly-v2` shows her off, with lab pages for her turnaround, face, contacts
+  and lift (voiced by Jessica).
 
 `examples/3d-cast` puts them both in a toon warehouse, all in 3D, with lab pages for each.
 
@@ -319,6 +343,15 @@ with lip-sync, blinking, IK gestures and a spring-driven ponytail) and Bolt (a h
 goes on to a web capture and a 3D tour: a label printed, walked to its bin and picked with a scanner,
 onto Tilly.
 
+The kit's characters are in `web/characters/`; `clap list` names them, and `clap list <name>` prints
+what a declared one understands:
+
+| style | characters | see |
+|---|---|---|
+| toon, drawn in code | Pip (`pip`), Gus (`gus`) | Stock characters, below |
+| cut-out, as data | Dex (`dex`); the cast: Rosa, Marcus, Priya, Walt, Jess, Dana, Kenji, Amara, Greg, Linda; the pets: Biscuit (`dog`), Miso (`cat`), Clover (`rabbit`) | Cut-out characters |
+| 3D | Pip (`pip3d`), Tilly (`tilly3d`), Tilly v2 (`tilly3d-v2`), Ray (`ray3d`, skinned) | 3D, and Skinned characters |
+
 ### Stock characters: Pip and Gus
 
 `/@kit/characters/pip.js` (Pip, a young presenter) and `/@kit/characters/gus.js` (Gus, an old-school
@@ -347,6 +380,265 @@ a two-shot and singles.
 In `choreo`, a move can `anticipate` (wind back before it goes), and `E.snap` lands fast and settles.
 `onTwos(t)` holds time in steps of two frames, for anything else that should move like drawn animation.
 
+### Cut-out characters: cutout.js and Dex
+
+`/@kit/cutout.js` rigs characters the way TV cut-out animation does (the Toon Boom Harmony look of
+adult animated sitcoms): flat colour and one even ink line, with drawings swapped rather than bent.
+`/@kit/characters/dex.js` is Dex, a warehouse picker in a hi-vis vest, made from it. Dex is data:
+a JSON file and SVG drawings in `web/characters/dex/` (see "Characters as data", below).
+
+**A character is declared as data** (`/@kit/character.js`), so it can be checked. In code:
+
+```js
+export const dex = defineCutout({
+  id: 'dex', version: 1, name: 'Dex',
+  bones: [{ name: 'hips', at: [0, -424] }, { name: 'legL', parent: 'hips', at: [-34, -4], len: 196, piece: 'legL' }, ...],
+  tags: {
+    root: 'hips', chest: 'torso', look: 'head',
+    chains: { legL: { bones: ['legL', 'shinL', 'footL'], side: 'L', kind: 'leg', bend: 'forward' }, ... },
+  },
+  pieces: { head: angleSet('head', { 0: front, 1: threeQuarter, 2: profile, 3: backThreeQuarter, 4: back }), handL: handPiece('handL', -1, { skin }), mouth: mouthChart(), ... },
+  rest, poses, expressions, life: { seed: 7 },
+});
+```
+
+- **Bones** are the engine's parts (name, parent, pivot `at`, `len`, `z`), each wearing a piece or
+  nothing. **Tags** say what they are for: `root`, `chest` and `look` (the head), and **chains**,
+  lines of bones with a `side` (L pairs with its R twin, for mirroring), a `kind` (`arm`, `leg`) and
+  which way they `bend`. The kit finds everything through the tags, so a character can have any
+  bones: nothing in cutout.js names an arm.
+- **Pose keys** are each bone's `.r`, `.x`, `.y`, `.s`, `.sx`, `.sy` and `.z`, and whatever the
+  character and its pieces declare (`'mouth.shape'`, `'handR.flip'`, `'eyes.x'` ...).
+- **Checks** fail loudly, saying what and where. At definition: bones, parents, pieces and tags that
+  don't exist, chains that aren't lines of bones, swap sets missing a drawing (an angle, a hand)
+  without a declared stand-in, and typos in the rest pose, poses and expressions. When moves load and
+  as frames are drawn: a key the character doesn't have ("the move at t = 7.35 uses 'handR.shpe' ...
+  Did you mean 'handR.shape'?"), values that aren't numbers (NaN, undefined), `.shape` values that
+  aren't one of its drawings, and a helper asking for a tag or chain it hasn't got. `clap` prints the
+  message; `CLAP_DEBUG=1` adds the stack.
+- **Warnings**, printed once each with the time: an IK target out of reach (the limb stops short),
+  a bone turned beyond its `limits` (Dex's knees can't bend backwards; limits are given facing right
+  and mirrored facing left), a chain drawn partly behind the body and partly in front, and a squash
+  or stretch keyed away from rest and never keyed back. A contact a scene is letting go of can be
+  `quiet`.
+- **Clips** are timed moves written against the tags, so any character with the same chains can
+  play them: `'@armR.0.r'` is the first bone of chain armR, `'@look.r'` the head, and `'rest'` the
+  character's own rest value. `moves([...dex.play('wave', c.hello), ...dex.play('shrug', c.so, {
+  mirror: true })])`: `mirror` plays it on the other side, `speed` faster or slower. The kit's
+  `CLIPS` for bipeds: `wave`, `point`, `shrug`, `thumbsUp`, `take` and `turn({ from, to })`.
+- `clap list dex` prints all of it: the tags and chains, the pieces and their drawings, every pose
+  key, the poses, expressions and clips, and the named shots and easings.
+
+**Characters as data.** A cut-out character can be a folder, with `character.json` and SVG
+drawings, that `loadCutout` reads: `export const dex = await loadCutout(new URL('./dex/',
+import.meta.url).href)` is all of `characters/dex.js`. The JSON is what `defineCutout` takes, as
+plain data (bones, tags, limits, rest, poses), and its pieces name SVG files or the kit's own
+drawings:
+
+```json
+"pieces": {
+  "head": { "angles": { "0": "svg/head-front.svg", "1": "svg/head-34.svg", "2": "svg/head-side.svg", "3": "svg/head-34back.svg", "4": "svg/head-back.svg" }, "of": "head" },
+  "neck": { "svg": "svg/neck.svg" },
+  "armL": { "kit": "noodle", "a": 150, "b": 138, "bend": "foreL", "w": 27, "w2": 25, "color": "skin", "sleeve": { "len": 60, "w": 42, "color": "shirt" } },
+  "handL": { "kit": "hand", "side": -1, "skin": "skin", "size": 1.05 },
+  "footL": { "angles": { ... }, "fallback": { "3": 2 }, "scale": 1.2, "front": { "flip": -1, "rotate": 0.06 } }
+}
+```
+
+- `palette` names colours that the rest of the JSON can use by name. `.shape` values can be names
+  (`"relaxed"`), and `expressions` and `clips` can be `"kit"` for the kit's own.
+- **SVG drawings** (`/@kit/svgdraw.js`) are read once and replayed as canvas calls, so they stay
+  sharp at any zoom and draw exactly as the kit's own drawings do. Their coordinates are the
+  piece's (for a head, the top of the neck is the origin); the viewBox is only for looking at them
+  in an editor. They can use path, rect, polyline, line, circle, ellipse, g (with a transform and
+  clip-path) and clipPath. Anything else is an error, so a drawing never quietly loses a part.
+  Strokes are round-capped and round-joined, like the kit's ink.
+- **Faces:** a head's SVG marks where the kit's features go, and the kit draws them with the pose:
+  `<g data-feature="eye" data-side="-1" data-look="0.35" transform="translate(-6 -104) scale(0.96
+  1)"/>`, `data-feature="brow"`, and `<g data-feature="mouth" data-x="42" data-y="-44"
+  data-sx="0.84" data-drop="0.35"/>` (the mouth moves down as the jaw drops, so it's placed with
+  data rather than a transform). `face` in the JSON sets the features' look: eye size, lid colour,
+  mouth width.
+- **Shape keys:** `<path d="..." data-morph="jaw" data-morph-at="30" data-morph-d="...">` moves
+  the path's numbers towards the second path as the jaw drops 30 px. That's how Dex's chin
+  stretches when he shouts.
+- What stays code is what bends or changes with the pose: limbs, hands, eyes, brows and the mouth
+  chart. The JSON names them with their sizes and colours.
+- A missing angle or file, an element or feature the kit doesn't draw, a shape name that isn't a
+  drawing, or a morph whose paths don't match fails at load, naming the file.
+
+**The cast.** Ten more cut-out people, made as data on Dex's frame (his heads, torsos and rig), so they
+share his style, his poses and the kit's clips: on the warehouse floor, Rosa (a team lead in a hard
+hat), Marcus, Priya (with a headset), Walt and Jess; in the office, Dana, Kenji, Amara, Greg and
+Linda. Each is `/@kit/characters/<name>.js` (`import { rosa, pose } from '/@kit/characters/rosa.js'`).
+`tools/make_people.py` makes them from short descriptions: build and height, skin, hair (short, side
+part, buzz, bob, long, bun, afro, bald), a beard or moustache, glasses, earrings, a hard hat, beanie
+or headset, a top (tee, polo, shirt and tie, blouse, blazer, cardigan, hoodie, flannel, a hi-vis vest
+over any of them, overalls), trousers or a skirt, and boots, sneakers, dress shoes or flats. Add one
+to its list and run it. Hair drawn behind the head (long hair, a bun, an afro) is a chain of kind
+`hair`: behind the body from the front, over it from behind. `examples/cast` lines them up (lab
+pages for every angle, faces and poses) and names them in a short video.
+
+What the kit draws:
+
+- **Angles:** a character is drawn from set angles, `0` front, `1` 3/4, `2` profile, `3` 3/4 from
+  behind and `4` back, negative to face left (the same drawings mirrored). `body.view` turns the body
+  and `head.view` turns the head on from there, so the head can lead a turn. Both key like any number
+  and the drawing swaps at each half step, passing through every angle in between. `angleSet` is a
+  piece with a drawing per angle (`fallback: { 3: 2 }` lets one stand in for another); `turnRig`
+  brings the sided chains round and puts the far limbs behind.
+- **Hands:** a library of drawn hands (`HAND.relaxed`, `open`, `spread`, `palm`, `point`, `fist`,
+  `thumb`, `grip`, `ok`, `peace`), keyed as `'handR.shape'`. `'handR.flip': 1` shows the other side.
+  Keys ending in `.shape` swap halfway through the move that keys them instead of blending. A prop
+  goes in a hand through the draw call: `dex.draw(ctx, pose, { x, y, held: { handL: fn } })`.
+- **Mouth chart:** one drawing per sound (lipsync.js's shapes, from `viseme(t)`) plus expression
+  mouths (`smile`, `grin`, `frown`, `grimace`, `shout`, `smirk`, `gasp`), keyed as `'mouth.shape'`.
+  While a character talks, the chart follows the words; between words it shows the expression's
+  mouth. Wide-open mouths drop the jaw (`jawDrop`).
+- **Faces:** big eyes with dot pupils and lids inside the outline, and brows, with the toon kit's
+  face keys (`lids.drop`, `lids.slant`, `brows.in` ...). `EXPR` has 14 expressions.
+- **Limbs:** `noodle` bends an arm or leg as one even tube; `sleeve` puts a short sleeve over it.
+- **Contacts:** `plant(character, pose, 'legL', [x, y])` puts a foot on a spot by IK and keeps it
+  level, for crouches, kneels and landings; `reachChain(character, pose, 'armR', [x, y])` puts a hand
+  there. Knees and elbows bend the way their chain's tag says, for the way the body faces.
+  `mixKeys` eases a contact in and out. Run them on the finished pose.
+- `character.pose(t, moves, opts)` brings a character to life as `toonPose` does: on twos, springs
+  on the arms and head, blinks, glances, breathing and the mouth chart.
+- **Walking** (`/@kit/walk2d.js`), side-on: `walk2d(t, { x0, x1, t0, t1, step, lift })` says where
+  the body is and where each foot is. A foot is planted while the body passes over it, then swings
+  to its next plant, so feet never slide. The walk sets off from the feet together and ends with the
+  back foot stepping up. `walkPose(character, pose, w, { scale })` plants the leg chains there, drops
+  the hips as far as the legs need (so the body rides lowest as the feet part), and swings the arms.
+  Call both with the time the character's drawings change on (`onTwos(t)`) and draw it at `w.x`.
+- **Chains that trail** (capes, tails, hair): `trailChain(character, pose, t, 'cape', u => [x(u),
+  y(u)], { drag, lag, wind, flutter })` swings a chain's bones back against the way the character
+  moves (motion(u) is where it is at time u, in its own units), hanging under gravity, each bone
+  answering a little after the one above it, so a wave runs down it, on springs. `posed: true` swings
+  the chain about its own pose instead of hanging it, so a tail held up wags where the pose holds it
+  (a motion swaying from side to side is a wag). A `ribbon` piece (`{ kit: 'ribbon', bones: [...],
+  w: [...], color, edge }` in a character's JSON) draws the chain as one inked shape, narrower seen
+  side on: to `edge` of its width, 0.45 unless given, and 1 for a tail, round from every side. A chain
+  of kind `cape` hangs behind the body, and in front of it seen from behind. Chains whose middle bones
+  wear drawings (a robot's rigid forearm) keep them with the chain's first bone in the drawing order.
+- **Named shots** (`camera.js`): `framing('medium', { x, y, height })` is a camera showing a
+  character's feet at (x, y), `height` tall on screen, from the waist up; also `wide`, `full`,
+  `knee`, `close` and `face`, and `third: 1` to put it on the right third.
+
+`examples/cutout-rig` has Dex's model sheet, face sheet, poses, clips and shots as lab pages, and a
+short acting test in a warehouse: a scanner, a turn to the racking, and a walk off (walk2d). `examples/cutout-jump` is a
+stunt: off a table, a forward flip, and a superhero landing, built from key poses and contacts.
+
+**Pets.** `/@kit/characters/dog.js` (Biscuit, a golden puppy), `/@kit/characters/cat.js` (Miso, a
+grey tabby) and `/@kit/characters/rabbit.js` (Clover, a long-eared bunny with long hind feet and a
+powder-puff tail) are four-legged cut-out characters, data like Dex, with the kit's faces and
+expressions. Each has four leg chains of kind `leg` (legFL, legFR, legBL, legBR: upper, lower, paw)
+and a tail chain drawn as a ribbon. As the body turns, their `turn.offsets` bring the front legs
+forward under the chest and the back legs back, and the chains' `layers` put the far legs behind the
+body. The near front leg goes in front of the body under a `shoulders` layer (the body's drawing
+clipped round the leg's top), so a raised paw passes in front of the chest. The legs hang from the
+root, not the body, so when a pose tips the body their spread stays level (the poses move their tops
+with it). The poses are stand, sit, lie and wag for all three; pawUp and bow for Biscuit and Miso,
+beg for Biscuit, crouch and hop for Clover. They're keyed side on, facing right, with the paws exactly
+on the floor at 3/4 and side on; `play` them with `mirror: true` to face left. A pose that tips the
+body forward or back reads only side on, so they're for 3/4 and profile: from the front and back the
+pets stand. A tail wags with `trailChain(dog, p, t, 'tail', u => [sway(u), 0], { posed: true })`.
+`examples/pets` has Biscuit and Miso meeting, and lab pages for all three.
+
+### Shared style
+
+Each kit has its own ink: the toon kit's is heavier and more purple than the cut-out kit's, and the 3D
+kit's is a fixed width on screen. A project can give them one style in `video.json`:
+
+```json
+"style": { "ink": "#1D1A24", "line": 3.4, "line3d": 3 }
+```
+
+- `ink` is the colour of every line, in all three kits (and in a cut-out character's SVG drawings).
+- `line` is the 2D kits' line width (toon.js and cutout.js), in the drawing's own units, so it
+  thickens and thins with the character.
+- `line3d` is the 3D kit's (toon3d.js and rig3d.js), in pixels on screen at any distance. The
+  kit's thinner lines, like a rack's bracing, keep their proportion to it.
+- Each is optional. Without them each kit keeps its own look, so existing videos don't change.
+- For 2D and 3D lines to match on screen, `line3d` is about `line` times the scale the characters
+  are drawn at (Dex at 0.9: 3.4 × 0.9 ≈ 3).
+
+The `-v2` examples (`acting-test-v2`, `dialogue-v2`, `clapper-intro-v2`, `3d-cast-v2`,
+`3d-props-v2`, `hand-rig-v2` and `ray-rig-v2`) are copies of the originals in this style. The
+originals keep their own.
+
+### Baked props: clap bake and sprite.js
+
+A cut-out scene can use the kit's 3D props as pictures. `clap bake` draws a prop from set angles into
+PNG sprites with transparent backgrounds, lit and inked as it is in the 3D scenes. `sprite.js` draws
+them:
+
+    clap bake @kit/printers3d.js#labelPrinter3d --angles 0,45,90 --scale 0.32 --line 2.04 --name printer
+
+```js
+import { loadSprite } from '/@kit/sprite.js';
+const printer = await loadSprite('/assets/baked/printer/');
+printer.draw(ctx, 45, { x: 1620, y: 800 });     // its origin (the footprint's middle, on the floor) at (x, y)
+```
+
+- The prop is a function in a module (the kit's or the project's), called with `--args` (JSON),
+  that returns a three.js object or `{ group }`.
+- The camera is orthographic, so a sprite looks right anywhere on screen. It looks down by
+  `--elevation` degrees (8). Angle 0 shows the prop's front and 90 turns it to face the screen's
+  right. `draw` picks the nearest baked angle, and mirrors the positive one for a negative angle.
+- `--scale` is the sprite's pixels per unit at 1x. It's drawn at `--res` (2) times that, so it
+  stays sharp when a 2D camera zooms in, up to 2x.
+- `--line` is its ink at 1x, in pixels. To match a cut-out character, it's the character's line
+  times the scale it's drawn at: Dex at 0.6 has 3.4 × 0.6 = 2.04 px lines. A bitmap's lines thicken
+  as the camera zooms in, as a vector character's do, so the two match at any zoom.
+- The soft shadow under the prop is baked in (`--no-shadow` leaves it out).
+- Out go `assets/baked/<name>/0.png`, `45.png` and so on, and `sprite.json`, which records the
+  scale, resolution, ink and each angle's size and origin.
+
+`examples/cutout-rig/scenes/lab-props.js` puts Dex beside baked racking, a desk and the label
+printer at three angles, at 1x and at `?zoom=1.75`.
+
+### Cut-out scenes in a 3D set: layout.js
+
+A cut-out scene can be laid out in a 3D set, as TV cut-out shows lay out their shots: the set is built
+in 3D once, and each shot is a picture of it from a fixed camera, with the 2D characters placed on it.
+
+```js
+import { bakeLayers, drawLayer, liveLayer, shotCamera, worldStand, worldWalk } from '/@kit/layout.js';
+const shot = shotCamera({ pos: [2600, 1500, 7800], at: [2600, 820, 600], fov: 30 });
+const baked = bakeLayers(L, shot, { back: set, front: [stock] });             // once, at setup
+// each frame:
+const at = worldWalk(shot, walk(t, { path, t0, t1 }), { unit: 1780 / 950 });  // Dex: 950 units, 1.78 m
+const p = walkPose(dex, dex.pose(t, moves, { extra: () => ({ 'body.view': at.view }) }), at.w, { scale: at.scale });
+drawLayer(ctx, baked.back);
+dex.draw(ctx, p, { x: at.x, y: at.y, scale: at.scale, line: 2.4 });
+drawLayer(ctx, baked.front);
+```
+
+- `shotCamera({ pos, at, fov })` is a shot's camera. Its `project([x, y, z])` says where a point of
+  the set is on screen, how many pixels a unit is there (`scale`), and how far away it is (`depth`).
+  Its `view([x, z], yaw)` says which cut-out angle (0 front to 4 back, negative facing left) a
+  character facing `yaw` shows it.
+- `bakeLayers(L, shot, { back, front })` draws the set once into pictures, a layer per list of
+  objects: the set behind the characters, and anything in front of them. Within a shot the camera
+  only pans and zooms in 2D (camera.js's `view`, over the pictures).
+- `worldStand(shot, [x, z], yaw, { unit })` and `worldWalk(shot, walk, { unit })` place a character:
+  where it is on screen, its draw scale (the set's scale there, times `unit`, the set's units per
+  character unit) and its view. `worldWalk` takes walk3d's `walk()` and gives walkPose its feet
+  projected, so a planted foot is a fixed point in the set and doesn't slide.
+- `liveLayer(L, shot, { show, hold })` draws what moves (a forklift, a pallet it lifts) in 3D each
+  frame, with `hold` (the baked set) drawn only into depth: it hides what's behind it without drawing
+  itself, so racking hides forks going into a bin.
+- Draw things in order of depth (`project()`'s `depth`), far to near, so characters pass behind and
+  in front of the set and of what moves.
+- `inkAt(shot, line)` is how much to widen the 3D kit's ink for a shot's lens, for lines `line` px
+  wide; toon3d's `rescaleInk(object, k)` does it.
+- A cut-out character's draw takes `line`: its line width in pixels at the draw's scale, whatever the
+  scale, so a small character in a wide shot has lines as heavy as a big one, and as the set's.
+  `withLine(width, fn)` (cutout.js) does the same for any drawing.
+
+`examples/cutout-tour` is the 3D intro's warehouse tour made again with Dex this way: the printer, the
+walk (behind stock on the aisle floor), the pick, and Tilly lifting the order out of its bin.
+
 ### Motion blur
 
 `"motionBlur": { "samples": 8, "shutter": 0.5 }` in video.json averages 8 moments across half a
@@ -358,6 +650,42 @@ Don't use it on things animated on twos: blur across a change of drawing shows b
 
 `clap still 0 --entry scenes/lab.js` draws another page instead of the video: a character sheet, a
 prop on its own. The page has the same stage and timeline.
+
+### Checking and reviewing
+
+- `clap check` draws every drawing of the video (every 2nd frame, as drawings change on twos)
+  without saving them, so the declared characters' checks run on all of them, not only on the frames
+  someone looked at. An error stops it, saying what and at what time; warnings (a limb out of reach,
+  a knee bent backwards) are listed once each. Then it makes the review sheets.
+- `clap frames jump-0.2 land+0.4` renders each drawing between two times straight from the page into
+  `out/frames/`, and one strip of them labelled with their times and frame numbers.
+  `--crop 900,380,700,700` looks closely at part of the frame (a hand, a foot on the floor).
+- In `clap preview`, **N** (or Note) writes a note on the frame you're on. The preview keeps notes in
+  `notes.json` in the project, with the scene, time and frame, and `clap notes` lists the open ones
+  for whoever works on the video next. `clap notes done 3 "moved the landing a frame earlier"` closes
+  one with a reply. The preview only takes notes from its own page, so another website open in the
+  same browser can't write into them.
+- The preview's **Stills** page (`/@kit/stills.html`) shows everything in `out/` (stills, sheets,
+  frames), newest first, and adds new renders as they're made.
+
+**Changing a character that videos use.** Versions and a visual check keep a change to a stock
+character from quietly breaking the videos made with it:
+
+- Every declared character has a `version`. It goes up only for a change that can break scenes: a
+  bone renamed, a pose key gone, a drawing's size or pivot moved.
+- A scene says which version it was made for: `requires({ dex: 1 })` (from `/@kit/character.js`),
+  after importing the character. When Dex moves on to version 2, the scene stops with an error that
+  says so, instead of drawing something wrong.
+- `clap check --affected dex` finds the projects that use Dex from their scenes' imports: the kit's
+  examples, the project it's run in, and any folders named (`clap check --affected dex
+  C:\Projects\my-videos`). It draws each one's review frames and the lab pages that use him, and
+  compares them with the approved ones in the project's `out/check/approved/`. It lists what changed,
+  how many pixels and where, and writes a picture of each changed frame (the new frame faded, the
+  change in red) to `out/check/diff/`. `--approve` keeps the new look as the one to compare with.
+- It draws in software (Chrome's CPU drawing, with SwiftShader for 3D), so the same scene gives the
+  same pixels on every run. A graphics card can draw a few edge pixels differently from one run to
+  the next. A pixel counts as changed when a colour moves by more than 24 of 255, and a frame when
+  more than 30 pixels do. `CLAP_SOFTWARE=1` draws any clap command in software.
 
 ## Making a 3D video
 
@@ -374,6 +702,7 @@ in units of their own, so scale them in:
 |---|---|---|
 | 3D Pip | 1.8 | she is about 1.64 m tall (910 in her own units) |
 | Tilly | 3.2 | she is about 1.05 m tall and her forks slide under a pallet |
+| Tilly v2 | 1 | she's modelled in millimetres: 2.2 m to the top of her guard |
 | `rack3d`, `palletLoad`, `pallet3d`, `carton3d` | 1.8 | they stand with Pip |
 | `scanner3d` | 0.9 × Pip's | it fits her hand |
 | printers, labels, desk | 1 | they are already in millimetres |
@@ -470,6 +799,9 @@ uploads the project needs YouTube's compliance audit: the
 ## Tools
 
 - `tools/make-sfx.mjs` remakes the kit's sound effects in `sfx/`.
+- `tools/make_people.py` makes the cast of cut-out people as data from short descriptions (see "The
+  cast"); add one to its list and run it.
+- `tools/gpu-check.mjs` shows which graphics card headless Chrome draws WebGL with.
 - `tools/import-el-cache.mjs` imports an ElevenLabs cache from the older Python pipeline.
 - `tools/profile-frames.mjs` times drawing and capture for one Chrome.
 - `tools/pdf-png.ps1` renders PDF pages to PNGs with the PDF renderer built into Windows, to put a

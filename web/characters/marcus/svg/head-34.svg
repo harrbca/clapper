@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Marcus: head, 34</title>
+  <defs>
+    <clipPath id="c1"><path d="M -300 -600 L 300 -600 L 300 -120 L 96 -120 C 82 -150 60 -160 24 -170 C -8 -166 -26 -150 -32 -126 C -40 -100 -50 -96 -70 -110 L -300 -110 Z"/></clipPath>
+  </defs>
+  <path d="M 20 -4 C 62 -6 86 -44 88 -104 C 90 -162 56 -196 -4 -196 C -64 -196 -92 -160 -88 -104 C -84 -46 -34 -4 20 -4 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M 20 26 C 62 24 86 -29 88 -104 C 90 -162 56 -196 -4 -196 C -64 -196 -92 -160 -88 -104 C -84 -31 -34 26 20 26 Z" fill="#6B4630" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(-64 -104) scale(-1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#6B4630" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <path d="M -86 -100 C -82 -44 -34 -4 20 -4 C 62 -6 86 -44 88 -100 C 80 -80 66 -62 44 -58 C 28 -56 12 -56 -2 -58 C -40 -62 -70 -80 -86 -100 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M -86 -100 C -82 -29 -34 26 20 26 C 62 24 86 -29 88 -100 C 80 -80 66 -47 44 -43 C 28 -41 12 -41 -2 -43 C -40 -47 -70 -80 -86 -100 Z" fill="#1B1512" stroke="#1D1A24" stroke-width="2.72"/>
+  <g transform="translate(50 -104) scale(0.74 1)" data-feature="eye" data-side="1" data-look="0.35"/>
+  <g transform="translate(-6 -104) scale(0.96 1)" data-feature="eye" data-side="-1" data-look="0.35"/>
+  <g transform="translate(50 -140) scale(0.72 1)" data-feature="brow" data-side="1"/>
+  <g transform="translate(-6 -140) scale(0.95 1)" data-feature="brow" data-side="-1"/>
+  <path d="M 70 -90 C 92 -80 98 -66 82 -61 C 76 -60 71 -62 68 -65 L 66 -80 Z" fill="#6B4630" stroke="none"/>
+  <path d="M 70 -90 C 92 -80 98 -66 82 -61 C 76 -60 71 -62 68 -65" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g data-feature="mouth" data-x="42" data-y="-44" data-sx="0.84" data-drop="0.35"/>
+  <g clip-path="url(#c1)">
+    <path d="M 20.5 -1.35 C 63.55 -3.4 88.15 -42.35 90.2 -103.85 C 92.25 -163.3 57.4 -198.15 -4.1 -198.15 C -65.6 -198.15 -94.3 -161.25 -90.2 -103.85 C -86.1 -44.4 -34.85 -1.35 20.5 -1.35 Z" fill="#1B1512" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+  <g clip-path="url(#c1)">
+    <path d="M 20 -4 C 62 -6 86 -44 88 -104 C 90 -162 56 -196 -4 -196 C -64 -196 -92 -160 -88 -104 C -84 -46 -34 -4 20 -4 Z" fill="none" stroke="#15100E" stroke-width="1.36"/>
+  </g>
+</svg>

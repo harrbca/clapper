@@ -1,0 +1,16 @@
+{
+  "title": "Biscuit and Miso: cut-out pets",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "background": "#EDE6D6",
+  "entry": "scenes/index.js",
+  "capture": "canvas",
+  "hidpi": true,
+  "fonts": [
+    { "family": "Roboto", "weight": 500, "src": "@kit/fonts/Roboto-Medium.ttf" },
+    { "family": "Roboto", "weight": 700, "src": "@kit/fonts/Roboto-Bold.ttf" }
+  ],
+  "chapters": { "meet": "Biscuit and Miso", "end": null },
+  "loudness": -16
+}

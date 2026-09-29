@@ -1,0 +1,39 @@
+{
+ "request": {
+  "text": "And this is Miso.",
+  "voice": "JBFqnCBsd6RMkjVDRZzb",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "This is Biscuit.",
+  "next_text": "Biscuit would very much like to be friends.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "And",
+   "start": 0,
+   "end": 0.174
+  },
+  {
+   "w": "this",
+   "start": 0.221,
+   "end": 0.348
+  },
+  {
+   "w": "is",
+   "start": 0.406,
+   "end": 0.488
+  },
+  {
+   "w": "Miso.",
+   "start": 0.557,
+   "end": 1.672
+  }
+ ]
+}

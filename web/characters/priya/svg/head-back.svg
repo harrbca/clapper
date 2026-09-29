@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Priya: head, back</title>
+  <defs>
+    <clipPath id="c1"><path d="M -300 -600 L 300 -600 L 300 -70 C 60 -62 30 -54 0 -54 C -30 -54 -60 -62 -300 -70 Z"/></clipPath>
+  </defs>
+  <g transform="translate(-84 -104) scale(-1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#A86F4C" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <g transform="translate(84 -104) scale(1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#A86F4C" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <path d="M -30 0 C -36 -30 -82 -52 -86 -104 C -90 -160 -60 -196 0 -196 C 60 -196 90 -160 86 -104 C 82 -52 36 -30 30 0 Z" fill="#A86F4C" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <path d="M -31.2 4.4 C -37.44 -26.8 -85.28 -49.68 -89.44 -103.76 C -93.6 -162 -62.4 -199.44 0 -199.44 C 62.4 -199.44 93.6 -162 89.44 -103.76 C 85.28 -49.68 37.44 -26.8 31.2 4.4 Z" fill="#1E1614" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+  <path d="M -100 -110 C -110 -220 110 -220 100 -110" fill="none" stroke="#1D1A24" stroke-width="13"/>
+  <path d="M -100 -110 C -110 -220 110 -220 100 -110" fill="none" stroke="#3A3F48" stroke-width="7"/>
+  <path d="M -112 -126 h 28 v 44 h -28 Z" fill="#2B2F38" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M 84 -126 h 28 v 44 h -28 Z" fill="#2B2F38" stroke="#1D1A24" stroke-width="2.72"/>
+</svg>

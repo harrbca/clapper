@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Kenji: head, 34back</title>
+  <defs>
+    <clipPath id="c1"><path d="M -300 -600 L 300 -600 L 300 -150 L 84 -150 C 74 -110 52 -46 20 -58 L -300 -66 Z"/></clipPath>
+  </defs>
+  <path d="M -30 0 C -40 -30 -84 -50 -88 -104 C -90 -162 -56 -196 4 -196 C 64 -196 92 -160 88 -104 C 86 -60 60 -30 34 -2 Z" fill="#E8B98E" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(64 -104) scale(1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#E8B98E" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <g clip-path="url(#c1)">
+    <path d="M -32.4 8.8 C -43.2 -23.6 -90.72 -45.2 -95.04 -103.52 C -97.2 -166.16 -60.48 -202.88 4.32 -202.88 C 69.12 -202.88 99.36 -164 95.04 -103.52 C 92.88 -56 64.8 -23.6 36.72 6.64 Z" fill="#16161C" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+</svg>

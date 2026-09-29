@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-120 -290 240 310">
+  <title>Clover: head, three-quarter</title>
+  <path d="M 18 -112 C 22 -170 34 -240 56 -262 C 72 -276 84 -252 76 -202 C 70 -162 58 -128 46 -106 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -40 -110 C -60 -170 -56 -246 -34 -270 C -16 -286 0 -262 -4 -210 C -6 -168 -12 -130 -18 -110 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -34 -124 C -48 -170 -44 -232 -30 -252 C -20 -262 -10 -246 -12 -206 C -14 -172 -18 -140 -22 -124 Z" fill="#F2A7B5"/>
+  <path d="M 6 -4 C 58 -6 84 -32 80 -72 C 76 -112 44 -134 -2 -134 C -46 -134 -76 -108 -76 -70 C -76 -28 -46 -4 6 -4 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -4 -36 C -4 -54 16 -58 30 -50 C 44 -58 64 -52 64 -34 C 64 -18 46 -10 30 -14 C 14 -10 -4 -18 -4 -36 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M -4 -36 C -4 -54 16 -58 30 -50 C 44 -58 64 -52 64 -34 C 64 2 46 10 30 6 C 14 10 -4 2 -4 -36 Z" fill="#F6EBDD" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 2 -40 L -34 -46" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M 2 -34 L -34 -32" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M 60 -40 L 88 -46" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M 60 -34 L 88 -32" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <g transform="translate(-4 -80) scale(0.95 1)" data-feature="eye" data-side="-1" data-look="0.35"/>
+  <g transform="translate(50 -80) scale(0.74 1)" data-feature="eye" data-side="1" data-look="0.35"/>
+  <g transform="translate(-4 -110) scale(0.95 1)" data-feature="brow" data-side="-1"/>
+  <g transform="translate(46 -106) scale(0.72 1)" data-feature="brow" data-side="1"/>
+  <path d="M 31 -45 L 30 -34" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g data-feature="mouth" data-x="30" data-y="-30" data-sx="0.86" data-drop="0.35"/>
+  <path d="M 23 -56 L 39 -56 C 38 -50 34 -46 31 -45 C 28 -46 24 -50 23 -56 Z" fill="#E88A9A" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -90 200 170">
+  <title>Clover: body, front</title>
+  <defs>
+    <clipPath id="c1"><path d="M 0 -60 C 44 -60 70 -34 70 4 C 70 40 52 62 26 62 L -26 62 C -52 62 -70 40 -70 4 C -70 -34 -44 -60 0 -60 Z"/></clipPath>
+  </defs>
+  <ellipse cx="-62" cy="34" rx="30" ry="30" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <ellipse cx="62" cy="34" rx="30" ry="30" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 0 -60 C 44 -60 70 -34 70 4 C 70 40 52 62 26 62 L -26 62 C -52 62 -70 40 -70 4 C -70 -34 -44 -60 0 -60 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <path d="M -30 -50 C -16 -34 16 -34 30 -50 C 42 -12 32 40 0 58 C -32 40 -42 -12 -30 -50 Z" fill="#F6EBDD"/>
+  </g>
+  <path d="M 0 -60 C 44 -60 70 -34 70 4 C 70 40 52 62 26 62 L -26 62 C -52 62 -70 40 -70 4 C -70 -34 -44 -60 0 -60 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

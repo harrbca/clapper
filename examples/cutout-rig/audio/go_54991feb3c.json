@@ -1,0 +1,59 @@
+{
+ "request": {
+  "text": "Anyway. Aisle twelve isn't going to pick itself.",
+  "voice": "N2lVS1w4EtoT3dr4eOWO",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "See this? Scan the bin, scan the item. Done. Wrong bin? It beeps at you. Loudly.",
+  "next_text": null,
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Anyway.",
+   "start": 0,
+   "end": 0.778
+  },
+  {
+   "w": "Aisle",
+   "start": 1.161,
+   "end": 1.509
+  },
+  {
+   "w": "twelve",
+   "start": 1.544,
+   "end": 2.043
+  },
+  {
+   "w": "isn't",
+   "start": 2.078,
+   "end": 2.31
+  },
+  {
+   "w": "going",
+   "start": 2.345,
+   "end": 2.554
+  },
+  {
+   "w": "to",
+   "start": 2.601,
+   "end": 2.67
+  },
+  {
+   "w": "pick",
+   "start": 2.74,
+   "end": 2.926
+  },
+  {
+   "w": "itself.",
+   "start": 2.984,
+   "end": 3.855
+  }
+ ]
+}

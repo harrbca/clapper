@@ -1,0 +1,84 @@
+{
+ "request": {
+  "text": "Meet the cast. On the warehouse floor: Rosa, Marcus, Priya, Walt, and Jess.",
+  "voice": "N2lVS1w4EtoT3dr4eOWO",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": null,
+  "next_text": "And in the office: Dana, Kenji, Amara, Greg, and Linda.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Meet",
+   "start": 0,
+   "end": 0.255
+  },
+  {
+   "w": "the",
+   "start": 0.302,
+   "end": 0.372
+  },
+  {
+   "w": "cast.",
+   "start": 0.441,
+   "end": 1.207
+  },
+  {
+   "w": "On",
+   "start": 1.591,
+   "end": 1.765
+  },
+  {
+   "w": "the",
+   "start": 1.8,
+   "end": 1.869
+  },
+  {
+   "w": "warehouse",
+   "start": 1.916,
+   "end": 2.38
+  },
+  {
+   "w": "floor:",
+   "start": 2.426,
+   "end": 2.961
+  },
+  {
+   "w": "Rosa,",
+   "start": 3.111,
+   "end": 3.715
+  },
+  {
+   "w": "Marcus,",
+   "start": 3.796,
+   "end": 4.493
+  },
+  {
+   "w": "Priya,",
+   "start": 4.563,
+   "end": 5.201
+  },
+  {
+   "w": "Walt,",
+   "start": 5.375,
+   "end": 5.968
+  },
+  {
+   "w": "and",
+   "start": 6.049,
+   "end": 6.223
+  },
+  {
+   "w": "Jess.",
+   "start": 6.304,
+   "end": 7.338
+  }
+ ]
+}

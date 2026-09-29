@@ -1,0 +1,44 @@
+{
+ "request": {
+  "text": "Oh, I like it here.",
+  "voice": "cgSgspJ2msm6clMCkdW9",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.4,
+   "similarity_boost": 0.75,
+   "style": 0.35,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Real size, and my forks go all the way up. So, what have we got today?",
+  "next_text": null,
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Oh,",
+   "start": 0,
+   "end": 0.255
+  },
+  {
+   "w": "I",
+   "start": 0.337,
+   "end": 0.395
+  },
+  {
+   "w": "like",
+   "start": 0.511,
+   "end": 0.662
+  },
+  {
+   "w": "it",
+   "start": 0.697,
+   "end": 0.755
+  },
+  {
+   "w": "here.",
+   "start": 0.801,
+   "end": 1.347
+  }
+ ]
+}

@@ -1,0 +1,48 @@
+{
+  "name": "rack",
+  "prop": "@kit/props3d.js#rack3d",
+  "args": {
+    "bays": 1,
+    "bayW": 720,
+    "depth": 560,
+    "height": 1670,
+    "levels": [
+      830,
+      1500
+    ]
+  },
+  "scale": 0.6,
+  "res": 2,
+  "line": 2.04,
+  "elevation": 8,
+  "shadow": false,
+  "angles": {
+    "0": {
+      "file": "0.png",
+      "w": 928,
+      "h": 2091,
+      "anchor": [
+        464,
+        2084.01
+      ]
+    },
+    "45": {
+      "file": "45.png",
+      "w": 1170,
+      "h": 2152,
+      "anchor": [
+        822.59,
+        2100.31
+      ]
+    },
+    "90": {
+      "file": "90.png",
+      "w": 780,
+      "h": 2119,
+      "anchor": [
+        726,
+        2051.25
+      ]
+    }
+  }
+}

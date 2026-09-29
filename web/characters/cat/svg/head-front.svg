@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 -210 260 230">
+  <title>Miso: head, front</title>
+  <defs>
+    <clipPath id="c1"><path d="M 0 -2 C 60 -2 96 -30 90 -80 C 86 -126 50 -152 0 -152 C -50 -152 -86 -126 -90 -80 C -96 -30 -60 -2 0 -2 Z"/></clipPath>
+  </defs>
+  <path d="M -86 -100 C -88 -140 -80 -176 -70 -196 C -52 -180 -34 -160 -20 -144 Z" fill="#8C95A6" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -76 -116 C -77 -144 -72 -166 -66 -180 C -54 -168 -44 -156 -36 -146 Z" fill="#F2A2B1"/>
+  <path d="M 86 -100 C 88 -140 80 -176 70 -196 C 52 -180 34 -160 20 -144 Z" fill="#8C95A6" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 76 -116 C 77 -144 72 -166 66 -180 C 54 -168 44 -156 36 -146 Z" fill="#F2A2B1"/>
+  <path d="M 0 -2 C 60 -2 96 -30 90 -80 C 86 -126 50 -152 0 -152 C -50 -152 -86 -126 -90 -80 C -96 -30 -60 -2 0 -2 Z" fill="#8C95A6"/>
+  <g clip-path="url(#c1)">
+    <path d="M -18 -156 C -16 -144 -13 -134 -9 -126 C -7 -136 -7 -146 -8 -156 Z" fill="#6E7788"/>
+    <path d="M -4 -156 C -3 -142 -2 -130 0 -120 C 2 -130 3 -142 4 -156 Z" fill="#6E7788"/>
+    <path d="M 18 -156 C 16 -144 13 -134 9 -126 C 7 -136 7 -146 8 -156 Z" fill="#6E7788"/>
+  </g>
+  <path d="M 0 -2 C 60 -2 96 -30 90 -80 C 86 -126 50 -152 0 -152 C -50 -152 -86 -126 -90 -80 C -96 -30 -60 -2 0 -2 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -44 -44 C -44 -66 -18 -70 0 -60 C 18 -70 44 -66 44 -44 C 44 -24 24 -14 0 -18 C -24 -14 -44 -24 -44 -44 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M -44 -44 C -44 -66 -18 -70 0 -60 C 18 -70 44 -66 44 -44 C 44 -4 24 8 0 4 C -24 8 -44 -4 -44 -44 Z" fill="#F5F3EF" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -36 -48 L -84 -56" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M -36 -42 L -88 -42" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M -36 -36 L -82 -28" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M 36 -48 L 84 -56" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M 36 -42 L 88 -42" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M 36 -36 L 82 -28" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <g transform="translate(-34 -98) scale(1 1)" data-feature="eye" data-side="-1"/>
+  <g transform="translate(34 -98) scale(1 1)" data-feature="eye" data-side="1"/>
+  <g transform="translate(-34 -132) scale(1 1)" data-feature="brow" data-side="-1"/>
+  <g transform="translate(34 -132) scale(1 1)" data-feature="brow" data-side="1"/>
+  <path d="M 0 -52 L 0 -40" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g data-feature="mouth" data-x="0" data-y="-36" data-sx="1" data-drop="0.35"/>
+  <path d="M -9 -64 L 9 -64 C 8 -58 3 -54 0 -52 C -3 -54 -8 -58 -9 -64 Z" fill="#E8879A" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

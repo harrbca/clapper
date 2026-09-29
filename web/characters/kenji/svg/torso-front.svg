@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -300 300 340">
+  <title>Kenji: torso, front</title>
+  <path d="M -57.04 4 C -60.72 -70 -69.92 -180 -73.6 -226 C -75.44 -248 -60.72 -258 -31.28 -260 Q 0 -244 31.28 -260 C 60.72 -258 75.44 -248 73.6 -226 C 69.92 -180 60.72 -70 57.04 4 Z" fill="#6D7480" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -36.8 -110 L 36.8 -110 L 47.84 -40 L -47.84 -40 Z" fill="#626873" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M -16 -250 L -18 -196" fill="none" stroke="#1D1A24" stroke-width="2.04"/>
+  <path d="M 16 -250 L 18 -196" fill="none" stroke="#1D1A24" stroke-width="2.04"/>
+  <path d="M -42.32 -262 C -27.6 -238 27.6 -238 42.32 -262 C 27.6 -250 -27.6 -250 -42.32 -262 Z" fill="#575C66" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M -24 -250 L -4 -170 L 20 -250" fill="none" stroke="#3A6FD8" stroke-width="2.72"/>
+  <g transform="translate(-4 -150) scale(1 1)">
+    <path d="M -12 -20 h 24 v 32 h -24 Z" fill="#F4F3EE" stroke="#1D1A24" stroke-width="2.4"/>
+    <rect x="-10.8" y="-18.8" width="21.6" height="8" fill="#3A6FD8"/>
+  </g>
+</svg>

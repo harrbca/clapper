@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-120 -290 250 310">
+  <title>Clover: head, profile</title>
+  <path d="M -8 -118 C -6 -176 6 -244 26 -264 C 42 -278 54 -254 46 -206 C 40 -166 26 -132 14 -112 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -30 -112 C -46 -170 -44 -246 -24 -270 C -8 -286 8 -264 4 -212 C 2 -170 -6 -132 -12 -110 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -24 -126 C -36 -170 -34 -232 -20 -252 C -10 -262 -2 -246 -4 -206 C -6 -172 -10 -140 -14 -126 Z" fill="#F2A7B5"/>
+  <path d="M -24 -4 C -64 -8 -80 -40 -78 -74 C -76 -112 -44 -134 -2 -134 C 40 -134 70 -110 72 -76 C 74 -52 62 -34 50 -26 C 34 -10 8 -2 -24 -4 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 38 -60 C 56 -66 78 -60 84 -46 C 90 -32 82 -18 68 -16 C 54 -14 42 -22 40 -32 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M 38 -60 C 56 -66 78 -60 84 -46 C 90 -14 82 0 68 2 C 54 4 42 -4 40 -32 Z" fill="#F6EBDD" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 70 -36 L 104 -42" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M 70 -32 L 106 -30" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <g transform="translate(32 -82) scale(0.56 1)" data-feature="eye" data-side="-1" data-look="0.8"/>
+  <g transform="translate(30 -110) scale(0.6 1)" data-feature="brow" data-side="-1"/>
+  <path d="M 84 -50 C 83 -42 80 -34 76 -28" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g data-feature="mouth" data-x="72" data-y="-24" data-sx="0.55" data-drop="0.35"/>
+  <path d="M 78 -62 L 89 -60 C 89 -54 86 -50 82 -50 C 78 -52 76 -56 78 -62 Z" fill="#E88A9A" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

@@ -1,0 +1,34 @@
+{
+ "request": {
+  "text": "Hi! I'm Pip.",
+  "voice": "hpp4J3VqNfWAUOO0d1Us",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.45,
+   "similarity_boost": 0.75,
+   "style": 0.25,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": null,
+  "next_text": "Everything you're watching right now was drawn by code, one frame at a time.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Hi!",
+   "start": 0,
+   "end": 0.464
+  },
+  {
+   "w": "I'm",
+   "start": 0.615,
+   "end": 0.766
+  },
+  {
+   "w": "Pip.",
+   "start": 0.824,
+   "end": 1.44
+  }
+ ]
+}
