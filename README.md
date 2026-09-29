@@ -58,6 +58,7 @@ folders outside the kit, and point `clap` at them (`--project`, or run it from i
 | `clap preview [--port 4173] [--open]` | the live player. Space plays, arrows skip (Shift: 1 s), `,` `.` step a frame, `[` `]` jump scenes, D shows cues |
 | `clap still <time>...` | full-size PNGs in `out/stills` |
 | `clap sheet [name] [time...]` | 2x2 contact sheets; by default of the timeline's review list |
+| `clap list [character]` | what a declared character understands: tags, chains, pieces, pose keys, poses, expressions, clips; and the named shots and easings. Without a name, the kit's characters |
 | `clap render [out.mp4] [--draft] [--scale 2] [--from s] [--to s] [--workers 8] [--encoder x264\|nvenc]` | the video. `--draft` is half size and fast; `--scale 2` is 4K when the project is `hidpi` |
 | `clap capture <script.js> [--headed]` | drives a web page as the script says and keeps each state's screenshot, for `screen.js` (below) |
 | `clap upload [file.mp4] [--privacy private\|unlisted\|public] [--title T] [--description D] [--login]` | the video to YouTube, private unless asked (below) |
@@ -382,6 +383,18 @@ export const dex = defineCutout({
   Did you mean 'handR.shape'?"), values that aren't numbers (NaN, undefined), `.shape` values that
   aren't one of its drawings, and a helper asking for a tag or chain it hasn't got. `clap` prints the
   message; `CLAP_DEBUG=1` adds the stack.
+- **Warnings**, printed once each with the time: an IK target out of reach (the limb stops short),
+  a bone turned beyond its `limits` (Dex's knees can't bend backwards; limits are given facing right
+  and mirrored facing left), a chain drawn partly behind the body and partly in front, and a squash
+  or stretch keyed away from rest and never keyed back. A contact a scene is letting go of can be
+  `quiet`.
+- **Clips** are timed moves written against the tags, so any character with the same chains can
+  play them: `'@armR.0.r'` is the first bone of chain armR, `'@look.r'` the head, and `'rest'` the
+  character's own rest value. `moves([...dex.play('wave', c.hello), ...dex.play('shrug', c.so, {
+  mirror: true })])`: `mirror` plays it on the other side, `speed` faster or slower. The kit's
+  `CLIPS` for bipeds: `wave`, `point`, `shrug`, `thumbsUp`, `take` and `turn({ from, to })`.
+- `clap list dex` prints all of it: the tags and chains, the pieces and their drawings, every pose
+  key, the poses, expressions and clips, and the named shots and easings.
 
 What the kit draws:
 
@@ -408,9 +421,18 @@ What the kit draws:
   `mixKeys` eases a contact in and out. Run them on the finished pose.
 - `character.pose(t, moves, opts)` brings a character to life as `toonPose` does: on twos, springs
   on the arms and head, blinks, glances, breathing and the mouth chart.
+- **Walking** (`/@kit/walk2d.js`), side-on: `walk2d(t, { x0, x1, t0, t1, step, lift })` says where
+  the body is and where each foot is. A foot is planted while the body passes over it, then swings
+  to its next plant, so feet never slide. The walk sets off from the feet together and ends with the
+  back foot stepping up. `walkPose(character, pose, w, { scale })` plants the leg chains there, drops
+  the hips as far as the legs need (so the body rides lowest as the feet part), and swings the arms.
+  Call both with the time the character's drawings change on (`onTwos(t)`) and draw it at `w.x`.
+- **Named shots** (`camera.js`): `framing('medium', { x, y, height })` is a camera showing a
+  character's feet at (x, y), `height` tall on screen, from the waist up; also `wide`, `full`,
+  `knee`, `close` and `face`, and `third: 1` to put it on the right third.
 
-`examples/cutout-rig` has Dex's model sheet, face sheet and poses as lab pages, and a short acting
-test in a warehouse: a scanner, a turn to the racking, and a walk off. `examples/cutout-jump` is a
+`examples/cutout-rig` has Dex's model sheet, face sheet, poses, clips and shots as lab pages, and a
+short acting test in a warehouse: a scanner, a turn to the racking, and a walk off (walk2d). `examples/cutout-jump` is a
 stunt: off a table, a forward flip, and a superhero landing, built from key poses and contacts.
 
 ### Motion blur

@@ -17,5 +17,7 @@ lands like a superhero. Then his knee.
 - Squash and stretch on take-off and landing, speed lines, a swoosh round the flip, a table that
   rocks after he leaves it.
 
-    clap voice --draft && clap build && clap render --draft
+Dex is voiced by Callum (ElevenLabs); the lines are cached in `audio/`.
+
+    clap voice && clap build && clap render
     clap still 0 --entry scenes/lab-keys.js    # the key poses and their contacts

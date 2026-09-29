@@ -34,7 +34,7 @@ export const MOVES = moves([
   // standing, proud: chest out, fists on hips
   { t: c.standUp, dur: 0.7, anticipate: 0.15, pose: { ...KEY.stand, 'body.view': 1, 'head.view': 0, 'head.r': -0.1, 'torso.r': -0.06, 'hips.y': 0, ...EXPR.smug, 'eyes.y': 0, 'armL.r': 0.75, 'foreL.r': -1.6, 'armR.r': -0.75, 'foreR.r': 1.6, 'handL.shape': HAND.fist, 'handR.shape': HAND.fist, 'handL.r': 0.5, 'handR.r': -0.5 }, ease: E.io },
   // ...until the knee
-  { t: c.knee, dur: 0.12, pose: { 'torso.r': 0.42, 'hips.y': 40, 'head.r': -0.2, ...EXPR.worried, 'eyes.squint': 0.7, 'eyeR.open': 0.3, 'mouth.shape': MOUTH.grimace, 'armR.r': -0.1, 'foreR.r': 0.2, 'handR.shape': HAND.spread, 'handR.r': 0, 'handL.shape': HAND.palm }, ease: E.snap },
+  { t: c.knee, dur: 0.12, pose: { 'torso.r': 0.9, 'hips.y': 130, 'head.r': -0.2, ...EXPR.worried, 'eyes.squint': 0.7, 'eyeR.open': 0.3, 'mouth.shape': MOUTH.grimace, 'armR.r': -0.1, 'foreR.r': 0.2, 'handR.shape': HAND.spread, 'handR.r': 0, 'handL.shape': HAND.palm }, ease: E.snap },
 ]);
 
 // ---------- the flight ----------
@@ -69,11 +69,14 @@ export function withContacts(p, t) {
   if (onTable > 0) p = mixKeys(p, contacts(p, 'stand'), onTable, LEGS);
   // in the tuck, hands on the shins
   const tuck = Math.min(inv(c.tuck, c.tuck + 0.12, t), 1 - inv(c.open, c.open + 0.1, t));
-  if (tuck > 0) p = mixKeys(p, contacts(p, 'tuck'), tuck, [...ARM_L, ...ARM_R]);
+  if (tuck > 0) p = mixKeys(p, contacts(p, 'tuck', { quiet: t > c.open }), tuck, [...ARM_L, ...ARM_R]);   // opening out, the hands let go
   // the impact's wide stance, handing over to the hero landing's knee, foot and fist
   if (t >= c.land && t < c.standUp + 0.7) {
     const k = E.out(inv(c.land + 0.04, c.hero + 0.22, t));
-    const a = contacts(p, 'impact'), b = contacts(p, 'hero');
+    // the fist travels to its spot while the impact hands over to the hero landing, and standing up
+    // he lets go of the floor, so those contacts are out of reach for a moment on purpose: quiet
+    const settling = t < c.hero + 0.22, leaving = t > c.standUp + 0.05;
+    const a = contacts(p, 'impact', { quiet: settling || leaving }), b = contacts(p, 'hero', { quiet: settling || leaving });
     const out = mixKeys(mixKeys(p, a, 1, [...LEGS, ...ARM_L]), b, k, [...LEGS, ...ARM_L]);
     const off = inv(c.standUp + 0.05, c.standUp + 0.6, t);           // standing up: let go of the floor
     p = mixKeys(out, p, E.io(off), [...LEGS, ...ARM_L]);
@@ -81,7 +84,7 @@ export function withContacts(p, t) {
   if (t >= c.standUp + 0.45) p = mixKeys(p, contacts(p, 'stand'), inv(c.standUp + 0.45, c.standUp + 0.7, t), LEGS);
   // the knee: a hand to it
   if (t >= c.knee) {
-    const knee = dex.where('shinL', p, [10, 10]);
+    const knee = dex.where('legL', p, [8, 150]);                     // the thigh, just above the knee
     p = mixKeys(p, reachChain(dex, p, 'armL', knee), E.out(inv(c.knee, c.knee + 0.12, t)), ARM_L);
   }
   return p;

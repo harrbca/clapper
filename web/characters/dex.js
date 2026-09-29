@@ -7,7 +7,7 @@
 // bottom (defineCutout): his bones, the tags that say what they are, and the pieces drawn on them.
 // A prop goes in a hand through the draw call: dex.draw(ctx, pose, { x, y, held: { handL: fn } }).
 import {
-  angleSet, brow, defineCutout, EXPR as FACES, eye, HAND, handPiece, ink, jawDrop, line, LW, mouth, mouthChart, mouthName, noodle, P,
+  angleSet, brow, CLIPS, defineCutout, EXPR as FACES, eye, HAND, handPiece, ink, jawDrop, line, LW, mouth, mouthChart, mouthName, noodle, P,
   sleeve, stroke, v, within,
 } from '../cutout.js';
 
@@ -261,7 +261,7 @@ export const POSES = {
 
 // ---------- the character ----------
 export const dex = defineCutout({
-  id: 'dex', version: 1, name: 'Dex',
+  id: 'dex', version: 1, name: 'Dex', height: 950,
   bones: [
     { name: 'hips', at: [0, -424] },
     { name: 'legL', parent: 'hips', at: [-34, -4], len: THIGH, z: 0, piece: 'legL' },
@@ -303,7 +303,9 @@ export const dex = defineCutout({
     legL: { draw: leg('L') }, legR: { draw: leg('R') },
     footL: boots(-1), footR: boots(1),
   },
-  rest: REST, poses: POSES, expressions: EXPR,
+  // knees bend forward, never back (for facing right; mirrored facing left)
+  limits: { shinL: [-0.15, 2.9], shinR: [-0.15, 2.9] },
+  rest: REST, poses: POSES, expressions: EXPR, clips: CLIPS,
   life: { seed: 7 },
 });
 

@@ -1,5 +1,5 @@
 // The performance: Dex's moves keyed to the words, his scanner, the walk off, and the camera.
-import { clamp, E, inv, wiggle } from '/@kit/core.js';
+import { E, inv, wiggle } from '/@kit/core.js';
 import { shot } from '/@kit/camera.js';
 import { HAND } from '/@kit/cutout.js';
 import { moves } from '/@kit/puppet.js';
@@ -57,18 +57,8 @@ export const DEX_MOVES = moves([
   { t: c.exit, dur: 0.3, pose: { 'body.view': 2, 'head.view': 0, ...R_DOWN, ...SCAN_DOWN, ...EXPR.neutral } },
 ]);
 
-// The walk off: legs and arms swinging, a bob, carrying him out of the frame to the right.
-const WALK_AT = () => c.exit + 0.3, STEP = 0.5, SPEED = 420;
-export const walked = t => Math.max(0, t - WALK_AT()) * SPEED * clamp((t - WALK_AT()) / 0.4);
-function walk(t) {
-  const u = t - WALK_AT();
-  if (u <= 0) return {};
-  const k = clamp(u / 0.3), ph = (u / STEP) * Math.PI, s = Math.sin(ph);
-  return {
-    'legL.r': -0.42 * s * k, 'legR.r': 0.42 * s * k, 'shinL.r': Math.max(0, s) * 0.7 * k, 'shinR.r': Math.max(0, -s) * 0.7 * k,
-    'armL.r': 0.3 * s * k, 'armR.r': -0.3 * s * k, 'hips.y': -Math.abs(Math.cos(ph)) * 10 * k,
-  };
-}
+// The walk off (walk2d): once he's turned side-on, out of the frame to the right, feet planted.
+export const WALK = { x0: DEX.x, x1: DEX.x + 1500, t0: c.exit + 0.3, t1: c.exit + 4.3, step: 240, lift: 40 };
 
 // Motion over the choreography: the wave's flap, the thumbs-up's pump, a jolt at the beep.
 const bump = (t, t0, d = 0.25) => { const k = (t - t0) / d; return k > 0 && k < 1 ? Math.sin(k * Math.PI) : 0; };
@@ -78,7 +68,6 @@ export function dexExtra(t) {
     'foreR.r': -bump(t, c.done, 0.2) * 0.15,
     'head.y': bump(t, c.beeps + 0.05, 0.25) * 8,
     'head.r': wiggle(t, c.wrong + 0.1, 0.5, 0.03, 2),
-    ...walk(t),
   };
 }
 

@@ -32,3 +32,26 @@ export function toScreen(cam, [x, y], depth = 1) {
   const r = (cam.rot || 0) * depth, dx = (x - fx) * z, dy = (y - fy) * z;
   return [W / 2 + dx * Math.cos(r) - dy * Math.sin(r), H / 2 + dx * Math.sin(r) + dy * Math.cos(r)];
 }
+
+// ---------- named shots ----------
+// How much of a character a shot shows: the span of its height, from its feet (0) to the top of its
+// head (1), that fills the frame top to bottom.
+export const SHOTS = {
+  wide: { span: [-0.3, 1.4], note: 'the whole figure, small in the set' },
+  full: { span: [-0.06, 1.06], note: 'head to toe' },
+  knee: { span: [0.28, 1.05], note: 'from the knees up' },
+  medium: { span: [0.47, 1.04], note: 'from the waist up' },
+  close: { span: [0.68, 1.03], note: 'head and shoulders' },
+  face: { span: [0.76, 1.0], note: 'the face' },
+};
+
+// A camera (for view) framing shot `kind` on a character whose feet are at (x, y), `height` scene
+// units tall (its height times its draw scale). third: -1 or 1 puts it on the left or right third
+// of the frame instead of the middle.
+export function framing(kind, { x, y, height, third = 0 }) {
+  const s = SHOTS[kind];
+  if (!s) throw new Error(`there's no shot called ${kind}; there are ${Object.keys(SHOTS).join(', ')}`);
+  if (!(height > 0)) throw new Error(`framing ${kind} needs the character's height on screen (height times scale)`);
+  const top = y - s.span[1] * height, bottom = y - s.span[0] * height, zoom = H / (bottom - top);
+  return { x: x - (third * W) / 6 / zoom, y: (top + bottom) / 2, zoom, rot: 0 };
+}

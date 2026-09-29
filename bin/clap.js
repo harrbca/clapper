@@ -8,6 +8,7 @@ import { build } from '../lib/build.js';
 import { chromePath } from '../lib/browser.js';
 import { capture } from '../lib/capture.js';
 import { KIT, loadProject } from '../lib/project.js';
+import { list } from '../lib/list.js';
 import { sheets, stills, video } from '../lib/render.js';
 import { serve } from '../lib/server.js';
 import { voice } from '../lib/voice.js';
@@ -29,6 +30,8 @@ const HELP = `clap <command> [options]
                                character lab, instead of the video). A time is seconds, a cue, a scene or
                                a line id, optionally with an offset: 12.5, title, intro+2, hello-0.1
   sheet [name] [time...]       2x2 contact sheets (default: the timeline's review list)
+  list [character]             what a declared character understands: tags, chains, pieces, pose keys,
+                               poses, expressions, clips; and the named shots and easings
   render [out.mp4] [--workers 8] [--from s] [--to s] [--scale 0.5|2] [--draft] [--encoder nvenc|x264]
                                the video, with the mix and chapters. --draft: half size, fast.
                                x264 by default; --encoder nvenc uses an NVIDIA GPU
@@ -69,6 +72,7 @@ const commands = {
   build: () => build(project(), { audio: !opt['no-audio'] }),
   still: () => stills(project(), pos.length ? pos : fail('clap still <time>...'), { scale: num(opt.scale, 1), entry: opt.entry }),
   sheet: () => sheets(project(), pos.shift() || 'review', pos, { entry: opt.entry }),
+  list: () => list(pos[0] ? project() : null, pos[0]),
   async render() {
     const P = project();
     const draft = opt.draft;

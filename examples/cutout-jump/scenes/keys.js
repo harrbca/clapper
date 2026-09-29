@@ -1,7 +1,7 @@
 // The key poses of the stunt, as an animator draws them first: stand, crouch, take-off, tuck, open,
 // impact, the hero landing, and the look up. Feet and hands that touch something are placed by IK
 // on the finished pose (contacts), so they stay put whatever the body does.
-import { HAND, MOUTH, plant, reachChain } from '/@kit/cutout.js';
+import { bodyAngle, HAND, MOUTH, plant, reachChain } from '/@kit/cutout.js';
 import { dex, EXPR } from '/@kit/characters/dex.js';
 
 // the ankle sits this far above the sole (Dex's boots are drawn at 1.2x)
@@ -25,31 +25,32 @@ export const KEY = {
   // impact: turned to us at 3/4, squashed deep
   impact: { 'body.view': 1, 'hips.y': 250, 'hips.sy': 1, 'torso.r': 0.75, 'torso.sy': 0.88, 'head.r': 0.35, 'armL.r': -0.4, 'foreL.r': -0.3, 'armR.r': 1.9, 'foreR.r': 0.2, ...hands(HAND.palm, HAND.spread), ...EXPR.angry, 'eyes.y': 0.7 },
   // the hero landing: a knee down, a fist on the floor, the other arm thrown back, head down
-  hero: { 'body.view': 1, 'hips.y': 226, 'torso.r': 0.85, 'torso.sy': 1, 'head.r': 0.1, 'head.view': 0, 'armR.r': 1.6, 'foreR.r': 0.15, 'handR.r': 0.3, ...hands(HAND.fist, HAND.spread), ...EXPR.neutral, 'brows.in': 0.8, 'lids.drop': 0.3, 'eyes.y': 0.8 },
+  hero: { 'body.view': 1, 'hips.y': 226, 'torso.r': 1.2, 'torso.sy': 1, 'head.r': 0.1, 'head.view': 0, 'armR.r': 1.6, 'foreR.r': 0.15, 'handR.r': 0.3, ...hands(HAND.fist, HAND.spread), ...EXPR.neutral, 'brows.in': 0.8, 'lids.drop': 0.3, 'eyes.y': 0.8 },
   // ...and the look up, straight at us
-  look: { 'head.r': -0.75, 'head.view': -1, 'eyes.y': -0.2, 'eyes.x': 0, 'brows.in': 0.7, 'lids.drop': 0.28, 'mood.smile': 0.3, 'mouth.shape': MOUTH.smirk, 'mouth.cornerR': 0.3 },
+  look: { 'head.r': -1.05, 'head.view': -1, 'eyes.y': -0.2, 'eyes.x': 0, 'brows.in': 0.7, 'lids.drop': 0.28, 'mood.smile': 0.3, 'mouth.shape': MOUTH.smirk, 'mouth.cornerR': 0.3 },
 };
 
 // The contacts for a finished pose. `which` names the set: feet on the table (x is where he stands),
 // the crouch's feet, the impact's, or the hero landing's knee, foot and fist.
-export function contacts(p, which) {
-  if (which === 'stand') {
-    p = plant(dex, p, 'legL', [16, ANKLE]);
-    return plant(dex, p, 'legR', [-16, ANKLE]);
+export function contacts(p, which, { quiet } = {}) {
+  if (which === 'stand') {                                         // each foot under its hip, the near one a little forward side-on
+    const side = Math.sin((bodyAngle(p) * Math.PI) / 4);
+    for (const [leg, ahead] of [['legL', 16], ['legR', -16]]) p = plant(dex, p, leg, [dex.where(leg, p)[0] + ahead * side, ANKLE]);
+    return p;
   }
-  if (which === 'tuck') {                                          // hands on the shins
-    p = reachChain(dex, p, 'armL', dex.where('shinL', p, [0, 90]));
-    return reachChain(dex, p, 'armR', dex.where('shinR', p, [0, 70]));
+  if (which === 'tuck') {                                          // hands on the shins, just below the knees
+    p = reachChain(dex, p, 'armL', dex.where('shinL', p, [0, 40]), { quiet });
+    return reachChain(dex, p, 'armR', dex.where('shinR', p, [0, 30]), { quiet });
   }
   if (which === 'impact') {
-    p = plant(dex, p, 'legL', [-120, ANKLE]);
-    p = plant(dex, p, 'legR', [120, ANKLE]);
-    return reachChain(dex, p, 'armL', [150, -70]);
+    p = plant(dex, p, 'legL', [-120, ANKLE], { quiet });
+    p = plant(dex, p, 'legR', [120, ANKLE], { quiet });
+    return reachChain(dex, p, 'armL', [158, -80], { quiet });
   }
   if (which === 'hero') {
-    p = plant(dex, p, 'legL', [-214, -30], { tilt: 1.3 });         // the knee on the floor, the shin behind
-    p = plant(dex, p, 'legR', [150, ANKLE]);                       // the front foot flat, knee up
-    const a = reachChain(dex, p, 'armL', [70, -84]);               // the fist on the floor
+    p = plant(dex, p, 'legL', [-214, -30], { tilt: 1.3, quiet });  // the knee on the floor, the shin behind
+    p = plant(dex, p, 'legR', [150, ANKLE], { quiet });            // the front foot flat, knee up
+    const a = reachChain(dex, p, 'armL', [185, -50], { quiet });   // the fist on the floor, under the shoulder
     return { ...a, 'handL.r': -dex.angle('foreL', a) + Math.PI * 0.02 };
   }
   return p;

@@ -1,0 +1,64 @@
+{
+ "request": {
+  "text": "See this? Scan the bin, scan the item. Done.",
+  "voice": "N2lVS1w4EtoT3dr4eOWO",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Morning! I'm Dex. I pick orders on the night shift.",
+  "next_text": "Wrong bin? It beeps at you. Loudly.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "See",
+   "start": 0,
+   "end": 0.221
+  },
+  {
+   "w": "this?",
+   "start": 0.267,
+   "end": 0.824
+  },
+  {
+   "w": "Scan",
+   "start": 1.149,
+   "end": 1.486
+  },
+  {
+   "w": "the",
+   "start": 1.556,
+   "end": 1.625
+  },
+  {
+   "w": "bin,",
+   "start": 1.672,
+   "end": 2.101
+  },
+  {
+   "w": "scan",
+   "start": 2.218,
+   "end": 2.554
+  },
+  {
+   "w": "the",
+   "start": 2.612,
+   "end": 2.694
+  },
+  {
+   "w": "item.",
+   "start": 2.775,
+   "end": 3.32
+  },
+  {
+   "w": "Done.",
+   "start": 3.495,
+   "end": 4.551
+  }
+ ]
+}

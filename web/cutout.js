@@ -10,7 +10,7 @@
 //
 // Poses are flat objects of numbers, as for any Puppet. Keys ending in '.shape' (a hand, a mouth)
 // swap drawings: choreo doesn't blend them, they change halfway through the move that keys them.
-import { clamp, onTwos } from './core.js';
+import { clamp, E, onTwos } from './core.js';
 import { defineCharacter } from './character.js';
 import { add, choreo } from './puppet.js';
 import { blink, breath, glance, sway } from './life.js';
@@ -47,6 +47,9 @@ export function angle(x) { const n = ((Math.round(x) + 4) % 8 + 8) % 8 - 4; retu
 export const bodyAngle = pose => angle(v(pose, 'body.view'));
 export const headAngle = pose => angle(v(pose, 'body.view') + v(pose, 'head.view'));
 
+// The angle keys: -4 to 4, their sign changed when a clip is played on the other side.
+const VIEW = { range: [-4, 4], flip: 'negate' };
+
 // A swap set of drawings by angle, as a piece: angleSet('body', { 0: front, 1: threeQuarter, ...
 // 4: back }) draws the one for the body's angle ('head' for the head's: body.view plus head.view),
 // mirrored, and given the mirrored pose, to face left. Each drawing is fn(ctx, pose, n). Every angle
@@ -64,7 +67,7 @@ export function angleSet(of, drawings, { fallback = {}, around } = {}) {
   return {
     kind: 'angle', of, variants: drawings, required: [0, 1, 2, 3, 4], fallback,
     describe: a => `angle ${a} (${ANGLES[a]})`,
-    keys: of === 'head' ? { 'body.view': [-4, 4], 'head.view': [-4, 4] } : { 'body.view': [-4, 4] },
+    keys: of === 'head' ? { 'body.view': VIEW, 'head.view': VIEW } : { 'body.view': VIEW },
     draw(ctx, pose, character) {
       const n = angleOf(pose);
       if (around) around(ctx, n, () => drawAt(ctx, n, pose, character));
@@ -145,20 +148,21 @@ function bendOf(character, name, ch, pose, bend) {
 // space) by IK, and the foot turns to `tilt` from level whatever the leg does, for crouches,
 // landings and kneels. Run it on a finished pose (after the pose function, which moves the hips
 // round for the angle).
-export function plant(character, pose, chain, target, { bend, tilt = 0 } = {}) {
+export function plant(character, pose, chain, target, { bend, tilt = 0, quiet } = {}) {
   const ch = character.chain(chain, 'plant');
   if (ch.bones.length < 3) throw new Error(`${character.name}: plant needs a chain of three bones (hip, knee, foot), and ${chain} has ${ch.bones.length}.`);
   const [upper, lower, foot] = ch.bones;
-  const p = character.reach(pose, upper, lower, target, bendOf(character, chain, ch, pose, bend));
+  const p = character.reach(pose, upper, lower, target, bendOf(character, chain, ch, pose, bend), { quiet });
   p[`${foot}.r`] = tilt - character.angle(lower, p);
   return p;
 }
 
-// Reach a chain's end (a hand, at the end of its forearm) to `target` by IK.
-export function reachChain(character, pose, chain, target, { bend } = {}) {
+// Reach a chain's end (a hand, at the end of its forearm) to `target` by IK. quiet: true, for both,
+// when the contact is being let go of and may go out of reach.
+export function reachChain(character, pose, chain, target, { bend, quiet } = {}) {
   const ch = character.chain(chain, 'reachChain');
   if (ch.bones.length < 2) throw new Error(`${character.name}: reachChain needs a chain of at least two bones, and ${chain} has ${ch.bones.length}.`);
-  return character.reach(pose, ch.bones[0], ch.bones[1], target, bendOf(character, chain, ch, pose, bend));
+  return character.reach(pose, ch.bones[0], ch.bones[1], target, bendOf(character, chain, ch, pose, bend), { quiet });
 }
 
 // Mix the keys of two poses by k (for easing IK in and out over animation).
@@ -485,7 +489,7 @@ export function cutoutPose(character, { rest = character.rest, seed = 5 } = {}) 
 // The pose keys the cut-out kit reads beyond the bones' own: the angles and the face. Sideways
 // numbers change sign in a mirrored drawing; CUTOUT_SIDES pairs the face's left and right keys.
 export const CUTOUT_KEYS = {
-  'body.view': [-4, 4], 'head.view': [-4, 4],
+  'body.view': VIEW, 'head.view': VIEW,
   'eyes.x': { range: [-1.3, 1.3], mirror: 'negate' }, 'eyes.y': [-1, 1], 'eyes.blink': [0, 1], 'eyes.open': [0, 1.4],
   'eyes.squint': [0, 1], 'eyes.pupil': [0, 2], 'eyeL.open': [0, 1.4], 'eyeR.open': [0, 1.4], 'eyeL.squint': [0, 1], 'eyeR.squint': [0, 1],
   'lids.drop': [0, 1], 'lids.slant': [-1, 1], 'lidL.drop': [0, 1], 'lidR.drop': [0, 1], 'lidL.slant': [-1, 1], 'lidR.slant': [-1, 1],
@@ -494,10 +498,58 @@ export const CUTOUT_KEYS = {
 };
 export const CUTOUT_SIDES = [['eyeL.', 'eyeR.'], ['lidL.', 'lidR.'], ['browL.', 'browR.'], ['mouth.cornerL', 'mouth.cornerR']];
 
-// A cut-out character: defineCharacter with the kit's keys and sides, and its pose function
-// (character.pose). `life` sets cutoutPose's options ({ seed }).
+// ---------- clips ----------
+// Clips for a cut-out biped (chains armL and armR, tags root and look), written against the tags so
+// any such character can play them: character.play('wave', t), and mirror: true for the other side.
+// wave, take and turn are whole gestures; point, shrug and thumbsUp end holding their pose, for the
+// scene to key the way back when it wants.
+const ARM_R_REST = { '@armR.0.r': 'rest', '@armR.1.r': 'rest', '@armR.2.r': 'rest', '@armR.2.shape': 'rest', '@armR.2.flip': 'rest' };
+export const CLIPS = {
+  // the right arm up, palm out, the hand flapping at the wrist, and down again
+  wave: { dur: 1.6, moves: [
+    { t: 0, dur: 0.25, ease: E.snap, anticipate: 0.2, pose: { '@armR.0.r': -2.5, '@armR.1.r': -0.45, '@armR.2.shape': HAND.palm, '@armR.2.r': 0 } },
+    { t: 0.3, dur: 0.18, pose: { '@armR.2.r': 0.35 } },
+    { t: 0.5, dur: 0.18, pose: { '@armR.2.r': -0.3 } },
+    { t: 0.7, dur: 0.18, pose: { '@armR.2.r': 0.35 } },
+    { t: 0.9, dur: 0.18, pose: { '@armR.2.r': -0.3 } },
+    { t: 1.1, dur: 0.15, pose: { '@armR.2.r': 0 } },
+    { t: 1.3, dur: 0.3, ease: E.io, pose: ARM_R_REST },
+  ] },
+  // the right arm out, a finger pointing along it
+  point: { dur: 0.25, moves: [
+    { t: 0, dur: 0.25, ease: E.snap, anticipate: 0.15, pose: { '@armR.0.r': -1.5, '@armR.1.r': -0.05, '@armR.2.shape': HAND.point, '@armR.2.r': 0.1 } },
+  ] },
+  // both forearms up and out, palms up, the head tilted, brows up
+  shrug: { dur: 0.3, moves: [
+    { t: 0, dur: 0.3, ease: E.snap, anticipate: 0.2, pose: {
+      '@armL.0.r': 0.55, '@armL.1.r': 1.3, '@armR.0.r': -0.55, '@armR.1.r': -1.3, '@armL.2.shape': HAND.open, '@armR.2.shape': HAND.open,
+      '@armL.2.r': 0.9, '@armR.2.r': -0.9, '@look.r': 0.1, 'brows.up': 0.6 } },
+  ] },
+  // a fist across the body, the thumb up (the hand flipped to show it), and a pump
+  thumbsUp: { dur: 0.55, moves: [
+    { t: 0, dur: 0.25, ease: E.snap, anticipate: 0.2, pose: { '@armR.0.r': -0.25, '@armR.1.r': -1.35, '@armR.2.shape': HAND.thumb, '@armR.2.flip': 1, '@armR.2.r': 0.1 } },
+    { t: 0.3, dur: 0.1, pose: { '@armR.1.r': -1.55 } },
+    { t: 0.4, dur: 0.15, pose: { '@armR.1.r': -1.35 } },
+  ] },
+  // a surprised take: down and screwed up first, then up, eyes wide, arms out, and a settle
+  take: { dur: 0.9, moves: [
+    { t: 0, dur: 0.12, pose: { '@root.y': 14, '@look.r': 0.06, 'eyes.squint': 0.4, 'brows.in': 0.4 } },
+    { t: 0.12, dur: 0.14, ease: E.snap, pose: {
+      '@root.y': -10, '@look.r': -0.08, 'eyes.squint': 0, 'brows.in': 0, 'brows.up': 1, 'eyes.open': 1.25, 'eyes.pupil': 0.7, 'mouth.shape': MOUTH.o,
+      '@armL.0.r': 0.45, '@armR.0.r': -0.45, '@armL.2.shape': HAND.spread, '@armR.2.shape': HAND.spread } },
+    { t: 0.5, dur: 0.4, pose: { '@root.y': 0, '@look.r': 0 } },
+  ] },
+  // a turn from angle `from` to angle `to`: the head gets there first, and the body follows
+  turn: Object.assign(({ from = 0, to = 2, lead = 0.12, dur = 0.35 } = {}) => ({ dur: lead + dur, moves: [
+    { t: 0, dur: lead + 0.04, pose: { 'head.view': to - from } },
+    { t: lead, dur, pose: { 'body.view': to, 'head.view': 0 } },
+  ] }), { params: ['from', 'to', 'lead', 'dur'] }),
+};
+
+// A cut-out character: defineCharacter with the kit's keys and sides, facing from body.view, and
+// its pose function (character.pose). `life` sets cutoutPose's options ({ seed }).
 export function defineCutout({ life, keys = {}, sides = [], ...def }) {
-  const character = defineCharacter({ ...def, keys: { ...CUTOUT_KEYS, ...keys }, sides: [...CUTOUT_SIDES, ...sides] });
+  const character = defineCharacter({ ...def, keys: { ...CUTOUT_KEYS, ...keys }, sides: [...CUTOUT_SIDES, ...sides], facing: pose => (bodyAngle(pose) < 0 ? -1 : 1) });
   character.pose = cutoutPose(character, life);
   return character;
 }
