@@ -347,6 +347,38 @@ a two-shot and singles.
 In `choreo`, a move can `anticipate` (wind back before it goes), and `E.snap` lands fast and settles.
 `onTwos(t)` holds time in steps of two frames, for anything else that should move like drawn animation.
 
+### Cut-out characters: cutout.js and Dex
+
+`/@kit/cutout.js` rigs characters the way TV cut-out animation does (the Toon Boom Harmony look of
+adult animated sitcoms): flat colour and one even ink line, with drawings swapped rather than bent.
+`/@kit/characters/dex.js` is Dex, a warehouse picker in a hi-vis vest, made from it.
+
+- **Angles:** a character is drawn from set angles, `0` front, `1` 3/4, `2` profile, `3` 3/4 from
+  behind and `4` back, negative to face left (the same drawings mirrored). `body.view` turns the body
+  and `head.view` turns the head on from there, so the head can lead a turn. Both key like any number
+  and the drawing swaps at each half step, passing through every angle in between. `byAngle` picks a
+  drawing from a set; `turnRig` moves the shoulders and hips round and puts the far limbs behind.
+- **Hands:** a library of drawn hands (`HAND.relaxed`, `open`, `spread`, `palm`, `point`, `fist`,
+  `thumb`, `grip`, `ok`, `peace`), keyed as `'handR.shape'`. `'handR.flip': 1` shows the other side.
+  Keys ending in `.shape` swap halfway through the move that keys them instead of blending.
+- **Mouth chart:** one drawing per sound (lipsync.js's shapes, from `viseme(t)`) plus expression
+  mouths (`smile`, `grin`, `frown`, `grimace`, `shout`, `smirk`, `gasp`), keyed as `'mouth.shape'`.
+  While a character talks, the chart follows the words; between words it shows the expression's
+  mouth. Wide-open mouths drop the jaw (`jawDrop`).
+- **Faces:** big eyes with dot pupils and lids inside the outline, and brows, with the toon kit's
+  face keys (`lids.drop`, `lids.slant`, `brows.in` ...). `EXPR` has 14 expressions.
+- **Limbs:** `noodle` bends an arm or leg as one even tube; `sleeve` puts a short sleeve over it.
+- **Contacts:** `plant(puppet, pose, 'L', [x, y])` puts a foot on a spot by IK and keeps it level,
+  for crouches, kneels and landings; `mixKeys` eases a contact in and out. Run them on the finished
+  pose.
+- `cutoutPose` brings a character to life as `toonPose` does: on twos, springs on the arms, blinks,
+  glances, breathing and the mouth chart. Dex's `HELD.L` / `HELD.R` draw a prop in his hand, under
+  the fingers.
+
+`examples/cutout-rig` has Dex's model sheet, face sheet and poses as lab pages, and a short acting
+test in a warehouse: a scanner, a turn to the racking, and a walk off. `examples/cutout-jump` is a
+stunt: off a table, a forward flip, and a superhero landing, built from key poses and contacts.
+
 ### Motion blur
 
 `"motionBlur": { "samples": 8, "shutter": 0.5 }` in video.json averages 8 moments across half a
