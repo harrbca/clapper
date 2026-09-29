@@ -118,12 +118,122 @@ function player() {
   $('rate').onchange = e => (audio.playbackRate = +e.target.value);
   $('debug').onchange = e => (hud.hidden = !e.target.checked);
 
-  // Notes: N (or the Note button) writes a note on this frame. The preview keeps them in notes.json
-  // in the project, and clap notes lists them for whoever works on the video next.
-  const box = $('notebox'), text = $('notetext');
-  let notes = [];
-  const loadNotes = () => fetch('/@notes', { cache: 'no-store' }).then(r => (r.ok ? r.json() : [])).then(n => (notes = n)).catch(() => {});
+  // Notes: N (or the Note button) writes a note on this frame, and L (or Notes) lists them all, with a
+  // mark for each on the position bar: go to one, change its words, move it to the frame you're on,
+  // close it or delete it. The preview keeps them in notes.json in the project, and clap notes lists
+  // them for whoever works on the video next.
+  const box = $('notebox'), text = $('notetext'), panel = $('notes'), list = $('noteslist');
+  let notes = [], seen = '', editing = null, pending = null, lit = -1;
+  // (editing: the note whose words are being changed; pending: a button waiting for its second click,
+  // { key, until }; lit: the frame the list is lit for.) The list is drawn again only when the notes
+  // have changed, so a refresh can't take away what you're in the middle of.
+  const loadNotes = () => fetch('/@notes', { cache: 'no-store' }).then(r => (r.ok ? r.json() : [])).then(n => {
+    const now = JSON.stringify(n);
+    if (now !== seen) { seen = now; notes = n; showNotes(); }
+  }).catch(() => {});
+  const tell = (words, kind = 'info') => { banner(words, kind); if (kind === 'info') setTimeout(() => banner(''), 2500); };
+  // A change to a note. A preview started before notes could be changed answers 405.
+  const change = async (method, id, body = {}) => {
+    const r = await fetch(`/@notes?id=${id}`, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const answer = await r.json().catch(() => ({}));
+    if (r.status === 405) throw new Error('this preview was started before notes could be changed: restart clap preview');
+    if (!r.ok) throw new Error(answer.error || `HTTP ${r.status}`);
+    return answer;
+  };
+  const act = async (n, method, body, did) => {
+    try { await change(method, n.id, body); tell(`Note ${n.id} ${did}`); } catch (err) { tell(`Note ${n.id} wasn't changed: ${err.message}`, 'error'); }
+    loadNotes();
+  };
+  const save = async (n, words) => {
+    if (!words.trim()) return tell('A note needs some words (Delete takes it away)', 'error');
+    try { await change('PATCH', n.id, { text: words }); } catch (err) { return tell(`Note ${n.id} wasn't changed: ${err.message}`, 'error'); }
+    editing = null; tell(`Note ${n.id} changed`); loadNotes();
+  };
+  const moveHere = n => act(n, 'PATCH', { t, frame: Math.round(t * FPS), scene: sceneAt(t).id }, `moved to ${fmt(t)}`);
+  const visit = n => { audio.pause(); go(n.t); };
+
+  const make = (tag, cls, words) => { const e = document.createElement(tag); if (cls) e.className = cls; if (words !== undefined) e.textContent = words; return e; };
+  // A row of buttons: [label, fn, sure, key] asks for a second click within 3 s, saying `sure`, before
+  // it does fn; `key` names the button, so it's still waiting if the list is drawn again meanwhile.
+  const buttons = rows => {
+    const row = make('div', 'note-actions');
+    for (const [label, fn, sure, key] of rows) {
+      const b = make('button', '', label);
+      b.type = 'button';
+      const waiting = () => pending?.key === key && Date.now() < pending.until;
+      const reset = () => { if (!waiting()) { b.classList.remove('sure'); b.textContent = label; } };
+      const arm = () => { b.classList.add('sure'); b.textContent = sure; setTimeout(reset, pending.until - Date.now() + 50); };
+      if (sure && waiting()) arm();
+      b.onclick = () => {
+        if (sure && !waiting()) { pending = { key, until: Date.now() + 3000 }; arm(); return; }
+        pending = null;
+        fn();
+      };
+      row.append(b);
+    }
+    return row;
+  };
+  const item = n => {
+    const li = make('li', n.status === 'done' ? 'done' : '');
+    li.dataset.frame = n.frame;
+    const where = make('button', 'note-where', `${n.id} · ${n.scene} · ${fmt(n.t)} · frame ${n.frame}${n.status === 'done' ? ' · done' : ''}${n.edited ? ' · changed' : ''}`);
+    where.type = 'button'; where.title = 'Go to this frame';
+    where.onclick = () => visit(n);
+    li.append(where);
+    if (editing === n.id) {
+      const input = make('input', 'note-edit');
+      const cancel = () => { editing = null; showNotes(); loadNotes(); };    // (and catch up with changes made meanwhile)
+      input.value = n.text; input.setAttribute('aria-label', `Note ${n.id}`);
+      input.onkeydown = e => {
+        if (e.key === 'Enter') { e.preventDefault(); save(n, input.value); }
+        if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); cancel(); }
+      };
+      li.append(input, buttons([['Save', () => save(n, input.value)], ['Cancel', cancel]]));
+      requestAnimationFrame(() => { input.focus(); input.select(); });
+      return li;
+    }
+    li.append(make('div', 'note-text', n.text));
+    if (n.reply) li.append(make('div', 'note-reply', `reply: ${n.reply}`));
+    li.append(buttons([
+      ['Change', () => { editing = n.id; showNotes(); }],
+      ['Move here', () => moveHere(n)],
+      n.status === 'done' ? ['Reopen', () => act(n, 'PATCH', { status: 'open' }, 'open again')] : ['Done', () => act(n, 'PATCH', { status: 'done' }, 'done')],
+      ['Delete', () => act(n, 'DELETE', {}, 'deleted'), 'Delete it?', `delete ${n.id}`],
+    ]));
+    return li;
+  };
+  function showNotes() {
+    const open = notes.filter(n => n.status === 'open').length;
+    $('notesbtn').textContent = open ? `Notes ${open}` : 'Notes';
+    $('notescount').textContent = notes.length ? `${open} open${notes.length > open ? `, ${notes.length - open} done` : ''}` : '';
+    $('notesempty').hidden = notes.length > 0;
+    list.replaceChildren(...[...notes].sort((a, b) => a.t - b.t || a.id - b.id).map(item));
+    $('marks').replaceChildren(...notes.map(n => {
+      const m = make('button', n.status === 'done' ? 'done' : '');
+      m.type = 'button'; m.style.left = `${(Math.min(n.t, TL.dur) / TL.dur) * 100}%`;
+      m.title = `Note ${n.id} at ${fmt(n.t)}: ${n.text}`; m.setAttribute('aria-label', m.title);
+      m.onclick = () => visit(n);
+      return m;
+    }));
+    lit = -1;
+  }
+  // the notes on the frame you're on stand out in the list
+  const light = f => {
+    if (f === lit || panel.hidden) return;
+    lit = f;
+    for (const li of list.children) li.classList.toggle('here', Number(li.dataset.frame) === f);
+  };
+  const showPanel = on => {
+    panel.hidden = !on;
+    document.body.classList.toggle('notes', on);
+    fit();
+    try { sessionStorage.setItem('clap-notes', on ? '1' : ''); } catch { /* storage may be off */ }
+    if (on) loadNotes();
+  };
+  $('notesbtn').onclick = () => showPanel(panel.hidden);
+  $('notesclose').onclick = () => showPanel(false);
   loadNotes();
+  try { if (sessionStorage.getItem('clap-notes')) showPanel(true); } catch { /* storage may be off */ }
   const openNote = () => {
     audio.pause();
     const s = sceneAt(t);
@@ -145,8 +255,7 @@ function player() {
       const saved = await r.json();
       if (!r.ok) throw new Error(saved.error || `HTTP ${r.status}`);
       closeNote();
-      banner(`Note ${saved.id} saved at ${fmt(at)}: clap notes lists it`, 'info');
-      setTimeout(() => banner(''), 2500);
+      tell(`Note ${saved.id} saved at ${fmt(at)} (L lists the notes)`);
       loadNotes();
     } catch (err) {
       banner(`The note wasn't saved: ${err.message}${/404/.test(err.message) ? ' (notes need clap preview)' : ''}`);
@@ -162,6 +271,8 @@ function player() {
     else if (e.key === 'End') go(TL.dur - 0.01);
     else if (e.key === 'd' || e.key === 'D') { const d = $('debug'); d.checked = !d.checked; d.onchange({ target: d }); }
     else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); openNote(); }
+    else if (e.key === 'l' || e.key === 'L') { e.preventDefault(); showPanel(panel.hidden); }
+    else if (e.key === 'Escape' && !panel.hidden) showPanel(false);
     else if (e.key === '[' || e.key === ']') {
       const i = TL.scenes.indexOf(sceneAt(t)) + (e.key === ']' ? 1 : -1);
       if (TL.scenes[i]) go(TL.scenes[i].start);
@@ -186,15 +297,18 @@ function player() {
       try { await render(t); drawn = t; } catch (e) { banner(String(e && e.stack || e)); audio.pause(); } finally { busy = false; }
     }
     clock.textContent = `${fmt(t)}  f ${Math.round(t * FPS)}`;
+    light(Math.round(t * FPS));
     if (document.activeElement !== scenes) scenes.value = String(s.start);    // the menu follows the playhead
     if (!hud.hidden) hud.textContent = hudText();
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);
 
-  // Live reload: the preview server says when scenes, assets or the build change.
+  // Live reload: the preview server says when scenes, assets or the build change, and when the notes
+  // do (clap notes done, say), which refreshes their list.
   const events = new EventSource('/@events');
   events.addEventListener('reload', () => { try { sessionStorage.setItem('clap-t', String(t)); } catch { /* ignore */ } location.reload(); });
+  events.addEventListener('notes', () => { if (editing === null) loadNotes(); });
   events.addEventListener('building', () => banner('rebuilding the timeline...', 'info'));
   events.addEventListener('failed', e => banner(JSON.parse(e.data).message));
 }

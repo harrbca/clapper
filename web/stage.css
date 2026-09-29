@@ -9,7 +9,13 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0f14; col
 #ui button { font: inherit; font-weight: 700; background: #FF8A1F; color: #1B2330; border: 0; border-radius: 8px; padding: 7px 18px; cursor: pointer; min-width: 76px; }
 #ui select { font: inherit; background: #1E2833; color: inherit; border: 1px solid #334456; border-radius: 6px; padding: 5px 6px; }
 #ui label { display: flex; gap: 5px; align-items: center; white-space: nowrap; cursor: pointer; }
-#seek { flex: 1; min-width: 120px; accent-color: #FF8A1F; }
+#seekwrap { position: relative; flex: 1; min-width: 120px; align-self: stretch; display: flex; align-items: center; }
+#seek { width: 100%; margin: 0; accent-color: #FF8A1F; }
+/* a mark on the position bar for each note (the bar's ends are half its thumb in from its sides) */
+#marks { position: absolute; left: 8px; right: 8px; top: 8px; height: 10px; pointer-events: none; }
+#ui #marks button { position: absolute; top: 0; width: 7px; height: 10px; min-width: 0; margin-left: -3.5px; padding: 0; border: 0; border-radius: 2px;
+                    background: #FF8A1F; cursor: pointer; pointer-events: auto; }
+#ui #marks button.done { background: #5F7388; }
 #clock { font-variant-numeric: tabular-nums; min-width: 150px; text-align: right; color: #B8C4D0; }
 #ui button.quiet, #notebox button.quiet { background: #1E2833; color: inherit; border: 1px solid #334456; min-width: 0; padding: 6px 12px; }
 #stills { color: #B8C4D0; text-decoration: none; border: 1px solid #334456; border-radius: 6px; padding: 5px 10px; }
@@ -23,6 +29,33 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0f14; col
 #notetext:focus { outline: 2px solid #FF8A1F; outline-offset: 1px; }
 #notebox button { font: inherit; font-weight: 700; background: #FF8A1F; color: #1B2330; border: 0; border-radius: 8px; padding: 7px 14px; cursor: pointer; }
 
+/* the notes list, down the right; the video moves over to make room */
+#notes { position: fixed; top: 0; right: 0; bottom: 56px; width: min(380px, 100vw); display: flex; flex-direction: column;
+         background: #141c26; border-left: 1px solid #243140; z-index: 4; }
+#notes[hidden] { display: none; }
+body.notes #wrap { right: min(380px, 100vw); }
+body.notes #banner, body.notes #notebox { left: calc((100vw - min(380px, 100vw)) / 2); max-width: calc(96vw - min(380px, 100vw)); }
+#notes header { display: flex; gap: 10px; align-items: center; padding: 12px 14px; border-bottom: 1px solid #243140; }
+#notes header b { font-size: 15px; }
+#notescount { flex: 1; color: #8FA0B2; }
+#notes button { font: 12px system-ui, "Segoe UI", sans-serif; background: #1E2833; color: inherit; border: 1px solid #334456; border-radius: 6px; padding: 4px 9px; cursor: pointer; }
+#notes button:hover { border-color: #FF8A1F; color: #fff; }
+#notesempty { margin: 14px; color: #8FA0B2; }
+#noteslist { list-style: none; margin: 0; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+#noteslist li { background: #1A2430; border: 1px solid #2A3A4C; border-radius: 8px; padding: 9px 11px; }
+#noteslist li.here { border-color: #FF8A1F; }
+#noteslist li.done .note-text { color: #8FA0B2; }
+#notes button.note-where { display: block; width: 100%; padding: 0; border: 0; background: none; text-align: left; color: #B8C4D0;
+                           font: 12px ui-monospace, Consolas, monospace; }
+#notes button.note-where:hover { color: #fff; }
+.note-text { margin: 6px 0 8px; line-height: 1.4; overflow-wrap: anywhere; }
+.note-reply { margin: -2px 0 8px; color: #8FA0B2; font-size: 12px; overflow-wrap: anywhere; }
+.note-edit { box-sizing: border-box; width: 100%; margin: 6px 0 8px; font: inherit; background: #0b0f14; color: inherit; border: 1px solid #334456;
+             border-radius: 6px; padding: 6px 8px; }
+.note-edit:focus { outline: 2px solid #FF8A1F; outline-offset: 1px; }
+.note-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+#notes .note-actions button.sure { background: #7A1E1E; border-color: #C0453F; color: #fff; }
+
 #hud { position: fixed; left: 12px; top: 12px; max-width: 460px; padding: 10px 12px; border-radius: 10px; background: rgba(10, 14, 20, 0.86);
        font: 12px/1.5 ui-monospace, Consolas, monospace; white-space: pre; pointer-events: none; }
 #banner { position: fixed; left: 50%; top: 14px; transform: translateX(-50%); max-width: 80vw; padding: 10px 16px; border-radius: 10px;
@@ -32,4 +65,4 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0f14; col
 body.render { background: transparent; }
 body.render #wrap { inset: 0; display: block; }
 body.render #stage { transform: none !important; box-shadow: none; }
-body.render #ui, body.render #hud, body.render #notebox { display: none; }
+body.render #ui, body.render #hud, body.render #notebox, body.render #notes { display: none; }

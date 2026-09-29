@@ -46,7 +46,8 @@ const HELP = `clap <command> [options]
                                with the approved ones: what changed, with a picture of where.
                                --approve keeps the new look as approved
   notes [all | done <id> [reply] | reopen <id>]
-                               notes written on frames in the preview (press N), from notes.json
+                               notes written on frames in the preview (N writes one, L lists them
+                               to change), from notes.json
   list [character]             what a declared character understands: tags, chains, pieces, pose keys,
                                poses, expressions, clips; and the named shots and easings
   bake <module#export> [--angles 0,45,90] [--scale 1] [--line px] [--res 2] [--elevation 8]
@@ -118,13 +119,18 @@ const commands = {
   },
   async preview() {
     const P = project();
-    const routes = reviewRoutes(P, { onNote: n => console.log(`  note ${n.id} at ${n.t.toFixed(2)} s (frame ${n.frame}, ${n.scene}): ${n.text}`) });
+    const said = { edited: 'changed', done: 'done', open: 'open again', deleted: 'deleted' };
+    const routes = reviewRoutes(P, {
+      onNote: (n, what) => console.log(what === 'new' ? `  note ${n.id} at ${n.t.toFixed(2)} s (frame ${n.frame}, ${n.scene}): ${n.text}`
+        : what === 'moved' ? `  note ${n.id} moved to ${n.t.toFixed(2)} s (frame ${n.frame}, ${n.scene})`
+          : `  note ${n.id} ${said[what]}${what === 'edited' ? `: ${n.text}` : ''}`),
+    });
     const server = await serve(P, { port: num(opt.port, 4173), routes });
     const url = `${server.url}/@kit/stage.html`;
-    console.log(`  preview: ${url}\n  Space plays, arrows skip (Shift: 1 s), , and . step a frame, [ ] jump scenes, D shows cues, N writes a note.`);
+    console.log(`  preview: ${url}\n  Space plays, arrows skip (Shift: 1 s), , and . step a frame, [ ] jump scenes, D shows cues, N writes a note, L lists them.`);
     console.log(`  stills: ${server.url}/@kit/stills.html (the renders in out/, as they're made). Ctrl+C stops.`);
     if (opt.open) spawn('cmd', ['/c', 'start', '', url], { detached: true, stdio: 'ignore' }).unref();
-    let timer = null, stillsTimer = null, building = false, pending = new Set();
+    let timer = null, stillsTimer = null, notesTimer = null, building = false, pending = new Set();
     const settle = async () => {
       const files = [...pending]; pending = new Set();
       if (files.some(f => f === P.config.timeline || f === 'video.json')) {
@@ -143,9 +149,10 @@ const commands = {
     fs.watch(P.root, { recursive: true }, (_, name) => {
       if (!name) return;
       const f = name.replace(/\\/g, '/');
-      // a new render in out/ refreshes the stills page, not the player; notes are the preview's own
+      // a new render in out/ refreshes the stills page, not the player; a change to the notes (from
+      // the page, or clap notes done) refreshes the player's list of them
       if (/^out\//.test(f) && IMAGE.test(f)) { clearTimeout(stillsTimer); stillsTimer = setTimeout(() => server.notify('stills'), 300); return; }
-      if (/^notes\.json/.test(f)) return;
+      if (/^notes\.json/.test(f)) { clearTimeout(notesTimer); notesTimer = setTimeout(() => server.notify('notes'), 150); return; }
       if (/^(out|audio|node_modules|\.git)\//.test(f) || /^build\/(render|sheet|frames)-tmp/.test(f)) return;
       pending.add(f);
       clearTimeout(timer);

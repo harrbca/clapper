@@ -688,8 +688,12 @@ prop on its own. The page has the same stage and timeline.
 - In `clap preview`, **N** (or Note) writes a note on the frame you're on. The preview keeps notes in
   `notes.json` in the project, with the scene, time and frame, and `clap notes` lists the open ones
   for whoever works on the video next. `clap notes done 3 "moved the landing a frame earlier"` closes
-  one with a reply. The preview only takes notes from its own page, so another website open in the
-  same browser can't write into them.
+  one with a reply. **L** (or Notes) lists them all, with a mark for each on the position bar: click
+  one to go to its frame, then change its words, move it to the frame you're on, close it, reopen it,
+  or delete it (a second click makes sure). The list keeps up as the notes change, so a `clap notes
+  done` shows up in it, and a note that's been changed says so there and in `clap notes`. Deleted
+  notes' numbers aren't used again. The preview only takes notes from its own page, so another
+  website open in the same browser can't write into them.
 - The preview's **Stills** page (`/@kit/stills.html`) shows everything in `out/` (stills, sheets,
   frames), newest first, and adds new renders as they're made.
 

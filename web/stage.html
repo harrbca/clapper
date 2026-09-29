@@ -11,15 +11,21 @@
 <div id="wrap"><div id="stage"><canvas id="canvas"></canvas><div id="overlay"></div></div></div>
 <div id="ui">
   <button id="play" title="Play or pause (Space)">Play</button>
-  <input id="seek" type="range" min="0" step="0.001" value="0" aria-label="Position">
+  <span id="seekwrap"><input id="seek" type="range" min="0" step="0.001" value="0" aria-label="Position"><span id="marks"></span></span>
   <span id="clock">0:00.00</span>
   <select id="scenes" aria-label="Jump to scene"></select>
   <select id="rate" aria-label="Speed"><option value="0.5">0.5x</option><option value="1" selected>1x</option></select>
   <label title="Loop the current scene"><input id="loop" type="checkbox"> Loop</label>
   <label title="Show cues and the current line (D)"><input id="debug" type="checkbox"> Cues</label>
   <button id="note" class="quiet" type="button" title="Write a note on this frame (N)">Note</button>
+  <button id="notesbtn" class="quiet" type="button" title="The notes on this video: go to one, change it, close it (L)">Notes</button>
   <a id="stills" href="/@kit/stills.html" target="_blank" title="The renders in out/: stills, sheets and frames, as they're made">Stills</a>
 </div>
+<aside id="notes" hidden aria-label="Notes">
+  <header><b>Notes</b><span id="notescount"></span><button id="notesclose" type="button" title="Close the list (L)">Close</button></header>
+  <p id="notesempty" hidden>No notes yet: N writes one on the frame you're on.</p>
+  <ol id="noteslist"></ol>
+</aside>
 <form id="notebox" hidden>
   <span id="notewhere"></span>
   <input id="notetext" autocomplete="off" placeholder="What should change here?" aria-label="The note">
