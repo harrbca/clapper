@@ -21,6 +21,15 @@ number of Chrome processes at once.
   when the timeline does.
 - **Render:** MP4 with the soundtrack and chapter markers, plus SRT and VTT captions. The whole
   3-minute 1080p video renders in about 30 s on an i9.
+- **Characters:** stock characters in three styles: toon puppets (Pip and Gus), cut-out characters
+  made as data, JSON and SVG drawings (Dex, a cast of ten office and warehouse people, and three
+  pets), and 3D (Pip, Tilly, Tilly v2 and Ray). Declared characters are checked as they're drawn: a
+  pose key that doesn't exist, a knee bent backwards, a hand that can't reach.
+- **2D and 3D together:** one ink style for all of it, 3D props baked into sprites for cut-out
+  scenes, and cut-out characters laid out in a 3D set, at the right size and in the right order.
+- **Checking:** `clap check` draws every frame and runs the characters' checks; `clap frames`
+  shows each drawing between two times; notes written on frames in the preview; and `clap check
+  --affected` shows what a change to a character does to every video that uses it.
 
 ## Setup
 
@@ -333,6 +342,15 @@ second, which the lip-sync uses. `examples/clapper-intro` has two full character
 with lip-sync, blinking, IK gestures and a spring-driven ponytail) and Bolt (a hovering robot). It
 goes on to a web capture and a 3D tour: a label printed, walked to its bin and picked with a scanner,
 onto Tilly.
+
+The kit's characters are in `web/characters/`; `clap list` names them, and `clap list <name>` prints
+what a declared one understands:
+
+| style | characters | see |
+|---|---|---|
+| toon, drawn in code | Pip (`pip`), Gus (`gus`) | Stock characters, below |
+| cut-out, as data | Dex (`dex`); the cast: Rosa, Marcus, Priya, Walt, Jess, Dana, Kenji, Amara, Greg, Linda; the pets: Biscuit (`dog`), Miso (`cat`), Clover (`rabbit`) | Cut-out characters |
+| 3D | Pip (`pip3d`), Tilly (`tilly3d`), Tilly v2 (`tilly3d-v2`), Ray (`ray3d`, skinned) | 3D, and Skinned characters |
 
 ### Stock characters: Pip and Gus
 
@@ -781,6 +799,9 @@ uploads the project needs YouTube's compliance audit: the
 ## Tools
 
 - `tools/make-sfx.mjs` remakes the kit's sound effects in `sfx/`.
+- `tools/make_people.py` makes the cast of cut-out people as data from short descriptions (see "The
+  cast"); add one to its list and run it.
+- `tools/gpu-check.mjs` shows which graphics card headless Chrome draws WebGL with.
 - `tools/import-el-cache.mjs` imports an ElevenLabs cache from the older Python pipeline.
 - `tools/profile-frames.mjs` times drawing and capture for one Chrome.
 - `tools/pdf-png.ps1` renders PDF pages to PNGs with the PDF renderer built into Windows, to put a

@@ -4,7 +4,9 @@ Clapper is a kit for narrated, animated videos: frames drawn in headless Chrome 
 three.js), narration from ElevenLabs, one ffmpeg encode. The README is the manual; read it first
 (for 3D, its "Making a 3D video"). Generic features go into the kit (`web/`, `lib/`, `bin/`),
 per-video art and scripts into the video's own project. `examples/` holds projects that show the kit
-off; `templates/` holds the starters `clap new` copies.
+off; `templates/` holds the starters `clap new` copies. Stock characters are in `web/characters/`: the
+cut-out ones are data (a folder with `character.json` and SVG drawings, loaded by `loadCutout`; see
+the README's "Characters as data"), and `tools/make_people.py` makes the cast of people.
 
 These rules are for everyone. The user's own (their commit identity, where their projects and assets
 live, work they have paused) are in `CLAUDE.local.md` next to this file, if there is one. Git ignores
