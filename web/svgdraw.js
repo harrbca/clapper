@@ -157,11 +157,11 @@ function run(ctx, nodes, drawing, env) {
     } else {
       const path = n.morph ? morphed(n.morph, env.vars?.[n.morph.key] ?? 0) : n.path;
       if (n.fill) { ctx.fillStyle = n.fill; ctx.fill(path); }
-      if (n.stroke) { ctx.lineWidth = n.width; ctx.strokeStyle = n.stroke; ctx.lineJoin = n.join; ctx.lineCap = n.cap; ctx.stroke(path); }
+      if (n.stroke) { ctx.lineWidth = n.width * (env.lineScale ?? 1); ctx.strokeStyle = n.stroke; ctx.lineJoin = n.join; ctx.lineCap = n.cap; ctx.stroke(path); }
     }
   }
 }
 
 // Draws a drawing (from readSVG) in the current space. env: { pose, vars (values shape keys read,
-// like the jaw), features ({ eye: (ctx, env, data) => ... }) }.
+// like the jaw), features ({ eye: (ctx, env, data) => ... }), lineScale (for every stroke's width) }.
 export function drawSVG(ctx, drawing, env = {}) { run(ctx, drawing.children, drawing, env); }

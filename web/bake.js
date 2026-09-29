@@ -12,6 +12,7 @@
 // it's drawn at. With `shadow`, the soft shadow under the prop is baked in too.
 import { layer3d, THREE } from './scene3d.js';
 import { INK3D, STYLE } from './style.js';
+import { rescaleInk } from './toon3d.js';
 
 const q = new URL(import.meta.url).searchParams;
 const num = (k, d) => (q.has(k) ? Number(q.get(k)) : d);
@@ -43,13 +44,7 @@ async function bake(stage) {
   L.renderer.setSize(N, N, false);
 
   // the ink, redrawn `line` px wide at 1x at this camera's depth
-  const f = line / (scale * 2.6 * INK3D * PER_PX * D), swapped = new Map();
-  holder.traverse(o => {
-    const m = o.material;
-    if (!m?.uniforms?.push) return;
-    if (!swapped.has(m)) { const c = m.clone(); c.uniforms.push.value = m.uniforms.push.value * f; swapped.set(m, c); }
-    o.material = swapped.get(m);
-  });
+  rescaleInk(holder, line / (scale * 2.6 * INK3D * PER_PX * D));
 
   const lights = L.studioLights();
   const top = lights.top.shadow.camera, reach = Math.max(1400, r * 1.4);

@@ -532,6 +532,48 @@ printer.draw(ctx, 45, { x: 1620, y: 800 });     // its origin (the footprint's m
 `examples/cutout-rig/scenes/lab-props.js` puts Dex beside baked racking, a desk and the label
 printer at three angles, at 1x and at `?zoom=1.75`.
 
+### Cut-out scenes in a 3D set: layout.js
+
+A cut-out scene can be laid out in a 3D set, as TV cut-out shows lay out their shots: the set is built
+in 3D once, and each shot is a picture of it from a fixed camera, with the 2D characters placed on it.
+
+```js
+import { bakeLayers, drawLayer, liveLayer, shotCamera, worldStand, worldWalk } from '/@kit/layout.js';
+const shot = shotCamera({ pos: [2600, 1500, 7800], at: [2600, 820, 600], fov: 30 });
+const baked = bakeLayers(L, shot, { back: set, front: [stock] });             // once, at setup
+// each frame:
+const at = worldWalk(shot, walk(t, { path, t0, t1 }), { unit: 1780 / 950 });  // Dex: 950 units, 1.78 m
+const p = walkPose(dex, dex.pose(t, moves, { extra: () => ({ 'body.view': at.view }) }), at.w, { scale: at.scale });
+drawLayer(ctx, baked.back);
+dex.draw(ctx, p, { x: at.x, y: at.y, scale: at.scale, line: 2.4 });
+drawLayer(ctx, baked.front);
+```
+
+- `shotCamera({ pos, at, fov })` is a shot's camera. Its `project([x, y, z])` says where a point of
+  the set is on screen, how many pixels a unit is there (`scale`), and how far away it is (`depth`).
+  Its `view([x, z], yaw)` says which cut-out angle (0 front to 4 back, negative facing left) a
+  character facing `yaw` shows it.
+- `bakeLayers(L, shot, { back, front })` draws the set once into pictures, a layer per list of
+  objects: the set behind the characters, and anything in front of them. Within a shot the camera
+  only pans and zooms in 2D (camera.js's `view`, over the pictures).
+- `worldStand(shot, [x, z], yaw, { unit })` and `worldWalk(shot, walk, { unit })` place a character:
+  where it is on screen, its draw scale (the set's scale there, times `unit`, the set's units per
+  character unit) and its view. `worldWalk` takes walk3d's `walk()` and gives walkPose its feet
+  projected, so a planted foot is a fixed point in the set and doesn't slide.
+- `liveLayer(L, shot, { show, hold })` draws what moves (a forklift, a pallet it lifts) in 3D each
+  frame, with `hold` (the baked set) drawn only into depth: it hides what's behind it without drawing
+  itself, so racking hides forks going into a bin.
+- Draw things in order of depth (`project()`'s `depth`), far to near, so characters pass behind and
+  in front of the set and of what moves.
+- `inkAt(shot, line)` is how much to widen the 3D kit's ink for a shot's lens, for lines `line` px
+  wide; toon3d's `rescaleInk(object, k)` does it.
+- A cut-out character's draw takes `line`: its line width in pixels at the draw's scale, whatever the
+  scale, so a small character in a wide shot has lines as heavy as a big one, and as the set's.
+  `withLine(width, fn)` (cutout.js) does the same for any drawing.
+
+`examples/cutout-tour` is the 3D intro's warehouse tour made again with Dex this way: the printer, the
+walk (behind stock on the aisle floor), the pick, and Tilly lifting the order out of its bin.
+
 ### Motion blur
 
 `"motionBlur": { "samples": 8, "shutter": 0.5 }` in video.json averages 8 moments across half a

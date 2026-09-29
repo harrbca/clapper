@@ -1,0 +1,17 @@
+{
+  "title": "Dex: the warehouse tour, in cut-out",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "background": "#C5CDD3",
+  "style": { "ink": "#1D1A24", "line": 3.4, "line3d": 2.4 },
+  "entry": "scenes/index.js",
+  "capture": "canvas",
+  "hidpi": true,
+  "fonts": [
+    { "family": "Roboto", "weight": 500, "src": "@kit/fonts/Roboto-Medium.ttf" },
+    { "family": "Roboto", "weight": 700, "src": "@kit/fonts/Roboto-Bold.ttf" }
+  ],
+  "chapters": { "dock": "The dock", "walk": "The walk", "bin": "The pick", "end": null },
+  "loudness": -16
+}

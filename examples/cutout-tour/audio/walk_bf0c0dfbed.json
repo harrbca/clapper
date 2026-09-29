@@ -1,0 +1,64 @@
+{
+ "request": {
+  "text": "Then it's a short walk over to aisle A.",
+  "voice": "N2lVS1w4EtoT3dr4eOWO",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "New order. The label prints right here at the dock. I tear it off, and it tells me the bin.",
+  "next_text": "Stick the label on the order, and scan it.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Then",
+   "start": 0,
+   "end": 0.197
+  },
+  {
+   "w": "it's",
+   "start": 0.244,
+   "end": 0.395
+  },
+  {
+   "w": "a",
+   "start": 0.43,
+   "end": 0.464
+  },
+  {
+   "w": "short",
+   "start": 0.522,
+   "end": 0.813
+  },
+  {
+   "w": "walk",
+   "start": 0.894,
+   "end": 1.184
+  },
+  {
+   "w": "over",
+   "start": 1.254,
+   "end": 1.44
+  },
+  {
+   "w": "to",
+   "start": 1.498,
+   "end": 1.579
+  },
+  {
+   "w": "aisle",
+   "start": 1.695,
+   "end": 1.997
+  },
+  {
+   "w": "A.",
+   "start": 2.055,
+   "end": 2.926
+  }
+ ]
+}

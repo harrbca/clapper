@@ -1,0 +1,54 @@
+{
+ "request": {
+  "text": "Tilly takes it from here. Thanks, Tilly!",
+  "voice": "N2lVS1w4EtoT3dr4eOWO",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "Then it's a short walk over to aisle A. Stick the label on the order, and scan it.",
+  "next_text": null,
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Tilly",
+   "start": 0,
+   "end": 0.372
+  },
+  {
+   "w": "takes",
+   "start": 0.441,
+   "end": 0.708
+  },
+  {
+   "w": "it",
+   "start": 0.755,
+   "end": 0.824
+  },
+  {
+   "w": "from",
+   "start": 0.871,
+   "end": 1.01
+  },
+  {
+   "w": "here.",
+   "start": 1.068,
+   "end": 1.498
+  },
+  {
+   "w": "Thanks,",
+   "start": 1.823,
+   "end": 2.194
+  },
+  {
+   "w": "Tilly!",
+   "start": 2.229,
+   "end": 2.926
+  }
+ ]
+}

@@ -48,6 +48,20 @@ export function inkMaterial(width = 2.6, color = INK) {
   return m;
 }
 
+// Redraws the ink of everything under root k times as wide (for another camera, or a bake), with
+// copies of its ink materials. Returns a function that puts the old ones back.
+export function rescaleInk(root, k) {
+  const was = [], copies = new Map();
+  root.traverse(o => {
+    const m = o.material;
+    if (!m?.uniforms?.push) return;
+    if (!copies.has(m)) { const c = m.clone(); c.uniforms.push.value = m.uniforms.push.value * k; copies.set(m, c); }
+    was.push([o, m]);
+    o.material = copies.get(m);
+  });
+  return () => { for (const [o, m] of was) o.material = m; };
+}
+
 // A mesh with an ink outline (width 0 for none), casting shadows.
 export function solid(geometry, material, { ink = 2.6, shadow = true } = {}) {
   const m = new THREE.Mesh(geometry, material);

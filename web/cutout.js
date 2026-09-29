@@ -20,7 +20,17 @@ import { springs } from './spring.js';
 import { STYLE } from './style.js';
 
 // The ink: the video's style (style.js) if it has one, else the cut-out kit's own.
-export const INK = STYLE.ink ?? '#1D1A24', LW = STYLE.line ?? 3.4;
+export const INK = STYLE.ink ?? '#1D1A24';
+const LW_BASE = STYLE.line ?? 3.4;
+export let LW = LW_BASE;
+// Draws with another line width for the length of fn. A drawing's lines scale with it, so a character
+// drawn small has thin lines; cut-out shows keep line weight even from shot to shot instead, which is
+// what a draw's `line` option does (see defineCutout): withLine(2.2 / scale, ...) is 2.2 px on screen.
+export function withLine(width, fn) {
+  const was = LW;
+  LW = width;
+  try { return fn(); } finally { LW = was; }
+}
 export const v = (pose, k, d = 0) => pose[k] ?? d;
 export const P = s => new Path2D(s);
 
@@ -551,9 +561,13 @@ export const CLIPS = {
 
 // A cut-out character: defineCharacter with the kit's keys and sides, facing from body.view, and
 // its pose function (character.pose). `life` sets cutoutPose's options ({ seed }).
+// Its draw takes a `line` option: the line width in pixels at the draw's scale, whatever the scale,
+// for lines as heavy on a small character in a wide shot as on a big one (and on a baked set).
 export function defineCutout({ life, keys = {}, sides = [], ...def }) {
   const character = defineCharacter({ ...def, keys: { ...CUTOUT_KEYS, ...keys }, sides: [...CUTOUT_SIDES, ...sides], facing: pose => (bodyAngle(pose) < 0 ? -1 : 1) });
   character.pose = cutoutPose(character, life);
+  const draw = character.draw.bind(character);
+  character.draw = (ctx, pose, opts = {}) => (opts.line ? withLine(opts.line / (opts.scale ?? 1), () => draw(ctx, pose, opts)) : draw(ctx, pose, opts));
   return character;
 }
 
@@ -608,7 +622,7 @@ export async function loadCutout(base) {
   }
   const drawing = f => {
     const d = svgs[f], mouthed = d.features.has('mouth');
-    return (ctx, pose) => drawSVG(ctx, d, { pose, face, features: FEATURES, vars: { jaw: mouthed ? jawDrop(mouthName(pose), face.mouth.w) : 0 } });
+    return (ctx, pose) => drawSVG(ctx, d, { pose, face, features: FEATURES, lineScale: LW / LW_BASE, vars: { jaw: mouthed ? jawDrop(mouthName(pose), face.mouth.w) : 0 } });
   };
   const wornBy = pn => def.bones.find(b => b.piece === pn)?.name;
   const pieces = {};
