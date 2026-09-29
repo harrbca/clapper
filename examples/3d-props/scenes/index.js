@@ -30,8 +30,8 @@ export function setup(stage) {
   }
   // labels on the level-1 beams: two old, one already covered by its new label
   const put = (lab, b, dx) => { lab.group.position.copy(rack.slot(b, 0, dx)); rack.group.add(lab.group); };
-  put(label3d({ title: 'A1-01', value: '41100188', old: true }), 0, -110);
-  put(label3d({ title: 'A1-02', value: '41100226', old: true }), 0, 110);
+  put(label3d({ title: 'A1-01', value: 'OLD-A1-01', old: true }), 0, -110);
+  put(label3d({ title: 'A1-02', value: 'OLD-A1-02', old: true }), 0, 110);
   put(label3d({ title: 'A1-03', value: 'NEWA103' }), 1, -110);
   held = label3d({ title: 'A1-01', value: 'NEWA101' }); L.scene.add(held.group);
   pip = pip3d(L, { vest: true });
