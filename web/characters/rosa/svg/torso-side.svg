@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -300 300 340">
+  <title>Rosa: torso, side</title>
+  <defs>
+    <clipPath id="c1"><path d="M -40 -6 L 40 -6 C 48 -90 50 -170 46 -222 C 40 -248 28 -258 8 -262 L -8 -262 C -30 -258 -44 -246 -46 -230 C -48 -180 -46 -80 -40 -6 Z"/></clipPath>
+  </defs>
+  <path d="M -40 4 C -46 -80 -50 -190 -46 -236 C -42 -256 -20 -262 4 -262 C 30 -262 46 -250 50 -224 C 56 -180 54 -90 46 4 Z" fill="#6E7682" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -40 -12 L 48 -12 L 48 6 L -40 6 Z" fill="#2A2A30" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M 0 -260 Q 20 -250 36 -254" fill="none" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M -40 -6 L 40 -6 C 48 -90 50 -170 46 -222 C 40 -248 28 -258 8 -262 L -8 -262 C -30 -258 -44 -246 -46 -230 C -48 -180 -46 -80 -40 -6 Z" fill="#F28A2E" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <rect x="-150" y="-66" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-66 150,-66" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-52 150,-52" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <rect x="-150" y="-108" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-108 150,-108" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-94 150,-94" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+  </g>
+  <path d="M -40 -6 L 40 -6 C 48 -90 50 -170 46 -222 C 40 -248 28 -258 8 -262 L -8 -262 C -30 -258 -44 -246 -46 -230 C -48 -180 -46 -80 -40 -6 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

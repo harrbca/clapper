@@ -1,0 +1,16 @@
+{
+  "title": "The cast: cut-out people",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "background": "#E4E0D6",
+  "entry": "scenes/index.js",
+  "capture": "canvas",
+  "hidpi": true,
+  "fonts": [
+    { "family": "Roboto", "weight": 500, "src": "@kit/fonts/Roboto-Medium.ttf" },
+    { "family": "Roboto", "weight": 700, "src": "@kit/fonts/Roboto-Bold.ttf" }
+  ],
+  "chapters": { "cast": "The cast", "end": null },
+  "loudness": -16
+}

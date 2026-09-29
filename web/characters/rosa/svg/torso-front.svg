@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -300 300 340">
+  <title>Rosa: torso, front</title>
+  <defs>
+    <clipPath id="c1"><path d="M 62 -6 L 20 -6 C 22 -100 26 -190 28 -258 L 50 -260 C 54 -236 66 -222 79 -214 C 74 -160 66 -70 62 -6 Z"/></clipPath>
+    <clipPath id="c2"><path d="M -62 -6 L -20 -6 C -22 -100 -26 -190 -28 -258 L -50 -260 C -54 -236 -66 -222 -79 -214 C -74 -160 -66 -70 -62 -6 Z"/></clipPath>
+  </defs>
+  <path d="M -62 4 C -66 -70 -76 -180 -80 -226 C -82 -248 -66 -258 -34 -260 Q 0 -244 34 -260 C 66 -258 82 -248 80 -226 C 76 -180 66 -70 62 4 Z" fill="#6E7682" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -62 -12 L 62 -12 L 62 6 L -62 6 Z" fill="#2A2A30" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M -30 -258 Q 0 -238 30 -258" fill="none" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M 62 -6 L 20 -6 C 22 -100 26 -190 28 -258 L 50 -260 C 54 -236 66 -222 79 -214 C 74 -160 66 -70 62 -6 Z" fill="#F28A2E" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -62 -6 L -20 -6 C -22 -100 -26 -190 -28 -258 L -50 -260 C -54 -236 -66 -222 -79 -214 C -74 -160 -66 -70 -62 -6 Z" fill="#F28A2E" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <rect x="-150" y="-66" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-66 150,-66" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-52 150,-52" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <rect x="-150" y="-108" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-108 150,-108" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-94 150,-94" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+  </g>
+  <path d="M 62 -6 L 20 -6 C 22 -100 26 -190 28 -258 L 50 -260 C 54 -236 66 -222 79 -214 C 74 -160 66 -70 62 -6 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c2)">
+    <rect x="-150" y="-66" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-66 150,-66" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-52 150,-52" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <rect x="-150" y="-108" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-108 150,-108" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-94 150,-94" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+  </g>
+  <path d="M -62 -6 L -20 -6 C -22 -100 -26 -190 -28 -258 L -50 -260 C -54 -236 -66 -222 -79 -214 C -74 -160 -66 -70 -62 -6 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

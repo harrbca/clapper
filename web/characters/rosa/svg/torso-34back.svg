@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -300 300 340">
+  <title>Rosa: torso, 34back</title>
+  <defs>
+    <clipPath id="c1"><path d="M -55.8 -6 L 55.8 -6 C 59.4 -70 66.6 -170 71.1 -214 C 59.4 -222 48.6 -236 45 -258 Q 0 -250 -45 -258 C -48.6 -236 -59.4 -222 -71.1 -214 C -66.6 -170 -59.4 -70 -55.8 -6 Z"/></clipPath>
+  </defs>
+  <path d="M -55.8 4 C -59.4 -70 -68.4 -180 -72 -226 C -73.8 -248 -59.4 -258 -30.6 -260 Q 0 -254 30.6 -260 C 59.4 -258 73.8 -248 72 -226 C 68.4 -180 59.4 -70 55.8 4 Z" fill="#6E7682" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -56 -12 L 56 -12 L 56 6 L -56 6 Z" fill="#2A2A30" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M -55.8 -6 L 55.8 -6 C 59.4 -70 66.6 -170 71.1 -214 C 59.4 -222 48.6 -236 45 -258 Q 0 -250 -45 -258 C -48.6 -236 -59.4 -222 -71.1 -214 C -66.6 -170 -59.4 -70 -55.8 -6 Z" fill="#F28A2E" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <rect x="-150" y="-66" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-66 150,-66" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-52 150,-52" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <rect x="-150" y="-108" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-108 150,-108" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-94 150,-94" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+  </g>
+  <path d="M -55.8 -6 L 55.8 -6 C 59.4 -70 66.6 -170 71.1 -214 C 59.4 -222 48.6 -236 45 -258 Q 0 -250 -45 -258 C -48.6 -236 -59.4 -222 -71.1 -214 C -66.6 -170 -59.4 -70 -55.8 -6 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

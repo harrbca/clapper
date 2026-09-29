@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -300 300 340">
+  <title>Walt: torso, side</title>
+  <defs>
+    <clipPath id="c1"><path d="M -45.6 -6 L 45.6 -6 C 54.72 -90 57 -170 52.44 -222 C 45.6 -248 31.92 -258 9.12 -262 L -9.12 -262 C -34.2 -258 -50.16 -246 -52.44 -230 C -54.72 -180 -52.44 -80 -45.6 -6 Z"/></clipPath>
+  </defs>
+  <path d="M -45.6 4 C -52.44 -80 -57 -190 -52.44 -236 C -47.88 -256 -22.8 -262 4.56 -262 C 34.2 -262 52.44 -250 57 -224 C 63.84 -180 61.56 -90 52.44 4 Z" fill="#A8352F" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -45.6 -12 L 54.72 -12 L 54.72 6 L -45.6 6 Z" fill="#2A2A30" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M 0 -260 Q 22.8 -250 41.04 -254" fill="none" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M -45.6 -6 L 45.6 -6 C 54.72 -90 57 -170 52.44 -222 C 45.6 -248 31.92 -258 9.12 -262 L -9.12 -262 C -34.2 -258 -50.16 -246 -52.44 -230 C -54.72 -180 -52.44 -80 -45.6 -6 Z" fill="#D3E64B" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <rect x="-150" y="-66" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-66 150,-66" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-52 150,-52" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <rect x="-150" y="-108" width="300" height="14" fill="#D8DCE0"/>
+    <polyline points="-150,-108 150,-108" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+    <polyline points="-150,-94 150,-94" fill="none" stroke="#1D1A24" stroke-width="1.8"/>
+  </g>
+  <path d="M -45.6 -6 L 45.6 -6 C 54.72 -90 57 -170 52.44 -222 C 45.6 -248 31.92 -258 9.12 -262 L -9.12 -262 C -34.2 -258 -50.16 -246 -52.44 -230 C -54.72 -180 -52.44 -80 -45.6 -6 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

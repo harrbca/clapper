@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Greg: head, side</title>
+  <defs>
+    <clipPath id="c1"><path d="M 300 -600 L 300 -190 L 78 -160 C 54 -154 22 -160 6 -132 C -2 -114 -12 -104 -30 -98 C -46 -92 -58 -82 -66 -112 L -300 -112 L -300 -600 Z"/></clipPath>
+  </defs>
+  <path d="M -34 -2 C 4 -2 34 0 48 -10 C 60 -20 62 -32 64 -40 C 68 -44 70 -48 70 -54 C 70 -58 71 -60 72 -62 C 96 -60 102 -86 80 -92 C 82 -112 84 -132 82 -150 C 78 -180 44 -196 -4 -196 C -62 -196 -94 -156 -92 -104 C -90 -62 -68 -28 -34 -2 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M -34 16 C 4 28 34 30 48 20 C 60 10 62 -8 64 -25 C 68 -44 70 -48 70 -54 C 70 -58 71 -60 72 -62 C 96 -60 102 -86 80 -92 C 82 -112 84 -132 82 -150 C 78 -180 44 -196 -4 -196 C -62 -196 -94 -156 -92 -104 C -90 -62 -68 -13 -34 16 Z" fill="#D59A73" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(-22 -104) scale(-1.1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#D59A73" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <path d="M 78 -68 C 82 -70 84 -74 82 -78" fill="none" stroke="#1D1A24" stroke-width="2.72"/>
+  <g transform="translate(48 -104) scale(0.5 1)" data-feature="eye" data-side="-1" data-look="0.8"/>
+  <g transform="translate(46 -140) scale(0.6 1)" data-feature="brow" data-side="-1"/>
+  <g data-feature="mouth" data-x="53" data-y="-44" data-sx="0.58" data-drop="0.35"/>
+  <g clip-path="url(#c1)">
+    <path d="M -36.72 6.64 C 4.32 6.64 36.72 8.8 51.84 -2 C 64.8 -12.8 66.96 -25.76 69.12 -34.4 C 73.44 -38.72 75.6 -43.04 75.6 -49.52 C 75.6 -53.84 76.68 -56 77.76 -58.16 C 103.68 -56 110.16 -84.08 86.4 -90.56 C 88.56 -112.16 90.72 -133.76 88.56 -153.2 C 84.24 -185.6 47.52 -202.88 -4.32 -202.88 C -66.96 -202.88 -101.52 -159.68 -99.36 -103.52 C -97.2 -58.16 -73.44 -21.44 -36.72 6.64 Z" fill="#5A3A22" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+</svg>

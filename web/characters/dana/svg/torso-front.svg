@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -300 300 340">
+  <title>Dana: torso, front</title>
+  <path d="M -58.9 4 C -62.7 -70 -72.2 -180 -76 -226 C -77.9 -248 -62.7 -258 -32.3 -260 Q 0 -244 32.3 -260 C 62.7 -258 77.9 -248 76 -226 C 72.2 -180 62.7 -70 58.9 4 Z" fill="#F2EAD8" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -28.5 -258 L 0 -214 L 28.5 -258" fill="none" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M 58.9 -6 L 19 -6 C 20.9 -100 24.7 -190 26.6 -258 L 47.5 -260 C 51.3 -236 62.7 -222 75.05 -214 C 70.3 -160 62.7 -70 58.9 -6 Z" fill="#2B3A5C" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 26.6 -258 L 47.5 -260 L 38 -206 L 22.8 -196 Z" fill="#24314E" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M -58.9 -6 L -19 -6 C -20.9 -100 -24.7 -190 -26.6 -258 L -47.5 -260 C -51.3 -236 -62.7 -222 -75.05 -214 C -70.3 -160 -62.7 -70 -58.9 -6 Z" fill="#2B3A5C" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -26.6 -258 L -47.5 -260 L -38 -206 L -22.8 -196 Z" fill="#24314E" stroke="#1D1A24" stroke-width="2.72"/>
+</svg>

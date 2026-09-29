@@ -440,6 +440,18 @@ drawings:
 - A missing angle or file, an element or feature the kit doesn't draw, a shape name that isn't a
   drawing, or a morph whose paths don't match fails at load, naming the file.
 
+**The cast.** Ten more cut-out people, made as data on Dex's frame (his heads, torsos and rig), so they
+share his style, his poses and the kit's clips: on the warehouse floor, Rosa (a team lead in a hard
+hat), Marcus, Priya (with a headset), Walt and Jess; in the office, Dana, Kenji, Amara, Greg and
+Linda. Each is `/@kit/characters/<name>.js` (`import { rosa, pose } from '/@kit/characters/rosa.js'`).
+`tools/make_people.py` makes them from short descriptions: build and height, skin, hair (short, side
+part, buzz, bob, long, bun, afro, bald), a beard or moustache, glasses, earrings, a hard hat, beanie
+or headset, a top (tee, polo, shirt and tie, blouse, blazer, cardigan, hoodie, flannel, a hi-vis vest
+over any of them, overalls), trousers or a skirt, and boots, sneakers, dress shoes or flats. Add one
+to its list and run it. Hair drawn behind the head (long hair, a bun, an afro) is a chain of kind
+`hair`: behind the body from the front, over it from behind. `examples/cast` lines them up (lab
+pages for every angle, faces and poses) and names them in a short video.
+
 What the kit draws:
 
 - **Angles:** a character is drawn from set angles, `0` front, `1` 3/4, `2` profile, `3` 3/4 from

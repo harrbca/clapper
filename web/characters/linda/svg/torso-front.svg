@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -300 300 340">
+  <title>Linda: torso, front</title>
+  <path d="M -60.76 4 C -64.68 -70 -74.48 -180 -78.4 -226 C -80.36 -248 -64.68 -258 -33.32 -260 Q 0 -244 33.32 -260 C 64.68 -258 80.36 -248 78.4 -226 C 74.48 -180 64.68 -70 60.76 4 Z" fill="#F4F1EA" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -29.4 -258 L 0 -214 L 29.4 -258" fill="none" stroke="#1D1A24" stroke-width="2.72"/>
+  <path d="M 60.76 -6 L 19.6 -6 C 21.56 -100 25.48 -190 27.44 -258 L 49 -260 C 52.92 -236 64.68 -222 77.42 -214 C 72.52 -160 64.68 -70 60.76 -6 Z" fill="#C46F82" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -60.76 -6 L -19.6 -6 C -21.56 -100 -25.48 -190 -27.44 -258 L -49 -260 C -52.92 -236 -64.68 -222 -77.42 -214 C -72.52 -160 -64.68 -70 -60.76 -6 Z" fill="#C46F82" stroke="#1D1A24" stroke-width="3.4"/>
+  <circle cx="-23.52" cy="-180" r="4" fill="#894D5B" stroke="#1D1A24" stroke-width="1.7"/>
+  <circle cx="-23.52" cy="-140" r="4" fill="#894D5B" stroke="#1D1A24" stroke-width="1.7"/>
+  <circle cx="-23.52" cy="-100" r="4" fill="#894D5B" stroke="#1D1A24" stroke-width="1.7"/>
+  <circle cx="-23.52" cy="-60" r="4" fill="#894D5B" stroke="#1D1A24" stroke-width="1.7"/>
+</svg>

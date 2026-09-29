@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Rosa: head, side</title>
+  <defs>
+    <clipPath id="c1"><path d="M 300 -600 L 300 -188 L 78 -158 C 54 -152 22 -160 6 -132 C -2 -114 -12 -104 -30 -98 C -46 -92 -58 -10 -66 -40 L -300 -40 L -300 -600 Z"/></clipPath>
+    <clipPath id="c2"><path d="M -104 -150 C -108 -228 -60 -266 -2 -266 C 56 -266 104 -228 100 -150 Z"/></clipPath>
+  </defs>
+  <path d="M -34 -2 C 4 -2 34 0 48 -10 C 60 -20 62 -32 64 -40 C 68 -44 70 -48 70 -54 C 70 -58 71 -60 72 -62 C 96 -60 102 -86 80 -92 C 82 -112 84 -132 82 -150 C 78 -180 44 -196 -4 -196 C -62 -196 -94 -156 -92 -104 C -90 -62 -68 -28 -34 -2 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M -34 16 C 4 28 34 30 48 20 C 60 10 62 -8 64 -25 C 68 -44 70 -48 70 -54 C 70 -58 71 -60 72 -62 C 96 -60 102 -86 80 -92 C 82 -112 84 -132 82 -150 C 78 -180 44 -196 -4 -196 C -62 -196 -94 -156 -92 -104 C -90 -62 -68 -13 -34 16 Z" fill="#B77A55" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(-22 -104) scale(-1.1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#B77A55" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <circle cx="-24" cy="-88" r="6" fill="#E9C24A" stroke="#1D1A24" stroke-width="2.04"/>
+  <path d="M 78 -68 C 82 -70 84 -74 82 -78" fill="none" stroke="#1D1A24" stroke-width="2.72"/>
+  <g transform="translate(48 -104) scale(0.5 1)" data-feature="eye" data-side="-1" data-look="0.8"/>
+  <g transform="translate(46 -140) scale(0.6 1)" data-feature="brow" data-side="-1"/>
+  <g data-feature="mouth" data-x="53" data-y="-44" data-sx="0.58" data-drop="0.35"/>
+  <g clip-path="url(#c1)">
+    <path d="M -38.76 13.12 C 4.56 13.12 38.76 15.4 54.72 4 C 68.4 -7.4 70.68 -21.08 72.96 -30.2 C 77.52 -34.76 79.8 -39.32 79.8 -46.16 C 79.8 -50.72 80.94 -53 82.08 -55.28 C 109.44 -53 116.28 -82.64 91.2 -89.48 C 93.48 -112.28 95.76 -135.08 93.48 -155.6 C 88.92 -189.8 50.16 -208.04 -4.56 -208.04 C -70.68 -208.04 -107.16 -162.44 -104.88 -103.16 C -102.6 -55.28 -77.52 -16.52 -38.76 13.12 Z" fill="#3A2418" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+  <path d="M -104 -150 C -108 -228 -60 -266 -2 -266 C 56 -266 104 -228 100 -150 Z" fill="#F4F3EE" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c2)">
+    <path d="M -10 -264 C 10 -230 16 -190 16 -156" fill="none" stroke="#DBDAD6" stroke-width="10"/>
+    <path d="M -10 -264 C 10 -230 16 -190 16 -156" fill="none" stroke="#1D1A24" stroke-width="2.04"/>
+  </g>
+  <path d="M -108 -152 L 136 -152 Q 146 -140 132 -136 L -104 -136 Q -116 -140 -108 -152 Z" fill="#E0DFDA" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

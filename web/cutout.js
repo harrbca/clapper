@@ -92,8 +92,9 @@ export function angleSet(of, drawings, { fallback = {}, around } = {}) {
 // Where a chain goes in the drawing order as the body turns, by its kind: near (the side towards us),
 // far, and facing us (front) or away (back); `end` is added for its last bone (a hand, a foot). A
 // chain can give its own `layers`; chains of other kinds keep their bones' own z.
-// A cape (a chain with no side) hangs behind the body, and comes in front of it seen from behind.
-const LAYERS = { arm: { near: 5.5, far: -0.6, front: 5.5, back: -0.6, end: 0.5 }, leg: { near: 0.3, far: 0, front: 0, back: 0, end: 0.1 }, cape: { front: -2, back: 7 } };
+// A cape (a chain with no side) hangs behind the body, and comes in front of it seen from behind; so
+// does long hair, a bun or an afro (a chain of kind 'hair', behind the head from the front).
+const LAYERS = { arm: { near: 5.5, far: -0.6, front: 5.5, back: -0.6, end: 0.5 }, leg: { near: 0.3, far: 0, front: 0, back: 0, end: 0.1 }, cape: { front: -2, back: 7 }, hair: { front: 0.5, back: 7 } };
 
 // Where the limbs hang at angle n. Each chain with a side comes round towards the middle (L is the
 // screen's left when facing us, so it is the near side facing right) by as far as its first bone's
