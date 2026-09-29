@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-180 -110 360 210">
+  <title>Biscuit: body, profile</title>
+  <defs>
+    <clipPath id="c1"><path d="M -104 -64 C -58 -76 20 -80 82 -74 C 130 -70 158 -38 154 6 C 150 50 122 84 82 84 C 52 84 34 62 -8 60 C -40 58 -72 80 -106 78 C -142 76 -158 44 -156 6 C -154 -30 -138 -56 -104 -64 Z"/></clipPath>
+  </defs>
+  <path d="M -104 -64 C -58 -76 20 -80 82 -74 C 130 -70 158 -38 154 6 C 150 50 122 84 82 84 C 52 84 34 62 -8 60 C -40 58 -72 80 -106 78 C -142 76 -158 44 -156 6 C -154 -30 -138 -56 -104 -64 Z" fill="#E2A654" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <ellipse cx="148" cy="22" rx="40" ry="64" fill="#F8E9CE"/>
+  </g>
+  <path d="M -104 -64 C -58 -76 20 -80 82 -74 C 130 -70 158 -38 154 6 C 150 50 122 84 82 84 C 52 84 34 62 -8 60 C -40 58 -72 80 -106 78 C -142 76 -158 44 -156 6 C -154 -30 -138 -56 -104 -64 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -50 -36 C -30 -6 -32 44 -54 72" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 86 -68 C 108 -78 134 -72 148 -54 L 142 -42 C 128 -58 108 -64 90 -56 Z" fill="#D8443F" stroke="#1D1A24" stroke-width="3.4"/>
+  <circle cx="144" cy="-32" r="9" fill="#F3C443" stroke="#1D1A24" stroke-width="2.7"/>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-170 -90 340 170">
+  <title>Miso: the body over the near front leg's top, profile (body-side.svg, clipped; the fur has a hole for the patch, so no colour lies over another at the edge)</title>
+  <defs>
+    <clipPath id="c1"><path d="M -96 -48 C -56 -60 20 -64 80 -60 C 124 -56 150 -30 148 4 C 146 40 122 66 86 66 C 58 66 40 46 0 44 C -34 42 -66 62 -100 60 C -134 58 -150 32 -148 2 C -146 -26 -128 -44 -96 -48 Z"/></clipPath>
+    <clipPath id="c2"><ellipse cx="88" cy="40" rx="48" ry="40"/></clipPath>
+  </defs>
+  <g clip-path="url(#c2)">
+    <g clip-path="url(#c1)">
+      <path d="M -96 -48 C -56 -60 20 -64 80 -60 C 124 -56 150 -30 148 4 C 146 40 122 66 86 66 C 58 66 40 46 0 44 C -34 42 -66 62 -100 60 C -134 58 -150 32 -148 2 C -146 -26 -128 -44 -96 -48 Z M 174 16 A 34 52 0 1 0 106 16 A 34 52 0 1 0 174 16 Z" fill="#8C95A6"/>
+      <ellipse cx="140" cy="16" rx="34" ry="52" fill="#F5F3EF"/>
+    </g>
+    <path d="M -96 -48 C -56 -60 20 -64 80 -60 C 124 -56 150 -30 148 4 C 146 40 122 66 86 66 C 58 66 40 46 0 44 C -34 42 -66 62 -100 60 C -134 58 -150 32 -148 2 C -146 -26 -128 -44 -96 -48 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+</svg>

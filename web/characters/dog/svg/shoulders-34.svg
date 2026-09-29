@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-180 -110 360 210">
+  <title>Biscuit: the body over the near front leg's top, three-quarter (body-34.svg, clipped; the fur has a hole for the patch, so no colour lies over another at the edge)</title>
+  <defs>
+    <clipPath id="c1"><path d="M -108 -62 C -62 -76 18 -80 80 -74 C 132 -70 162 -36 158 8 C 154 52 124 86 80 86 C 50 86 32 64 -10 62 C -42 60 -74 82 -108 80 C -144 78 -158 46 -156 8 C -154 -28 -140 -54 -108 -62 Z"/></clipPath>
+    <clipPath id="c2"><ellipse cx="61" cy="52" rx="56" ry="44"/></clipPath>
+  </defs>
+  <g clip-path="url(#c2)">
+    <g clip-path="url(#c1)">
+      <path d="M -108 -62 C -62 -76 18 -80 80 -74 C 132 -70 162 -36 158 8 C 154 52 124 86 80 86 C 50 86 32 64 -10 62 C -42 60 -74 82 -108 80 C -144 78 -158 46 -156 8 C -154 -28 -140 -54 -108 -62 Z M 186 20 A 52 68 0 1 0 82 20 A 52 68 0 1 0 186 20 Z" fill="#E2A654"/>
+      <ellipse cx="134" cy="20" rx="52" ry="68" fill="#F8E9CE"/>
+    </g>
+    <path d="M -108 -62 C -62 -76 18 -80 80 -74 C 132 -70 162 -36 158 8 C 154 52 124 86 80 86 C 50 86 32 64 -10 62 C -42 60 -74 82 -108 80 C -144 78 -158 46 -156 8 C -154 -28 -140 -54 -108 -62 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+</svg>

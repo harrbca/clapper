@@ -588,7 +588,11 @@ export function defineCutout({ life, keys = {}, sides = [], ...def }) {
 // on screen over its draw scale); `drag` is how hard the air pushes, per unit a second; `wind` is a
 // steady push [x, y], against gravity's 1 down. Returns the pose with the chain's bones' '.r' set.
 // Simulated from t0, where it hangs still, so any frame gives the same answer.
-export function trailChain(character, pose, t, chain, motion, { drag = 0.0012, lag = 0.05, wind = [0, 0], flutter = 0.12, stiffness = 110, damping = 11, t0 = 0, key = character.id } = {}) {
+// posed: true swings the chain about its own pose instead of hanging it: the swing a hanging chain
+// would make is added to the turns the pose gives its bones, so a tail held up wags where the pose
+// holds it (a motion swaying from side to side). Its answer to moving is the hanging chain's, turned
+// with the pose, so it suits swings and wags more than a run.
+export function trailChain(character, pose, t, chain, motion, { drag = 0.0012, lag = 0.05, wind = [0, 0], flutter = 0.12, stiffness = 110, damping = 11, t0 = 0, key = character.id, posed = false } = {}) {
   const bones = character.chain(chain, 'trailChain').bones, h = 1 / 60;
   const air = u => {
     const [x1, y1] = motion(u), [x0, y0] = motion(u - h), vx = (x1 - x0) / h, vy = (y1 - y0) / h;
@@ -601,8 +605,8 @@ export function trailChain(character, pose, t, chain, motion, { drag = 0.0012, l
   }));
   const abs = springs(`${key}.trail.${chain}`, t, aims, Object.fromEntries(bones.map(b => [b, { stiffness, damping }])), { t0 });
   const p = { ...pose };
-  let above = character.angle(character.by[bones[0]].parent, pose);
-  for (const b of bones) { p[`${b}.r`] = abs[b] - above; above = abs[b]; }
+  let above = posed ? 0 : character.angle(character.by[bones[0]].parent, pose);
+  for (const b of bones) { p[`${b}.r`] = posed ? v(pose, `${b}.r`) + abs[b] - above : abs[b] - above; above = abs[b]; }
   return p;
 }
 
@@ -648,7 +652,8 @@ const FEATURES = {
 //     'head', fallback, scale, front: { flip, rotate } }, an angle set; or the kit's own: { kit:
 //     'noodle', a, b, bend: '<the lower bone>', w, w2, round, color, sleeve: { len, w, color } },
 //     { kit: 'hand', side, skin, size }, { kit: 'mouthChart' }, and { kit: 'ribbon', bones: [...], w:
-//     [...], color }, a cape or tail along a chain (narrower seen side on); see ribbon and trailChain
+//     [...], color, edge }, a cape or tail along a chain, narrower seen side on (to `edge` of its
+//     width: 0.45 unless given, and 1 for a tail, round from every side); see ribbon and trailChain
 //   palette: named colours, which colours anywhere in the JSON may use by name
 //   face: { eye: { rx, ry, pupil, lid }, brow: {}, mouth: { w, pal: { mouth, tongue } } }, for the
 //     features the head's SVGs have places for
@@ -706,9 +711,10 @@ export async function loadCutout(base) {
       pieces[pn] = handPiece(wornBy(pn), p.side, { skin: colour(p.skin), size: p.size });
     } else if (p.kit === 'mouthChart') pieces[pn] = mouthChart();
     else if (p.kit === 'ribbon') {
+      const edge = p.edge ?? 0.45;                 // its width seen edge on: a cape's 0.45, a round tail's 1
       pieces[pn] = {
         draw: (ctx, pose, character) => {
-          const k = 0.45 + 0.55 * Math.abs(Math.cos((bodyAngle(pose) * Math.PI) / 4));         // narrower side on
+          const k = edge + (1 - edge) * Math.abs(Math.cos((bodyAngle(pose) * Math.PI) / 4));  // narrower side on
           ribbon(ctx, character, pose, p.bones, p.w.map(x => x * k), colour(p.color));
         },
       };

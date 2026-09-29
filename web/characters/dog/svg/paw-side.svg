@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-30 -20 80 50">
+  <title>Biscuit: paw, profile</title>
+  <path d="M -15 -2 C -18 8 -16 20 -8 22 L 24 22 C 34 22 36 12 30 6 C 22 -2 6 -3 -15 -2 Z" fill="#F8E9CE" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 16 22 C 16 18 17 15 19 13" fill="none" stroke="#1D1A24" stroke-width="2.6"/>
+  <path d="M 25 21 C 25 18 26 16 28 14" fill="none" stroke="#1D1A24" stroke-width="2.6"/>
+</svg>

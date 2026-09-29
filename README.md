@@ -495,11 +495,13 @@ What the kit draws:
 - **Chains that trail** (capes, tails, hair): `trailChain(character, pose, t, 'cape', u => [x(u),
   y(u)], { drag, lag, wind, flutter })` swings a chain's bones back against the way the character
   moves (motion(u) is where it is at time u, in its own units), hanging under gravity, each bone
-  answering a little after the one above it, so a wave runs down it, on springs. A `ribbon` piece
-  (`{ kit: 'ribbon', bones: [...], w: [...], color }` in a character's JSON) draws the chain as one
-  inked shape, narrower seen side on. A chain of kind `cape` hangs behind the body, and in front of
-  it seen from behind. Chains whose middle bones wear drawings (a robot's rigid forearm) keep them
-  with the chain's first bone in the drawing order.
+  answering a little after the one above it, so a wave runs down it, on springs. `posed: true` swings
+  the chain about its own pose instead of hanging it, so a tail held up wags where the pose holds it
+  (a motion swaying from side to side is a wag). A `ribbon` piece (`{ kit: 'ribbon', bones: [...],
+  w: [...], color, edge }` in a character's JSON) draws the chain as one inked shape, narrower seen
+  side on: to `edge` of its width, 0.45 unless given, and 1 for a tail, round from every side. A chain
+  of kind `cape` hangs behind the body, and in front of it seen from behind. Chains whose middle bones
+  wear drawings (a robot's rigid forearm) keep them with the chain's first bone in the drawing order.
 - **Named shots** (`camera.js`): `framing('medium', { x, y, height })` is a camera showing a
   character's feet at (x, y), `height` tall on screen, from the waist up; also `wide`, `full`,
   `knee`, `close` and `face`, and `third: 1` to put it on the right third.
@@ -507,6 +509,22 @@ What the kit draws:
 `examples/cutout-rig` has Dex's model sheet, face sheet, poses, clips and shots as lab pages, and a
 short acting test in a warehouse: a scanner, a turn to the racking, and a walk off (walk2d). `examples/cutout-jump` is a
 stunt: off a table, a forward flip, and a superhero landing, built from key poses and contacts.
+
+**Pets.** `/@kit/characters/dog.js` (Biscuit, a golden puppy), `/@kit/characters/cat.js` (Miso, a
+grey tabby) and `/@kit/characters/rabbit.js` (Clover, a long-eared bunny with long hind feet and a
+powder-puff tail) are four-legged cut-out characters, data like Dex, with the kit's faces and
+expressions. Each has four leg chains of kind `leg` (legFL, legFR, legBL, legBR: upper, lower, paw)
+and a tail chain drawn as a ribbon. As the body turns, their `turn.offsets` bring the front legs
+forward under the chest and the back legs back, and the chains' `layers` put the far legs behind the
+body. The near front leg goes in front of the body under a `shoulders` layer (the body's drawing
+clipped round the leg's top), so a raised paw passes in front of the chest. The legs hang from the
+root, not the body, so when a pose tips the body their spread stays level (the poses move their tops
+with it). The poses are stand, sit, lie and wag for all three; pawUp and bow for Biscuit and Miso,
+beg for Biscuit, crouch and hop for Clover. They're keyed side on, facing right, with the paws exactly
+on the floor at 3/4 and side on; `play` them with `mirror: true` to face left. A pose that tips the
+body forward or back reads only side on, so they're for 3/4 and profile: from the front and back the
+pets stand. A tail wags with `trailChain(dog, p, t, 'tail', u => [sway(u), 0], { posed: true })`.
+`examples/pets` has Biscuit and Miso meeting, and lab pages for all three.
 
 ### Shared style
 

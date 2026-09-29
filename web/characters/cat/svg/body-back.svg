@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -90 200 170">
+  <title>Miso: body, back</title>
+  <defs>
+    <clipPath id="c1"><path d="M 0 -54 C 42 -54 66 -30 66 4 C 68 40 48 64 24 64 L -24 64 C -48 64 -68 40 -66 4 C -64 -30 -42 -54 0 -54 Z"/></clipPath>
+  </defs>
+  <path d="M 0 -54 C 42 -54 66 -30 66 4 C 68 40 48 64 24 64 L -24 64 C -48 64 -68 40 -66 4 C -64 -30 -42 -54 0 -54 Z" fill="#8C95A6" stroke="#1D1A24" stroke-width="3.4"/>
+  <g clip-path="url(#c1)">
+    <path d="M -52 -40 C -40 -34 -30 -22 -24 -8 C -34 -18 -46 -24 -60 -26 Z" fill="#6E7788"/>
+    <path d="M 52 -40 C 40 -34 30 -22 24 -8 C 34 -18 46 -24 60 -26 Z" fill="#6E7788"/>
+  </g>
+  <path d="M 0 -54 C 42 -54 66 -30 66 4 C 68 40 48 64 24 64 L -24 64 C -48 64 -68 40 -66 4 C -64 -30 -42 -54 0 -54 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -34 -12 C -14 -2 -8 22 -12 46" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 34 -12 C 14 -2 8 22 12 46" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

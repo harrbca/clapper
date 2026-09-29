@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-120 -110 240 210">
+  <title>Biscuit: body, back</title>
+  <path d="M 0 -70 C 52 -70 82 -40 84 4 C 86 50 62 80 30 80 L -30 80 C -62 80 -86 50 -84 4 C -82 -40 -52 -70 0 -70 Z" fill="#E2A654" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -44 -18 C -20 -6 -12 26 -16 58" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 44 -18 C 20 -6 12 26 16 58" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

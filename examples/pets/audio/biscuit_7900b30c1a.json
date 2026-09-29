@@ -1,0 +1,34 @@
+{
+ "request": {
+  "text": "This is Biscuit.",
+  "voice": "JBFqnCBsd6RMkjVDRZzb",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": null,
+  "next_text": "And this is Miso.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "This",
+   "start": 0,
+   "end": 0.232
+  },
+  {
+   "w": "is",
+   "start": 0.29,
+   "end": 0.372
+  },
+  {
+   "w": "Biscuit.",
+   "start": 0.441,
+   "end": 1.393
+  }
+ ]
+}

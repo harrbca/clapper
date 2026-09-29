@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-180 -110 360 210">
+  <title>Biscuit: the body over the near front leg's top, three-quarter from behind (body-34back.svg, clipped)</title>
+  <defs>
+    <clipPath id="c2"><ellipse cx="103" cy="50" rx="50" ry="40"/></clipPath>
+  </defs>
+  <g clip-path="url(#c2)">
+    <path d="M -104 -64 C -58 -76 20 -80 82 -74 C 128 -70 154 -40 150 4 C 146 48 120 82 82 82 C 52 82 34 62 -8 60 C -40 58 -72 80 -106 78 C -144 76 -162 44 -160 4 C -156 -32 -138 -56 -104 -64 Z" fill="#E2A654" stroke="#1D1A24" stroke-width="3.4"/>
+  </g>
+</svg>

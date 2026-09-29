@@ -1,0 +1,44 @@
+{
+ "request": {
+  "text": "Miso is not so sure.",
+  "voice": "JBFqnCBsd6RMkjVDRZzb",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.3,
+   "similarity_boost": 0.75,
+   "style": 0.55,
+   "use_speaker_boost": true,
+   "speed": 1
+  },
+  "previous_text": "And this is Miso. Biscuit would very much like to be friends.",
+  "next_text": "Then Miso blinks, very slowly.",
+  "seed": 7
+ },
+ "words": [
+  {
+   "w": "Miso",
+   "start": 0,
+   "end": 0.395
+  },
+  {
+   "w": "is",
+   "start": 0.476,
+   "end": 0.557
+  },
+  {
+   "w": "not",
+   "start": 0.615,
+   "end": 0.755
+  },
+  {
+   "w": "so",
+   "start": 0.801,
+   "end": 0.964
+  },
+  {
+   "w": "sure.",
+   "start": 1.045,
+   "end": 2.183
+  }
+ ]
+}

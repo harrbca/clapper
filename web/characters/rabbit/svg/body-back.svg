@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -90 200 170">
+  <title>Clover: body, back</title>
+  <path d="M 0 -62 C 50 -62 78 -30 78 8 C 78 44 56 64 28 64 L -28 64 C -56 64 -78 44 -78 8 C -78 -30 -50 -62 0 -62 Z" fill="#C9A27E" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -40 -14 C -18 -2 -10 26 -14 54" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 40 -14 C 18 -2 10 26 14 54" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>

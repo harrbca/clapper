@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 -210 260 230">
+  <title>Miso: head, three-quarter from behind</title>
+  <defs>
+    <clipPath id="c1"><path d="M -8 -2 C -66 -4 -98 -32 -92 -82 C -88 -128 -50 -152 2 -152 C 54 -152 88 -124 90 -80 C 92 -30 50 -2 -8 -2 Z"/></clipPath>
+  </defs>
+  <path d="M -80 -110 C -82 -146 -76 -176 -66 -192 C -52 -176 -40 -160 -30 -146 Z" fill="#8C95A6" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 22 -144 C 36 -160 52 -178 66 -194 C 80 -176 88 -140 86 -102 Z" fill="#8C95A6" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 86 -46 L 110 -50" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M 86 -40 L 112 -40" fill="none" stroke="#1D1A24" stroke-width="2.2"/>
+  <path d="M -8 -2 C -66 -4 -98 -32 -92 -82 C -88 -128 -50 -152 2 -152 C 54 -152 88 -124 90 -80 C 92 -30 50 -2 -8 -2 Z" fill="#8C95A6"/>
+  <g clip-path="url(#c1)">
+    <path d="M -22 -156 C -20 -136 -16 -118 -10 -104 C -8 -120 -10 -140 -12 -156 Z" fill="#6E7788"/>
+    <path d="M 2 -156 C 4 -134 6 -114 10 -98 C 13 -114 13 -136 12 -156 Z" fill="#6E7788"/>
+    <path d="M 26 -156 C 26 -136 28 -118 32 -104 C 36 -120 38 -140 36 -156 Z" fill="#6E7788"/>
+  </g>
+  <path d="M -8 -2 C -66 -4 -98 -32 -92 -82 C -88 -128 -50 -152 2 -152 C 54 -152 88 -124 90 -80 C 92 -30 50 -2 -8 -2 Z" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+</svg>
