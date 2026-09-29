@@ -92,7 +92,8 @@ export function angleSet(of, drawings, { fallback = {}, around } = {}) {
 // Where a chain goes in the drawing order as the body turns, by its kind: near (the side towards us),
 // far, and facing us (front) or away (back); `end` is added for its last bone (a hand, a foot). A
 // chain can give its own `layers`; chains of other kinds keep their bones' own z.
-const LAYERS = { arm: { near: 5.5, far: -0.6, front: 5.5, back: -0.6, end: 0.5 }, leg: { near: 0.3, far: 0, front: 0, back: 0, end: 0.1 } };
+// A cape (a chain with no side) hangs behind the body, and comes in front of it seen from behind.
+const LAYERS = { arm: { near: 5.5, far: -0.6, front: 5.5, back: -0.6, end: 0.5 }, leg: { near: 0.3, far: 0, front: 0, back: 0, end: 0.1 }, cape: { front: -2, back: 7 } };
 
 // Where the limbs hang at angle n. Each chain with a side comes round towards the middle (L is the
 // screen's left when facing us, so it is the near side facing right) by as far as its first bone's
@@ -116,6 +117,13 @@ export function turnRig(pose, n, character) {
     const first = ch.bones[0], last = ch.bones[ch.bones.length - 1];
     p[`${first}.z`] ??= near ? L.near : far ? L.far : back ? L.back : L.front;
     p[`${last}.z`] ??= p[`${first}.z`] + L.end;
+    // the bones between go with the first (just under it), for characters with a drawing on each
+    for (let i = 1; i < ch.bones.length - 1; i++) p[`${ch.bones[i]}.z`] ??= p[`${first}.z`] - 0.01 * i;
+  }
+  for (const [, ch] of character.chainsOf()) {
+    const L = ch.layers || LAYERS[ch.kind];
+    if (ch.side || !L || L.front === undefined) continue;
+    p[`${ch.bones[0]}.z`] ??= back ? L.back : L.front;
   }
   return p;
 }
@@ -571,6 +579,54 @@ export function defineCutout({ life, keys = {}, sides = [], ...def }) {
   return character;
 }
 
+// ---------- chains that trail ----------
+// A chain that trails as its character moves: a cape, a tail, hair, an antenna. Air pushes it back
+// against the way the character is going, gravity hangs it down, and each bone answers `lag` seconds
+// after the one above it, so a wave runs down it; springs give it weight, and it flutters when the
+// air is strong. motion(u) is where the character is at time u, in its own units (a scene's position
+// on screen over its draw scale); `drag` is how hard the air pushes, per unit a second; `wind` is a
+// steady push [x, y], against gravity's 1 down. Returns the pose with the chain's bones' '.r' set.
+// Simulated from t0, where it hangs still, so any frame gives the same answer.
+export function trailChain(character, pose, t, chain, motion, { drag = 0.0012, lag = 0.05, wind = [0, 0], flutter = 0.12, stiffness = 110, damping = 11, t0 = 0, key = character.id } = {}) {
+  const bones = character.chain(chain, 'trailChain').bones, h = 1 / 60;
+  const air = u => {
+    const [x1, y1] = motion(u), [x0, y0] = motion(u - h), vx = (x1 - x0) / h, vy = (y1 - y0) / h;
+    return [wind[0] - vx * drag, 1 + wind[1] - vy * drag, Math.hypot(vx, vy) * drag];
+  };
+  // where each bone points (its angle on screen, 0 hanging straight down), from the air a moment ago
+  const aims = u => Object.fromEntries(bones.map((b, i) => {
+    const [dx, dy, strong] = air(u - i * lag);
+    return [b, Math.atan2(-dx, dy) + flutter * Math.min(1, strong) * Math.sin(u * 13 + i * 1.3)];
+  }));
+  const abs = springs(`${key}.trail.${chain}`, t, aims, Object.fromEntries(bones.map(b => [b, { stiffness, damping }])), { t0 });
+  const p = { ...pose };
+  let above = character.angle(character.by[bones[0]].parent, pose);
+  for (const b of bones) { p[`${b}.r`] = abs[b] - above; above = abs[b]; }
+  return p;
+}
+
+// A ribbon along a chain of bones (a cape, a scarf, a tail), drawn in the first bone's space: w is its
+// width at each joint, from the top down (one more than the bones), and it's filled and inked as one
+// shape, so it bends without seams.
+export function ribbon(ctx, character, pose, bones, w, fill) {
+  const pts = [[0, 0]];
+  let a = 0;
+  bones.forEach((b, i) => {
+    if (i) a += v(pose, `${b}.r`);
+    const [x, y] = pts[pts.length - 1], len = character.by[b].len ?? 0;
+    pts.push([x - Math.sin(a) * len, y + Math.cos(a) * len]);
+  });
+  const dir = j => {
+    const [ax, ay] = pts[Math.max(0, j - 1)], [bx, by] = pts[Math.min(pts.length - 1, j + 1)], n = Math.hypot(bx - ax, by - ay) || 1;
+    return [(bx - ax) / n, (by - ay) / n];
+  };
+  const edge = side => pts.map(([x, y], j) => { const [dx, dy] = dir(j), half = (w[j] ?? w[w.length - 1]) / 2; return [x - dy * half * side, y + dx * half * side]; });
+  const L = edge(1), R = edge(-1).reverse(), path = new Path2D();
+  const through = q => { for (let i = 1; i < q.length - 1; i++) path.quadraticCurveTo(q[i][0], q[i][1], (q[i][0] + q[i + 1][0]) / 2, (q[i][1] + q[i + 1][1]) / 2); path.lineTo(...q[q.length - 1]); };
+  path.moveTo(...L[0]); through(L); path.lineTo(...R[0]); through(R); path.closePath();
+  ink(ctx, path, fill);
+}
+
 // ---------- characters from data ----------
 // The features a face's SVG can have places for (<g data-feature="eye" ...>), drawn by the kit with
 // the pose and the character's face settings. The mouth drops with the jaw, so its place is given as
@@ -590,7 +646,8 @@ const FEATURES = {
 //   pieces: { svg: 'neck.svg' }, an SVG drawing; { angles: { 0: 'front.svg', ... }, of: 'body' or
 //     'head', fallback, scale, front: { flip, rotate } }, an angle set; or the kit's own: { kit:
 //     'noodle', a, b, bend: '<the lower bone>', w, w2, round, color, sleeve: { len, w, color } },
-//     { kit: 'hand', side, skin, size }, { kit: 'mouthChart' }
+//     { kit: 'hand', side, skin, size }, { kit: 'mouthChart' }, and { kit: 'ribbon', bones: [...], w:
+//     [...], color }, a cape or tail along a chain (narrower seen side on); see ribbon and trailChain
 //   palette: named colours, which colours anywhere in the JSON may use by name
 //   face: { eye: { rx, ry, pupil, lid }, brow: {}, mouth: { w, pal: { mouth, tongue } } }, for the
 //     features the head's SVGs have places for
@@ -647,7 +704,15 @@ export async function loadCutout(base) {
       if (!wornBy(pn)) throw new Error(`${name}: the hand piece ${pn} isn't on a bone`);
       pieces[pn] = handPiece(wornBy(pn), p.side, { skin: colour(p.skin), size: p.size });
     } else if (p.kit === 'mouthChart') pieces[pn] = mouthChart();
-    else throw new Error(`${name}: piece ${pn} needs svg, angles, or kit (noodle, hand or mouthChart)`);
+    else if (p.kit === 'ribbon') {
+      pieces[pn] = {
+        draw: (ctx, pose, character) => {
+          const k = 0.45 + 0.55 * Math.abs(Math.cos((bodyAngle(pose) * Math.PI) / 4));         // narrower side on
+          ribbon(ctx, character, pose, p.bones, p.w.map(x => x * k), colour(p.color));
+        },
+      };
+    }
+    else throw new Error(`${name}: piece ${pn} needs svg, angles, or kit (noodle, hand, mouthChart or ribbon)`);
   }
   // '.shape' values given as names, as the pieces' drawings are named
   const shapes = {};

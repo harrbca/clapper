@@ -471,6 +471,14 @@ What the kit draws:
   back foot stepping up. `walkPose(character, pose, w, { scale })` plants the leg chains there, drops
   the hips as far as the legs need (so the body rides lowest as the feet part), and swings the arms.
   Call both with the time the character's drawings change on (`onTwos(t)`) and draw it at `w.x`.
+- **Chains that trail** (capes, tails, hair): `trailChain(character, pose, t, 'cape', u => [x(u),
+  y(u)], { drag, lag, wind, flutter })` swings a chain's bones back against the way the character
+  moves (motion(u) is where it is at time u, in its own units), hanging under gravity, each bone
+  answering a little after the one above it, so a wave runs down it, on springs. A `ribbon` piece
+  (`{ kit: 'ribbon', bones: [...], w: [...], color }` in a character's JSON) draws the chain as one
+  inked shape, narrower seen side on. A chain of kind `cape` hangs behind the body, and in front of
+  it seen from behind. Chains whose middle bones wear drawings (a robot's rigid forearm) keep them
+  with the chain's first bone in the drawing order.
 - **Named shots** (`camera.js`): `framing('medium', { x, y, height })` is a camera showing a
   character's feet at (x, y), `height` tall on screen, from the waist up; also `wide`, `full`,
   `knee`, `close` and `face`, and `third: 1` to put it on the right third.
