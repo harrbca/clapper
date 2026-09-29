@@ -2,10 +2,13 @@
 import { onTwos } from '/@kit/core.js';
 import { view } from '/@kit/camera.js';
 import { caption } from '/@kit/captions.js';
+import { requires } from '/@kit/character.js';
 import { dex, pose } from '/@kit/characters/dex.js';
 import { camera, extra, fade, FLOOR, MOVES, place, SCALE, withContacts } from './acting.js';
 import { cracks, dust, flash, swoosh, table, trail } from './effects.js';
 import { set } from './warehouse.js';
+
+requires({ dex: 1 });                               // made for Dex version 1: an error if he moves on
 
 export function render({ ctx, W, H }, t) {
   const cam = camera(t);

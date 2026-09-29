@@ -82,6 +82,7 @@ export class Character extends Puppet {
     super(bones.map(({ piece, ...b }) => (piece === undefined ? b : { ...b, piece, draw: (ctx, pose, part, opts) => pieces[piece].draw(ctx, pose, self, opts) })));
     self = this;
     Object.assign(this, { id, version, name, height, pieces, limits, rest, poses, expressions, clips });
+    LOADED.set(id, this);
     this.facing = facing || (() => 1);             // which way the body faces (-1 left), for limits
     this.tags = this.#tagsChecked(tags);
 
@@ -350,3 +351,20 @@ export class Character extends Puppet {
 }
 
 export const defineCharacter = def => new Character(def);
+
+// The characters made so far on this page, by id, for requires().
+const LOADED = new Map();
+
+// A scene made for a version of a character says so, and gets an error once the character has moved
+// on to a version with changes that break scenes: requires({ dex: 1 }), after importing Dex. Versions
+// go up only for breaking changes (a bone renamed, a pose key gone), so a scene isn't left to break
+// quietly. `clap check --affected dex` shows what the new version changes in each scene that uses it.
+export function requires(pins) {
+  for (const [id, v] of Object.entries(pins)) {
+    const c = LOADED.get(id);
+    if (!c) throw new Error(`requires: no character called ${id} has been loaded (${[...LOADED.keys()].join(', ') || 'none'}); import it first`);
+    if (c.version !== v) {
+      throw new Error(`${c.name} is version ${c.version}, and this scene was made for version ${v}. ${c.version > v ? 'The character has changed in ways that can break scenes: check this one (clap check --affected ' + id + '), then change requires to ' + c.version : 'The scene expects a newer character than this one'}.`);
+    }
+  }
+}

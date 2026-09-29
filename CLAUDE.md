@@ -52,6 +52,9 @@ Look at frames, don't assume them. The user will notice glitches, so find them f
 - 2D characters: after changing a rig, check the drawing order (arms in front of the head, near and
   far limbs when turned) and transitions between poses (hands mustn't sweep through the face).
 - Animation on twos and motion blur don't mix (blur shows both drawings).
+- After changing a stock character (its JSON, SVGs or the kit code it uses), run `clap check
+  --affected <id>` and look at the diffs before committing; approve only what was meant. Bump its
+  `version` for changes that break scenes, and update the scenes' `requires`.
 
 ## Gotchas
 

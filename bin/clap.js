@@ -9,6 +9,7 @@ import { build } from '../lib/build.js';
 import { chromePath } from '../lib/browser.js';
 import { capture } from '../lib/capture.js';
 import { KIT, loadProject } from '../lib/project.js';
+import { affected } from '../lib/affected.js';
 import { list } from '../lib/list.js';
 import { notesCommand } from '../lib/notes.js';
 import { check, frames, sheets, stills, video } from '../lib/render.js';
@@ -39,6 +40,11 @@ const HELP = `clap <command> [options]
   check [--every 2] [--entry f] [--no-sheets]
                                draws every drawing without saving it, so every character check runs:
                                errors stop it, warnings are listed once each; then the review sheets
+  check --affected <character> [folder...] [--approve]
+                               the projects that use a character (the kit's examples, and any folders
+                               named), their review frames and lab pages drawn in software and compared
+                               with the approved ones: what changed, with a picture of where.
+                               --approve keeps the new look as approved
   notes [all | done <id> [reply] | reopen <id>]
                                notes written on frames in the preview (press N), from notes.json
   list [character]             what a declared character understands: tags, chains, pieces, pose keys,
@@ -61,7 +67,7 @@ const HELP = `clap <command> [options]
   doctor                       check ffmpeg, Chrome, the ElevenLabs key and the YouTube sign-in
 `;
 
-const FLAGS = new Set(['audition', 'music', 'open', 'draft', 'no-audio', 'no-sheets', 'no-shadow', 'login', 'headed', 'help']);
+const FLAGS = new Set(['audition', 'music', 'open', 'draft', 'no-audio', 'no-sheets', 'no-shadow', 'approve', 'login', 'headed', 'help']);
 const args = process.argv.slice(2), pos = [], opt = {};
 for (let i = 0; i < args.length; i++) {
   const a = args[i];
@@ -97,7 +103,9 @@ const commands = {
   frames: () => frames(project(), pos[0] ?? fail('clap frames <from> <to>'), pos[1] ?? fail('clap frames <from> <to>'), {
     every: num(opt.every, 2), tile: num(opt.tile, 6), entry: opt.entry, crop: opt.crop ? String(opt.crop).split(',').map(Number) : undefined,
   }),
-  check: () => check(project(), { every: num(opt.every, 2), entry: opt.entry, sheets: !opt['no-sheets'] }),
+  check: () => (opt.affected
+    ? affected(opt.affected, pos, { approve: opt.approve, here: (() => { try { return project(); } catch { return null; } })() })
+    : check(project(), { every: num(opt.every, 2), entry: opt.entry, sheets: !opt['no-sheets'] })),
   notes: () => notesCommand(project(), pos),
   async render() {
     const P = project();

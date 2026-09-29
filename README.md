@@ -60,6 +60,7 @@ folders outside the kit, and point `clap` at them (`--project`, or run it from i
 | `clap sheet [name] [time...]` | 2x2 contact sheets; by default of the timeline's review list |
 | `clap frames <from> <to> [--every 2] [--crop x,y,w,h] [--tile 6]` | each drawing between two times (cues work), straight from the page, and a strip of them labelled with their times, in `out/frames/` |
 | `clap check [--every 2] [--no-sheets]` | draws every drawing without saving it, so every character check runs; errors stop it, warnings are listed once each; then the review sheets |
+| `clap check --affected <character> [folder...] [--approve]` | what a change to a character does to the videos that use it: their review frames and lab pages, drawn in software and compared with the approved ones (below) |
 | `clap notes [all \| done <id> [reply] \| reopen <id>]` | the notes written on frames in the preview, from `notes.json` |
 | `clap list [character]` | what a declared character understands: tags, chains, pieces, pose keys, poses, expressions, clips; and the named shots and easings. Without a name, the kit's characters |
 | `clap bake <module#export> [--angles 0,45,90] [--scale 1] [--line px] [--res 2] [--elevation 8] [--args JSON] [--no-shadow]` | a 3D prop drawn from set angles into PNG sprites with transparent backgrounds, for 2D scenes (below) |
@@ -559,6 +560,25 @@ prop on its own. The page has the same stage and timeline.
   same browser can't write into them.
 - The preview's **Stills** page (`/@kit/stills.html`) shows everything in `out/` (stills, sheets,
   frames), newest first, and adds new renders as they're made.
+
+**Changing a character that videos use.** Versions and a visual check keep a change to a stock
+character from quietly breaking the videos made with it:
+
+- Every declared character has a `version`. It goes up only for a change that can break scenes: a
+  bone renamed, a pose key gone, a drawing's size or pivot moved.
+- A scene says which version it was made for: `requires({ dex: 1 })` (from `/@kit/character.js`),
+  after importing the character. When Dex moves on to version 2, the scene stops with an error that
+  says so, instead of drawing something wrong.
+- `clap check --affected dex` finds the projects that use Dex from their scenes' imports: the kit's
+  examples, the project it's run in, and any folders named (`clap check --affected dex
+  C:\Projects\my-videos`). It draws each one's review frames and the lab pages that use him, and
+  compares them with the approved ones in the project's `out/check/approved/`. It lists what changed,
+  how many pixels and where, and writes a picture of each changed frame (the new frame faded, the
+  change in red) to `out/check/diff/`. `--approve` keeps the new look as the one to compare with.
+- It draws in software (Chrome's CPU drawing, with SwiftShader for 3D), so the same scene gives the
+  same pixels on every run. A graphics card can draw a few edge pixels differently from one run to
+  the next. A pixel counts as changed when a colour moves by more than 24 of 255, and a frame when
+  more than 30 pixels do. `CLAP_SOFTWARE=1` draws any clap command in software.
 
 ## Making a 3D video
 

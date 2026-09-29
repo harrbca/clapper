@@ -4,10 +4,13 @@ import { on, onTwos } from '/@kit/core.js';
 import { view } from '/@kit/camera.js';
 import { caption } from '/@kit/captions.js';
 import { TL } from '/@kit/timeline.js';
+import { requires } from '/@kit/character.js';
 import { dex, pose } from '/@kit/characters/dex.js';
 import { walk2d, walkPose } from '/@kit/walk2d.js';
 import { camera, DEX, DEX_MOVES, dexExtra, done, FLOOR, scanState, WALK } from './acting.js';
 import { scanner, set } from './warehouse.js';
+
+requires({ dex: 1 });                               // made for Dex version 1: an error if he moves on
 
 export function render({ ctx, W, H }, t) {
   const cam = camera(t);
