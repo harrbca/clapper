@@ -6,7 +6,8 @@ three.js), narration from ElevenLabs, one ffmpeg encode. The README is the manua
 per-video art and scripts into the video's own project. `examples/` holds projects that show the kit
 off; `templates/` holds the starters `clap new` copies. Stock characters are in `web/characters/`: the
 cut-out ones are data (a folder with `character.json` and SVG drawings, loaded by `loadCutout`; see
-the README's "Characters as data"), and `tools/make_people.py` makes the cast of people.
+the README's "Characters as data"), `tools/make_people.py` makes the cast of people, and
+`tools/make_pip.py` draws cut-out Pip.
 
 These rules are for everyone. The user's own (their commit identity, where their projects and assets
 live, work they have paused) are in `CLAUDE.local.md` next to this file, if there is one. Git ignores

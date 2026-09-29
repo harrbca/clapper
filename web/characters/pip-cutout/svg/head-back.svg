@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Pip: head, back</title>
+  <path d="M -30 0 C -36 -30 -82 -52 -86 -104 C -90 -160 -60 -196 0 -196 C 60 -196 90 -160 86 -104 C 82 -52 36 -30 30 0 Z" fill="#F8CBA6" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 0 -214 C 72 -214 114 -174 112 -118 C 111 -92 106 -72 96 -58 C 90 -48 80 -46 74 -54 C 62 -46 44 -38 22 -35 C 8 -33 -8 -33 -22 -35 C -44 -38 -62 -46 -74 -54 C -80 -46 -90 -48 -96 -58 C -106 -72 -111 -92 -112 -118 C -114 -174 -72 -214 0 -214 Z" fill="#3B2B57" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -70 -120 C -46 -140 -24 -156 -8 -164" fill="none" stroke="#291D40" stroke-width="2.2"/>
+  <path d="M 70 -120 C 46 -140 24 -156 8 -164" fill="none" stroke="#291D40" stroke-width="2.2"/>
+  <path d="M -40 -80 C -26 -112 -14 -142 -4 -160" fill="none" stroke="#291D40" stroke-width="2.2"/>
+  <path d="M 40 -80 C 26 -112 14 -142 4 -160" fill="none" stroke="#291D40" stroke-width="2.2"/>
+</svg>

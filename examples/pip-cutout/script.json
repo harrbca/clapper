@@ -1,0 +1,13 @@
+{
+  "voice": { "name": "Bella", "id": "hpp4J3VqNfWAUOO0d1Us" },
+  "model": "eleven_multilingual_v2",
+  "settings": { "stability": 0.3, "similarity_boost": 0.75, "style": 0.55, "use_speaker_boost": true, "speed": 1 },
+  "scenes": [
+    { "id": "test", "lines": [
+      { "id": "wait", "text": "Wait. It draws every single frame... by itself?" },
+      { "id": "nothing", "text": "No keyframes? No timeline? Nothing?" },
+      { "id": "okay", "text": "Okay. That's actually... kind of amazing." },
+      { "id": "help", "text": "Not that I needed the help. Obviously." }
+    ]}
+  ]
+}

@@ -337,7 +337,7 @@ export class Character extends Puppet {
       id: this.id, name: this.name, version: this.version, height: this.height,
       bones: this.parts.map(p => ({ name: p.name, parent: p.parent, piece: p.piece })),
       tags: Object.fromEntries(Object.entries(this.tags).filter(([t]) => t !== 'chains' && typeof this.tags[t] === 'string')),
-      chains: Object.fromEntries(this.chainsOf().map(([n, c]) => [n, { bones: c.bones, side: c.side, kind: c.kind, bend: c.bend }])),
+      chains: Object.fromEntries(this.chainsOf().map(([n, c]) => [n, { bones: c.bones, side: c.side, kind: c.kind, bend: c.bend, trail: c.trail ? true : undefined }])),
       pieces: Object.fromEntries(Object.entries(this.pieces).map(([n, p]) => [n, {
         kind: p.kind || 'drawing', on: pieceOf[n] || p.within, variants: p.variants ? Object.keys(p.variants).map(k => (p.describe ? p.describe(isNaN(k) ? k : Number(k)) : k)) : [],
         fallback: p.fallback && Object.keys(p.fallback).length ? p.fallback : undefined,

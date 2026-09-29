@@ -22,8 +22,8 @@ number of Chrome processes at once.
 - **Render:** MP4 with the soundtrack and chapter markers, plus SRT and VTT captions. The whole
   3-minute 1080p video renders in about 30 s on an i9.
 - **Characters:** stock characters in three styles: toon puppets (Pip and Gus), cut-out characters
-  made as data, JSON and SVG drawings (Dex, a cast of ten office and warehouse people, and three
-  pets), and 3D (Pip, Tilly, Tilly v2 and Ray). Declared characters are checked as they're drawn: a
+  made as data, JSON and SVG drawings (Dex, a cast of ten office and warehouse people, three pets,
+  and Pip cut out, her ponytail swinging on its own), and 3D (Pip, Tilly, Tilly v2 and Ray). Declared characters are checked as they're drawn: a
   pose key that doesn't exist, a knee bent backwards, a hand that can't reach.
 - **2D and 3D together:** one ink style for all of it, 3D props baked into sprites for cut-out
   scenes, and cut-out characters laid out in a 3D set, at the right size and in the right order.
@@ -349,7 +349,7 @@ what a declared one understands:
 | style | characters | see |
 |---|---|---|
 | toon, drawn in code | Pip (`pip`), Gus (`gus`) | Stock characters, below |
-| cut-out, as data | Dex (`dex`); the cast: Rosa, Marcus, Priya, Walt, Jess, Dana, Kenji, Amara, Greg, Linda; the pets: Biscuit (`dog`), Miso (`cat`), Clover (`rabbit`) | Cut-out characters |
+| cut-out, as data | Dex (`dex`); the cast: Rosa, Marcus, Priya, Walt, Jess, Dana, Kenji, Amara, Greg, Linda; the pets: Biscuit (`dog`), Miso (`cat`), Clover (`rabbit`); Pip, cut out (`pip-cutout`) | Cut-out characters |
 | 3D | Pip (`pip3d`), Tilly (`tilly3d`), Tilly v2 (`tilly3d-v2`), Ray (`ray3d`, skinned) | 3D, and Skinned characters |
 
 ### Stock characters: Pip and Gus
@@ -375,7 +375,7 @@ delighted, deadpan, grumpy, horrified) and `POSES` body poses, both partial pose
   down his nose, to peer over them.
 
 `examples/acting-test` is Pip alone, `examples/dialogue` is Pip and Gus in a conversation cut between
-a two-shot and singles.
+a two-shot and singles. There's a cut-out Pip too (`pip-cutout`, under Cut-out characters).
 
 In `choreo`, a move can `anticipate` (wind back before it goes), and `E.snap` lands fast and settles.
 `onTwos(t)` holds time in steps of two frames, for anything else that should move like drawn animation.
@@ -486,7 +486,10 @@ What the kit draws:
   and `head.view` turns the head on from there, so the head can lead a turn. Both key like any number
   and the drawing swaps at each half step, passing through every angle in between. `angleSet` is a
   piece with a drawing per angle (`fallback: { 3: 2 }` lets one stand in for another); `turnRig`
-  brings the sided chains round and puts the far limbs behind.
+  brings the sided chains round and puts the far limbs behind. `tags.turn.offsets` adds a
+  character's own offsets per angle (`{ "2": { "neck.x": 12 } }`), and `tags.turn.head` does the
+  same by the head's angle, for what's on the head (a ponytail), so it comes round with a head that
+  turns on its own.
 - **Hands:** a library of drawn hands (`HAND.relaxed`, `open`, `spread`, `palm`, `point`, `fist`,
   `thumb`, `grip`, `ok`, `peace`), keyed as `'handR.shape'`. `'handR.flip': 1` shows the other side.
   Keys ending in `.shape` swap halfway through the move that keys them instead of blending. A prop
@@ -496,8 +499,10 @@ What the kit draws:
   While a character talks, the chart follows the words; between words it shows the expression's
   mouth. Wide-open mouths drop the jaw (`jawDrop`).
 - **Faces:** big eyes with dot pupils and lids inside the outline, and brows, with the toon kit's
-  face keys (`lids.drop`, `lids.slant`, `brows.in` ...). `EXPR` has 14 expressions.
-- **Limbs:** `noodle` bends an arm or leg as one even tube; `sleeve` puts a short sleeve over it.
+  face keys (`lids.drop`, `lids.slant`, `brows.in` ...). `EXPR` has 14 expressions. `iris` (a colour)
+  in the face's eye settings puts the pupil in a coloured iris with a glint (`irisR`, its radius).
+- **Limbs:** `noodle` bends an arm or leg as one even tube; `sleeve` puts a short sleeve over it, and
+  `cuff` (`{ len, color }`) colours its end, a sweater's cuff or a glove.
 - **Contacts:** `plant(character, pose, 'legL', [x, y])` puts a foot on a spot by IK and keeps it
   level, for crouches, kneels and landings; `reachChain(character, pose, 'armR', [x, y])` puts a hand
   there. Knees and elbows bend the way their chain's tag says, for the way the body faces.
@@ -520,6 +525,14 @@ What the kit draws:
   side on: to `edge` of its width, 0.45 unless given, and 1 for a tail, round from every side. A chain
   of kind `cape` hangs behind the body, and in front of it seen from behind. Chains whose middle bones
   wear drawings (a robot's rigid forearm) keep them with the chain's first bone in the drawing order.
+  `limit` is the most a chain swings, in radians (a ponytail that bounces in a fast drop instead of
+  flipping over its root).
+  A chain can **trail on its own**: give it `trail` (trailChain's options) in its tags, and the
+  character's pose function swings it every frame, as the moves and `extra()` move the bone it
+  hangs from (a nod, a hop), and as the character turns (`turn`: how far behind the middle of the
+  head or body it hangs, in px). `pose(t, moves, { motion: u => [x(u) / scale, 0] })` adds the
+  scene's own movement (a walk across the screen), and `key` names the springs when there's more than
+  one of a character moving in a scene.
 - **Named shots** (`camera.js`): `framing('medium', { x, y, height })` is a camera showing a
   character's feet at (x, y), `height` tall on screen, from the waist up; also `wide`, `full`,
   `knee`, `close` and `face`, and `third: 1` to put it on the right third.
@@ -543,6 +556,18 @@ on the floor at 3/4 and side on; `play` them with `mirror: true` to face left. A
 body forward or back reads only side on, so they're for 3/4 and profile: from the front and back the
 pets stand. A tail wags with `trailChain(dog, p, t, 'tail', u => [sway(u), 0], { posed: true })`.
 `examples/pets` has Biscuit and Miso meeting, and lab pages for all three.
+
+**Pip, cut out.** `/@kit/characters/pip-cutout.js` (`import { pip, pose } from
+'/@kit/characters/pip-cutout.js'`) is the toon Pip redrawn as a cut-out character, data like the rest,
+on the cast's frame so she shares their rig, poses and clips: her side-swept fringe and the locks
+framing her face, blue eyes (`iris`), rosy cheeks, the teal sweater with its ribbed cuffs, hem and
+neckline and the Clapper pin, and white sneakers with orange soles. Her ponytail is a chain of three
+bones drawn as a ribbon, placed round her head by the head's angle (`turn.head`: out to one side from
+the front, behind the head at 3/4, on the back of it side on) and trailing on its own, so it swings
+as she nods, hops and turns without the scene doing anything. `tools/make_pip.py` draws her.
+`examples/pip-cutout` is the toon acting test performed by the cut-out Pip (the same lines, so the
+same audio), full length in a flat room, with lab pages for her turnaround, faces, poses and the
+ponytail in motion.
 
 ### Shared style
 
@@ -801,6 +826,7 @@ uploads the project needs YouTube's compliance audit: the
 - `tools/make-sfx.mjs` remakes the kit's sound effects in `sfx/`.
 - `tools/make_people.py` makes the cast of cut-out people as data from short descriptions (see "The
   cast"); add one to its list and run it.
+- `tools/make_pip.py` draws cut-out Pip as data (see "Pip, cut out").
 - `tools/gpu-check.mjs` shows which graphics card headless Chrome draws WebGL with.
 - `tools/import-el-cache.mjs` imports an ElevenLabs cache from the older Python pipeline.
 - `tools/profile-frames.mjs` times drawing and capture for one Chrome.

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Pip: head, 34back</title>
+  <path d="M -30 0 C -40 -30 -84 -50 -88 -104 C -90 -162 -56 -196 4 -196 C 64 -196 92 -160 88 -104 C 86 -60 60 -30 34 -2 Z" fill="#F8CBA6" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M 4 -214 C 70 -214 108 -176 104 -118 C 102 -92 96 -72 86 -60 C 78 -52 70 -56 66 -62 C 50 -48 30 -38 8 -36 C -14 -34 -40 -40 -62 -54 C -70 -42 -84 -40 -94 -50 C -106 -66 -112 -92 -112 -120 C -112 -176 -66 -214 4 -214 Z" fill="#3B2B57" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -80 -118 C -60 -140 -44 -156 -30 -164" fill="none" stroke="#291D40" stroke-width="2.2"/>
+  <path d="M 50 -124 C 20 -144 -4 -158 -20 -164" fill="none" stroke="#291D40" stroke-width="2.2"/>
+  <path d="M -52 -78 C -44 -110 -36 -140 -28 -158" fill="none" stroke="#291D40" stroke-width="2.2"/>
+  <g transform="translate(64 -104) scale(1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#F8CBA6" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+</svg>

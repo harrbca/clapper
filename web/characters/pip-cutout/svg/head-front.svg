@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-190 -300 380 400">
+  <title>Pip: head, front</title>
+  <path d="M 0 -214 C 72 -214 114 -174 112 -118 C 111 -90 108 -66 99 -51 C 93 -41 82 -40 74 -50 C 70 -64 66 -84 64 -100 L -64 -100 C -66 -84 -70 -64 -74 -50 C -82 -40 -93 -41 -99 -51 C -108 -66 -111 -90 -112 -118 C -114 -174 -72 -214 0 -214 Z" fill="#3B2B57" stroke="#1D1A24" stroke-width="3.4"/>
+  <g transform="translate(-84 -104) scale(-1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#F8CBA6" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <g transform="translate(84 -104) scale(1 1)">
+    <path d="M 0 -17 C 17 -21 25 -3 20 11 C 16 21 5 23 -2 17 Z" fill="#F8CBA6" stroke="#1D1A24" stroke-width="3.4"/>
+    <path d="M 4 -7 C 12 -6 13 4 7 9" fill="none" stroke="#1D1A24" stroke-width="2.55"/>
+  </g>
+  <path d="M 0 -4 C 48 -4 82 -40 86 -104 C 90 -160 60 -196 0 -196 C -60 -196 -90 -160 -86 -104 C -82 -40 -48 -4 0 -4 Z" data-morph="jaw" data-morph-at="30" data-morph-d="M 0 26 C 48 26 82 -25 86 -104 C 90 -160 60 -196 0 -196 C -60 -196 -90 -160 -86 -104 C -82 -25 -48 26 0 26 Z" fill="#F8CBA6" stroke="#1D1A24" stroke-width="3.4"/>
+  <ellipse cx="-55" cy="-67" rx="16" ry="9" fill="#F4A08F"/>
+  <ellipse cx="55" cy="-67" rx="16" ry="9" fill="#F4A08F"/>
+  <g transform="translate(-30 -104) scale(1 1)" data-feature="eye" data-side="-1"/>
+  <g transform="translate(30 -104) scale(1 1)" data-feature="eye" data-side="1"/>
+  <path d="M -5 -86 C -15 -70 -11 -62 -1 -62 C 7 -62 12 -66 12 -72" fill="none" stroke="#1D1A24" stroke-width="3.4"/>
+  <g data-feature="mouth" data-x="0" data-y="-44" data-sx="1" data-drop="0.35"/>
+  <path d="M -112 -118 C -114 -174 -72 -214 0 -214 C 72 -214 114 -174 112 -118 C 108 -130 100 -144 90 -154 C 78 -166 62 -176 46 -182 C 34 -168 8 -160 -22 -159 C -54 -158 -82 -146 -100 -128 C -105 -123 -109 -120 -112 -118 Z" fill="#3B2B57" stroke="#1D1A24" stroke-width="3.4"/>
+  <path d="M -40 -204 C -12 -214 30 -213 59 -198 C 36 -203 0 -204 -27 -197 C -36 -196 -43 -199 -40 -204 Z" fill="#5B4A84" stroke="none"/>
+  <path d="M 18 -204 C 4 -190 -8 -178 -22 -168" fill="none" stroke="#291D40" stroke-width="2.2"/>
+  <path d="M 52 -194 C 50 -188 46 -184 42 -180" fill="none" stroke="#291D40" stroke-width="2.2"/>
+  <g transform="translate(-30 -140) scale(1 1)" data-feature="brow" data-side="-1"/>
+  <g transform="translate(30 -140) scale(1 1)" data-feature="brow" data-side="1"/>
+</svg>

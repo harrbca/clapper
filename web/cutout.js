@@ -100,16 +100,20 @@ const LAYERS = { arm: { near: 5.5, far: -0.6, front: 5.5, back: -0.6, end: 0.5 }
 // screen's left when facing us, so it is the near side facing right) by as far as its first bone's
 // pivot is from the middle, and goes in front of the body or behind it (and behind the legs).
 // tags.turn.offsets adds the character's own offsets per angle ({ 2: { 'neck.x': 12 } }), mirrored
-// for negative angles. Offsets are added to the pose; draw orders are set where not given.
+// for negative angles. tags.turn.head does the same by the head's angle (body.view + head.view), for
+// what's on the head (a ponytail, a feather in a hat), so it comes round with a head turned on its
+// own. Offsets are added to the pose; draw orders ('.z') are set, where not given.
 export function turnRig(pose, n, character) {
   const th = (n * Math.PI) / 4, c = Math.cos(th), s = Math.sin(th), back = c < -0.1;
   const sided = character.chainsOf().filter(([, ch]) => ch.side);
   const shift = {};
   for (const [, ch] of sided) shift[`${ch.bones[0]}.x`] = (ch.side === 'L' ? 1 : -1) * Math.abs(character.by[ch.bones[0]].at[0]) * (1 - c);
   const p = add(pose, shift);
-  for (const [k0, val] of Object.entries(character.tags.turn?.offsets?.[Math.abs(n)] || {})) {
-    const k = n < 0 ? character.swapSide(k0) : k0;
-    p[k] = /\.z$/.test(k) ? val : v(p, k) + (n < 0 && /\.(x|r)$/.test(k) ? -val : val);
+  for (const [table, m] of [[character.tags.turn?.offsets, n], [character.tags.turn?.head, headAngle(pose)]]) {
+    for (const [k0, val] of Object.entries(table?.[Math.abs(m)] || {})) {
+      const k = m < 0 ? character.swapSide(k0) : k0;
+      p[k] = /\.z$/.test(k) ? val : v(p, k) + (m < 0 && /\.(x|r)$/.test(k) ? -val : val);
+    }
   }
   for (const [, ch] of sided) {
     const L = ch.layers || LAYERS[ch.kind];
@@ -132,8 +136,9 @@ export function turnRig(pose, n, character) {
 // ---------- limbs ----------
 // A noodle limb, as cut-out rigs bend them with a deformer: from the pivot down (+y) `a` long to the
 // elbow or knee, then `b` more turned by `bend`, one even tube with a rounded bend and no seam. w2
-// narrows the lower half.
-export function noodle(ctx, a, b, bend, w, col, { w2 = w, round = 0.42 } = {}) {
+// narrows the lower half. `cuff` ({ len, color }) colours the last `len` of it, a sweater's cuff or
+// a glove, with a line across where it starts.
+export function noodle(ctx, a, b, bend, w, col, { w2 = w, round = 0.42, cuff } = {}) {
   const wx = -Math.sin(bend) * b, wy = a + Math.cos(bend) * b;
   const r = round * Math.min(a, b) * Math.min(1, Math.abs(bend) * 1.5 + 0.15);
   const k = r / b, mid = [wx * k, a + (wy - a) * k];
@@ -147,6 +152,18 @@ export function noodle(ctx, a, b, bend, w, col, { w2 = w, round = 0.42 } = {}) {
   ctx.strokeStyle = col;
   ctx.lineWidth = w; ctx.stroke(upper);
   ctx.lineWidth = w2; ctx.stroke(lower);
+  if (cuff) {
+    // the lower half again in the cuff's colour, beyond a line across it `len` from the end
+    const L = Math.hypot(wx - mid[0], wy - mid[1]) || 1, dx = (wx - mid[0]) / L, dy = (wy - mid[1]) / L;
+    const k = Math.max(0, L - cuff.len), cx = mid[0] + dx * k, cy = mid[1] + dy * k, e = cuff.len + w2;
+    ctx.save();
+    ctx.beginPath(); ctx.moveTo(cx - dy * w2, cy + dx * w2); ctx.lineTo(cx + dy * w2, cy - dx * w2);
+    ctx.lineTo(cx + dy * w2 + dx * e, cy - dx * w2 + dy * e); ctx.lineTo(cx - dy * w2 + dx * e, cy + dx * w2 + dy * e);
+    ctx.clip();
+    ctx.strokeStyle = cuff.color; ctx.lineWidth = w2; ctx.stroke(lower);
+    ctx.restore();
+    line(ctx, [[cx - (dy * w2) / 2, cy + (dx * w2) / 2], [cx + (dy * w2) / 2, cy - (dx * w2) / 2]], LW * 0.8);
+  }
   return [wx, wy];
 }
 
@@ -265,8 +282,9 @@ export function handPiece(bone, side, opts) {
 // eyes.x / eyes.y aim the pupil (-1..1), eyes.pupil sizes it, eyes.open widens the eye. Nearly
 // shut, it swaps to the closed drawing: the lid over the eye with a lash line, or in a squint the
 // happy arcs of a laugh. `sx` narrows it for the far eye or a
-// profile, and `look` pushes the pupil the way the face points.
-export function eye(ctx, pose, side, { rx = 26, ry = 29, pupil = 5.5, lid, sx = 1, look = 0, lw = LW } = {}) {
+// profile, and `look` pushes the pupil the way the face points. `iris` (a colour) puts the pupil in a
+// coloured iris of radius `irisR`, with a glint; eyes.pupil sizes the iris too.
+export function eye(ctx, pose, side, { rx = 26, ry = 29, pupil = 5.5, lid, sx = 1, look = 0, lw = LW, iris, irisR = rx * 0.46 } = {}) {
   const S = side < 0 ? 'L' : 'R';
   const open = clamp(v(pose, 'eyes.open', 1) * v(pose, `eye${S}.open`, 1), 0, 1.4);
   const cover = clamp(Math.max(v(pose, 'eyes.blink'), v(pose, 'lids.drop') + v(pose, `lid${S}.drop`), 1 - Math.min(open, 1)), 0, 1);
@@ -283,9 +301,15 @@ export function eye(ctx, pose, side, { rx = 26, ry = 29, pupil = 5.5, lid, sx = 
   }
   ctx.fillStyle = '#FFFFFF'; ctx.fill(white);
   within(ctx, white, () => {
-    const gx = clamp(v(pose, 'eyes.x') + look, -1.3, 1.3) * (RX - pupil * 1.4) * 0.8;
-    const gy = clamp(v(pose, 'eyes.y'), -1, 1) * (RY - pupil * 1.4) * 0.7;
-    ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(gx, gy, pupil * v(pose, 'eyes.pupil', 1), 0, Math.PI * 2); ctx.fill();
+    const size = v(pose, 'eyes.pupil', 1), reach = iris ? irisR * (0.5 + 0.5 * size) : pupil * 1.4;
+    const gx = clamp(v(pose, 'eyes.x') + look, -1.3, 1.3) * (RX - reach) * 0.8;
+    const gy = clamp(v(pose, 'eyes.y'), -1, 1) * (RY - reach) * 0.7;
+    if (iris) {                                              // the iris, inked thinly, a pupil and a glint
+      ctx.fillStyle = iris; ctx.beginPath(); ctx.arc(gx, gy, reach, 0, Math.PI * 2); ctx.fill();
+      ctx.lineWidth = lw * 0.55; ctx.strokeStyle = INK; ctx.stroke();
+      ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(gx, gy, pupil * size, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.arc(gx + reach * 0.36, gy - reach * 0.36, reach * 0.26, 0, Math.PI * 2); ctx.fill();
+    } else { ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(gx, gy, pupil * size, 0, Math.PI * 2); ctx.fill(); }
     // the upper lid: its edge a line from the inner corner to the outer, dropped and slanted
     const lidY = -RY + 2 * RY * cover, tilt = slant * RY * 0.55 * (1 - cover * 0.5);
     const yIn = lidY + tilt, yOut = lidY - tilt * 0.45;
@@ -474,17 +498,25 @@ export function stepped(t, rest, moves) {
 // head, breathing (tags.chest), a sway (tags.root), blinks, glances, and the mouth chart following
 // the lines the character says (`speaker`). Checks each move list when it first comes in, and
 // what extra(t) adds each frame.
+// Chains that say how they trail (tags.chains.<name>.trail: trailChain's options, and `turn`) swing
+// on their own, a ponytail or a cape: as the moves and extra() move the bone they hang from (a nod, a
+// hop), as the character turns (they hang `turn` px behind the middle of what turns them: the head,
+// if they hang from it, else the body), and as the scene moves the character: `motion(u)` is where
+// it is at time u, in its own units (its place on screen over its draw scale), for a walk across the
+// screen. (For them, extra() is also asked about other times, so keep it a function of t.) `key`
+// names the springs, for more than one of the same character moving in one scene.
 export function cutoutPose(character, { rest = character.rest, seed = 5 } = {}) {
   character.needs(['root', 'chest', 'look'], 'cutoutPose');
   const { root, chest, look } = character.tags;
   const joints = jointsOf(character);
-  return function pose(t, moves, { speaker, extra, twos = true, still = false, springy = !still, fps = 30 } = {}) {
+  const trails = character.chainsOf().filter(([, ch]) => ch.trail);
+  return function pose(t, moves, { speaker, extra, twos = true, still = false, springy = !still, fps = 30, motion, key = character.id } = {}) {
     character.checkMoves(moves);
     if (twos) t = onTwos(t, fps);
     character.now = t;
     const chore = u => stepped(u, rest, moves);
     let p = chore(t);
-    if (springy) Object.assign(p, springs(`${character.id}.joints`, t, chore, joints));
+    if (springy) Object.assign(p, springs(`${key}.joints`, t, chore, joints));
     if (extra) {
       const e = extra(t);
       character.checkPose(e, `extra() at t = ${Number(t.toFixed(3))}`);
@@ -504,7 +536,36 @@ export function cutoutPose(character, { rest = character.rest, seed = 5 } = {}) 
     const talk = s === 'rest' ? 0 : loudness(t);
     p[`${look}.r`] = v(p, `${look}.r`) + Math.sin(t * 8 + seed) * 0.018 * talk;
     p[`${look}.y`] = v(p, `${look}.y`) - talk * 2.5;
-    return turnRig(p, bodyAngle(p), character);
+    p = turnRig(p, bodyAngle(p), character);
+    if (springy) for (const [name, ch] of trails) p = trailChain(character, p, t, name, trailMotion(character, chore, extra, ch, motion), { ...ch.trail, key });
+    return p;
+  };
+}
+
+// Where a bone's pivot is in its character's space, from a walk up its parents: cheaper than every
+// bone's matrix (Puppet.where), for a motion sampled at every step of a spring.
+function pivotOf(character, pose, bone) {
+  let x = 0, y = 0;
+  for (let b = character.by[bone]; b; b = character.by[b.parent]) {
+    const s = v(pose, `${b.name}.s`, 1), sx = x * s * v(pose, `${b.name}.sx`, 1), sy = y * s * v(pose, `${b.name}.sy`, 1);
+    const r = v(pose, `${b.name}.r`), c = Math.cos(r), si = Math.sin(r);
+    x = b.at[0] + v(pose, `${b.name}.x`) + c * sx - si * sy;
+    y = b.at[1] + v(pose, `${b.name}.y`) + si * sx + c * sy;
+  }
+  return [x, y];
+}
+
+// A trailing chain's motion, for trailChain: where the bone it hangs from is at time u, in the moves
+// and what extra() adds (without the springs), swung round as the character turns, plus the scene's
+// motion.
+function trailMotion(character, chore, extra, ch, motion) {
+  const first = ch.bones[0], turn = ch.trail.turn ?? 0;
+  let onHead = false;
+  for (let b = character.by[first]; b; b = character.by[b.parent]) if (b.name === character.tags.look) onHead = true;
+  return u => {
+    const q = extra ? add(chore(u), extra(u)) : chore(u), [x, y] = pivotOf(character, q, first), [mx, my] = motion ? motion(u) : [0, 0];
+    const th = ((v(q, 'body.view') + (onHead ? v(q, 'head.view') : 0)) * Math.PI) / 4;
+    return [x - turn * Math.sin(th) + mx, y + my];
   };
 }
 
@@ -591,8 +652,10 @@ export function defineCutout({ life, keys = {}, sides = [], ...def }) {
 // posed: true swings the chain about its own pose instead of hanging it: the swing a hanging chain
 // would make is added to the turns the pose gives its bones, so a tail held up wags where the pose
 // holds it (a motion swaying from side to side). Its answer to moving is the hanging chain's, turned
-// with the pose, so it suits swings and wags more than a run.
-export function trailChain(character, pose, t, chain, motion, { drag = 0.0012, lag = 0.05, wind = [0, 0], flutter = 0.12, stiffness = 110, damping = 11, t0 = 0, key = character.id, posed = false } = {}) {
+// with the pose, so it suits swings and wags more than a run. `limit` is the most it swings from
+// hanging (or from its pose), in radians: a ponytail that bounces in a fast drop rather than flipping
+// over its root.
+export function trailChain(character, pose, t, chain, motion, { drag = 0.0012, lag = 0.05, wind = [0, 0], flutter = 0.12, stiffness = 110, damping = 11, t0 = 0, key = character.id, posed = false, limit = Infinity } = {}) {
   const bones = character.chain(chain, 'trailChain').bones, h = 1 / 60;
   const air = u => {
     const [x1, y1] = motion(u), [x0, y0] = motion(u - h), vx = (x1 - x0) / h, vy = (y1 - y0) / h;
@@ -601,7 +664,7 @@ export function trailChain(character, pose, t, chain, motion, { drag = 0.0012, l
   // where each bone points (its angle on screen, 0 hanging straight down), from the air a moment ago
   const aims = u => Object.fromEntries(bones.map((b, i) => {
     const [dx, dy, strong] = air(u - i * lag);
-    return [b, Math.atan2(-dx, dy) + flutter * Math.min(1, strong) * Math.sin(u * 13 + i * 1.3)];
+    return [b, clamp(Math.atan2(-dx, dy), -limit, limit) + flutter * Math.min(1, strong) * Math.sin(u * 13 + i * 1.3)];
   }));
   const abs = springs(`${key}.trail.${chain}`, t, aims, Object.fromEntries(bones.map(b => [b, { stiffness, damping }])), { t0 });
   const p = { ...pose };
@@ -650,13 +713,16 @@ const FEATURES = {
 // JSON is what defineCutout takes, as plain data:
 //   pieces: { svg: 'neck.svg' }, an SVG drawing; { angles: { 0: 'front.svg', ... }, of: 'body' or
 //     'head', fallback, scale, front: { flip, rotate } }, an angle set; or the kit's own: { kit:
-//     'noodle', a, b, bend: '<the lower bone>', w, w2, round, color, sleeve: { len, w, color } },
-//     { kit: 'hand', side, skin, size }, { kit: 'mouthChart' }, and { kit: 'ribbon', bones: [...], w:
-//     [...], color, edge }, a cape or tail along a chain, narrower seen side on (to `edge` of its
-//     width: 0.45 unless given, and 1 for a tail, round from every side); see ribbon and trailChain
+//     'noodle', a, b, bend: '<the lower bone>', w, w2, round, color, sleeve: { len, w, color }, cuff:
+//     { len, color } }, { kit: 'hand', side, skin, size }, { kit: 'mouthChart' }, and { kit:
+//     'ribbon', bones: [...], w: [...], color, edge }, a cape or tail along a chain, narrower seen
+//     side on (to `edge` of its width: 0.45 unless given, and 1 for a tail, round from every side);
+//     see ribbon and trailChain
+//   tags: as defineCharacter's, and the cut-out kit's own: turn: { offsets, head } (see turnRig), and
+//     a chain's trail, for one that swings on its own (see cutoutPose)
 //   palette: named colours, which colours anywhere in the JSON may use by name
-//   face: { eye: { rx, ry, pupil, lid }, brow: {}, mouth: { w, pal: { mouth, tongue } } }, for the
-//     features the head's SVGs have places for
+//   face: { eye: { rx, ry, pupil, lid, iris, irisR }, brow: {}, mouth: { w, pal: { mouth, tongue } } },
+//     for the features the head's SVGs have places for
 //   ink, line: the ink colour and line width the SVGs are drawn with (the kit's own if not given), so
 //     that with a video's style (style.js) their lines are redrawn in its ink, and thicker or thinner
 //     in proportion
@@ -671,7 +737,7 @@ export async function loadCutout(base) {
   const def = await get('character.json', 'json'), name = def.name ?? def.id;
   const colour = c => def.palette?.[c] ?? c;
   const face = {
-    eye: { ...def.face?.eye, lid: colour(def.face?.eye?.lid) },
+    eye: { ...def.face?.eye, lid: colour(def.face?.eye?.lid), iris: def.face?.eye?.iris && colour(def.face.eye.iris) },
     brow: def.face?.brow ?? {},
     mouth: { w: def.face?.mouth?.w ?? 26, pal: Object.fromEntries(Object.entries(def.face?.mouth?.pal ?? {}).map(([k, c]) => [k, colour(c)])) },
   };
@@ -702,7 +768,7 @@ export async function loadCutout(base) {
     else if (p.kit === 'noodle') {
       pieces[pn] = {
         draw: (ctx, pose) => {
-          noodle(ctx, p.a, p.b, v(pose, `${p.bend}.r`), p.w, colour(p.color), { w2: p.w2 ?? p.w, round: p.round ?? 0.42 });
+          noodle(ctx, p.a, p.b, v(pose, `${p.bend}.r`), p.w, colour(p.color), { w2: p.w2 ?? p.w, round: p.round ?? 0.42, cuff: p.cuff && { len: p.cuff.len, color: colour(p.cuff.color) } });
           if (p.sleeve) sleeve(ctx, p.sleeve.len, p.sleeve.w, colour(p.sleeve.color));
         },
       };
